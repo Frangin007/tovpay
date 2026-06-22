@@ -1,7 +1,15 @@
+import {
+  ScoringIcon, AiSparkIcon, HandshakeIcon, BriefcaseIcon,
+  SignalIcon, GlobeIcon, DocumentIcon,
+} from '../components/Icon'
+import PageHero from '../components/PageHero'
+import { useScrollReveal } from '../hooks/useScrollReveal'
+
 export default function Blog() {
+  useScrollReveal()
   const posts = [
     {
-      icon: '📊',
+      icon: ScoringIcon,
       tag: 'Inclusion Financière',
       title: 'Comment le nano-crédit transforme les économies informelles',
       date: 'Mai 2026',
@@ -9,7 +17,7 @@ export default function Blog() {
       gradient: 'linear-gradient(135deg,#0D2251,#00B98E)'
     },
     {
-      icon: '🤖',
+      icon: AiSparkIcon,
       tag: 'Innovation IA',
       title: 'Le scoring mobile : la révolution du crédit sans garantie',
       date: 'Avril 2026',
@@ -17,7 +25,7 @@ export default function Blog() {
       gradient: 'linear-gradient(135deg,#1A3FA8,#00B98E)'
     },
     {
-      icon: '🤝',
+      icon: HandshakeIcon,
       tag: 'Partenariat',
       title: 'TOVPAY & Orabank : un partenariat historique pour l\'UEMOA',
       date: 'Mars 2026',
@@ -25,15 +33,15 @@ export default function Blog() {
       gradient: 'linear-gradient(135deg,#0B4A3F,#00B98E)'
     },
     {
-      icon: '💼',
+      icon: BriefcaseIcon,
       tag: 'PME',
-      title: 'Étude de cas : Comment Ama Trader a triplé son chiffre d\'affaires',
+      title: 'Étude de cas : des commerçantes développent leur activité grâce au nano-crédit',
       date: 'Février 2026',
       reading: '7 min',
       gradient: 'linear-gradient(135deg,#F5A623,#FF8C42)'
     },
     {
-      icon: '📱',
+      icon: SignalIcon,
       tag: 'Tech',
       title: 'Architecture fintech africaine : défis et solutions',
       date: 'Janvier 2026',
@@ -41,7 +49,7 @@ export default function Blog() {
       gradient: 'linear-gradient(135deg,#7C3AED,#A855F7)'
     },
     {
-      icon: '🌍',
+      icon: GlobeIcon,
       tag: 'Expansion',
       title: 'La stratégie panafricaine de TOVPAY : 12 pays d\'ici 2028',
       date: 'Décembre 2025',
@@ -52,42 +60,46 @@ export default function Blog() {
 
   return (
     <>
-      <section className="page-hero">
-        <div className="page-hero-grid"></div>
-        <div className="page-hero-inner">
-          <div className="breadcrumb">
-            <span className="breadcrumb-item">Accueil</span>
-            <span className="breadcrumb-sep">/</span>
-            <span className="breadcrumb-item">Blog</span>
-          </div>
-          <h1>Blog & Actualités</h1>
-          <p>Dernières nouvelles sur l'inclusion financière et l'innovation en Afrique</p>
-        </div>
-      </section>
+      <PageHero
+        breadcrumb="Accueil / Blog"
+        title="Blog & Actualités"
+        desc="Dernières nouvelles sur l'inclusion financière et l'innovation en Afrique"
+      />
 
-      <section style={{ background: '#fff' }}>
-        <div className="container">
-          <div className="blog-full-grid" style={{ marginTop: '60px' }}>
+      <section className="bg-white py-24 px-[5%]">
+        <div className="container-tp">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {posts.map((post, i) => (
-              <div key={i} className="blog-full-card">
-                <div className="blog-full-img" style={{ background: post.gradient }}>
-                  {post.icon}
+              <div
+                key={i}
+                data-reveal
+                data-reveal-delay={String((i % 3) + 1)}
+                className="bg-white rounded-2xl border border-g100 overflow-hidden flex flex-col transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:border-teal/30"
+              >
+                <div className="h-[160px] flex items-center justify-center relative overflow-hidden" style={{ background: post.gradient }}>
+                  <post.icon size={30} className="text-white/90 relative z-10" />
+                  <div
+                    className="absolute inset-0 opacity-50"
+                    style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.14) 1px, transparent 1px)', backgroundSize: '14px 14px' }}
+                  />
                 </div>
-                <div className="blog-full-body">
-                  <div className="blog-meta" style={{ marginBottom: '12px' }}>
-                    <span className="blog-tag">{post.tag}</span>
-                    <span className="blog-reading">{post.reading}</span>
+                <div className="p-5 flex flex-col flex-1">
+                  <div className="flex justify-between items-center mb-3">
+                    <span className="text-teal text-[11px] font-semibold uppercase tracking-wide">{post.tag}</span>
+                    <span className="text-g400 text-xs">{post.reading}</span>
                   </div>
-                  <h4 className="blog-title">{post.title}</h4>
-                  <p className="blog-excerpt">
+                  <h4 className="font-display font-bold text-navy text-base leading-snug mb-3">{post.title}</h4>
+                  <p className="text-g600 text-sm leading-relaxed mb-5">
                     Découvrez les dernières tendances et innovations en fintech, étude de cas et analyses de marché pour l'inclusion financière africaine.
                   </p>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 'auto' }}>
-                    <div className="blog-author-row">
-                      <span className="blog-author-avatar">📝</span>
-                      <span className="blog-author-name">TOVPAY Blog</span>
+                  <div className="flex justify-between items-center mt-auto pt-3 border-t border-g100">
+                    <div className="flex items-center gap-2">
+                      <span className="w-[26px] h-[26px] rounded-full bg-teal/10 text-teal flex items-center justify-center">
+                        <DocumentIcon size={16} />
+                      </span>
+                      <span className="font-semibold text-navy text-xs">TOVPAY Blog</span>
                     </div>
-                    <span className="blog-date">{post.date}</span>
+                    <span className="text-g400 text-xs">{post.date}</span>
                   </div>
                 </div>
               </div>
@@ -96,16 +108,22 @@ export default function Blog() {
         </div>
       </section>
 
-      <section style={{ background: 'var(--g50)', paddingTop: '60px' }}>
-        <div className="container">
-          <div className="newsletter-box">
+      <section className="bg-g50 pt-[60px] pb-24 px-[5%]">
+        <div className="container-tp">
+          <div className="bg-gradient-to-br from-teal to-[#00D4AA] rounded-3xl p-11 flex flex-wrap justify-between items-center gap-6">
             <div>
-              <h3 style={{ color: '#fff', marginBottom: '8px', fontSize: '1.3rem', fontWeight: 700 }}>S'abonner à la newsletter</h3>
-              <p style={{ color: 'rgba(255,255,255,.75)', fontSize: '14px' }}>Recevez les dernières actualités fintech africaines</p>
+              <h3 className="text-white text-2xl font-display font-bold mb-2">S'abonner à la newsletter</h3>
+              <p className="text-white/75 text-sm">Recevez les dernières actualités fintech africaines</p>
             </div>
-            <div className="newsletter-input-row">
-              <input type="email" className="newsletter-input" placeholder="email@exemple.com" />
-              <button className="newsletter-btn">S'abonner</button>
+            <div className="flex-1 min-w-[280px] flex gap-2.5">
+              <input
+                type="email"
+                placeholder="email@exemple.com"
+                className="flex-1 px-4 py-3 rounded-[10px] border-0 text-sm outline-none"
+              />
+              <button className="bg-navy text-white font-semibold text-sm px-6 py-3 rounded-[10px] whitespace-nowrap hover:bg-navy/90 transition-colors duration-200">
+                S'abonner
+              </button>
             </div>
           </div>
         </div>

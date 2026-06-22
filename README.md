@@ -1,73 +1,81 @@
-# React + TypeScript + Vite
+# TOVPAY — Site vitrine
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Site vitrine de TOVPAY, plateforme de nano-crédit mobile et de paiements digitaux pour la zone UEMOA, en partenariat avec Orabank.
 
-Currently, two official plugins are available:
+## Stack technique
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **React 19** + **TypeScript**
+- **Vite** pour le build et le dev server
+- **React Router** pour la navigation
+- **Tailwind CSS v4** (config CSS-first via `@theme`, pas de `tailwind.config.js`) — palette de marque navy/teal/lime, typographies DM Sans + Syne, animations custom (mesh gradients, reveal au scroll, floating cards)
 
-## React Compiler
+## Démarrer en local
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Le site est accessible sur `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Scripts disponibles
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+| Commande | Description |
+|---|---|
+| `npm run dev` | Lance le serveur de développement avec hot-reload |
+| `npm run build` | Vérifie les types puis génère le build de production dans `dist/` |
+| `npm run preview` | Prévisualise le build de production en local |
+| `npm run lint` | Lance ESLint sur le projet |
+
+## Structure du projet
+
 ```
+src/
+├── components/
+│   ├── Nav.tsx          # Navigation (transparente sur hero sombre, opaque au scroll)
+│   ├── Footer.tsx        # Footer avec logo officiel
+│   ├── PageHero.tsx       # En-tête réutilisable des pages secondaires (mesh gradient sombre)
+│   ├── FinalCta.tsx       # Section CTA pleine largeur réutilisable
+│   ├── Icon.tsx           # Bibliothèque d'icônes SVG ligne (remplace les emojis)
+│   └── Avatar.tsx         # Placeholders initiales pour équipe/témoignages
+├── pages/                 # Une page par route (Home, Services, NanoCredit, About, ...)
+├── hooks/
+│   └── useScrollReveal.ts # Animation fade+slide-up au scroll (IntersectionObserver)
+├── index.css              # @theme Tailwind (palette, fonts, keyframes) + @layer components
+└── App.tsx                # Déclaration des routes
+
+public/
+└── brand/
+    ├── tovpay-icon.png     # Logo carré (nav, favicon)
+    └── tovpay-logo.png     # Logo complet (footer, usages larges)
+```
+
+## Système de design
+
+Toute la palette et les animations sont centralisées dans `src/index.css` via la directive `@theme` de Tailwind v4 :
+- Couleurs : `navy`, `navy-deep`, `blue`, `teal`, `teal-dk`, `teal-light`, `lime`, `lime-dk`, `gold`, `g50`→`g900`
+- Fonts : `font-sans` (DM Sans), `font-display` (Syne)
+- Animations : `animate-float`, `animate-float-card`, `animate-mesh`, `animate-pulse-dot`, `animate-fade-up`, `animate-shine`
+
+Classes composants réutilisables (`@layer components`) : `.btn-primary`, `.btn-ghost`, `.btn-outline`, `.btn-cta`, `.floating-card`, `.mesh-orb`, `.footer-link`, `.section-title`, `.section-tag`, `.section-sub`, `.container-tp`.
+
+## Pages
+
+| Route | Description |
+|---|---|
+| `/` | Accueil — hero carousel, services, simulateur de crédit, témoignages |
+| `/services` | Détail des 4 offres (Nano-Crédit, Wallet, Scoring IA, Solutions PME) |
+| `/nano-credit` | Page dédiée au nano-crédit avec simulateur |
+| `/about` | Mission, valeurs, historique, équipe |
+| `/partners` | Écosystème de partenaires et présence pays |
+| `/investors` | Données pour investisseurs (KPI, levée de fonds) |
+| `/blog` | Articles et actualités |
+| `/faq` | Questions fréquentes |
+| `/contact` | Formulaire de contact et coordonnées |
+
+## Notes pour la suite
+
+- Les avatars d'équipe et de témoignages utilisent actuellement des monogrammes générés (composant `Avatar.tsx`). Pour passer à de vraies photos, ajoutez l'image dans `public/team/` et passez la prop `src="/team/nom.jpg"` au composant.
+- Les liens vers les réseaux sociaux (`Contact.tsx`, footer) sont des placeholders (`href="#"`) en attendant les comptes officiels.
+- Le logo officiel (`public/brand/`) a été recadré/compressé à partir du fichier source fourni ; régénérer depuis l'original si une version haute résolution est nécessaire.
+

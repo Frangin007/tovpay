@@ -1,6 +1,37 @@
 import { useState } from 'react'
+import {
+  DocumentIcon, AiSparkIcon, PhoneDownloadIcon, IdIcon,
+  CheckCircleIcon,
+} from '../components/Icon'
+import PageHero from '../components/PageHero'
+import FinalCta from '../components/FinalCta'
+import { useScrollReveal } from '../hooks/useScrollReveal'
+
+const criteres = [
+  'Âge minimum 18 ans',
+  'Numéro de téléphone actif',
+  'Compte Mobile Money',
+  'Identité vérifiée',
+  'Résidence UEMOA',
+]
+
+const avantages = [
+  'Sans garantie physique',
+  "Sans demande d'emploi",
+  'Scoring instantané',
+  'Décaissement 15 min',
+  'Taux transparent',
+]
+
+const steps = [
+  { Icon: PhoneDownloadIcon, title: 'Télécharger', desc: 'App Store / Google Play' },
+  { Icon: IdIcon, title: 'Vérifier', desc: 'ID + téléphone (5 min)' },
+  { Icon: AiSparkIcon, title: 'Scorer', desc: 'IA analyse (1 min)' },
+  { Icon: CheckCircleIcon, title: 'Décaisser', desc: 'Fonds reçus (15 min)' },
+]
 
 export default function NanoCredit() {
+  useScrollReveal()
   const [simDur, setSimDur] = useState(1)
   const [simAmount, setSimAmount] = useState(10000)
 
@@ -10,29 +41,24 @@ export default function NanoCredit() {
 
   return (
     <>
-      <section className="page-hero">
-        <div className="page-hero-grid"></div>
-        <div className="page-hero-inner">
-          <div className="breadcrumb">
-            <span className="breadcrumb-item">Accueil</span>
-            <span className="breadcrumb-sep">/</span>
-            <span className="breadcrumb-item">Nano-Crédit</span>
-          </div>
-          <h1>Nano-Crédit Mobile</h1>
-          <p>Crédit instantané sans garantie, remboursement flexible</p>
-        </div>
-      </section>
+      <PageHero
+        breadcrumb="Accueil / Nano-Crédit"
+        title="Nano-Crédit Mobile"
+        desc="Crédit instantané sans garantie, remboursement flexible"
+      />
 
-      <section style={{ background: '#fff' }}>
-        <div className="container">
-          <div style={{ marginBottom: '80px' }}>
-            <h2 className="section-title">Simulation de crédit</h2>
-            <div className="sim-card" style={{ background: 'var(--g50)' }}>
-              <div className="sim-grid">
+      <section className="bg-white py-24 px-[5%]">
+        <div className="container-tp">
+
+          {/* SIMULATION */}
+          <div className="mb-20">
+            <h2 className="section-title mb-9">Simulation de crédit</h2>
+            <div className="bg-g50 rounded-3xl p-9" data-reveal>
+              <div className="grid md:grid-cols-2 gap-9">
                 <div>
-                  <span className="sim-label">Montant souhaité</span>
-                  <div className="sim-amount" style={{ color: 'var(--navy)' }}>
-                    {simAmount.toLocaleString('fr-FR')} <span>FCFA</span>
+                  <span className="block text-g600 text-xs mb-2.5">Montant souhaité</span>
+                  <div className="font-display font-extrabold text-[34px] text-navy mb-2.5">
+                    {simAmount.toLocaleString('fr-FR')} <span className="text-[15px] text-g400 font-medium">FCFA</span>
                   </div>
                   <input
                     type="range"
@@ -41,16 +67,20 @@ export default function NanoCredit() {
                     step="500"
                     value={simAmount}
                     onChange={(e) => setSimAmount(Number(e.target.value))}
+                    className="w-full accent-teal cursor-pointer mb-1"
                   />
-                  <div className="range-labels"><span>1 000</span><span>20 000</span></div>
-                  <div style={{ marginTop: '22px' }}>
-                    <span className="sim-label" style={{ color: 'var(--navy)' }}>Durée de remboursement</span>
-                    <div className="dur-grid">
+                  <div className="flex justify-between text-g400 text-xs">
+                    <span>1 000</span><span>20 000</span>
+                  </div>
+                  <div className="mt-6">
+                    <span className="block text-navy text-xs mb-2.5">Durée de remboursement</span>
+                    <div className="grid grid-cols-2 gap-2">
                       {[1, 2, 3, 4].map(d => (
                         <button
                           key={d}
-                          className={`dur-btn ${d === simDur ? 'active' : ''}`}
-                          style={{ background: d === simDur ? 'var(--navy)' : 'var(--g100)', color: d === simDur ? '#fff' : 'var(--navy)' }}
+                          className={`text-xs font-semibold rounded-lg py-2.5 transition-colors duration-200 ${
+                            d === simDur ? 'bg-navy text-white' : 'bg-g100 text-navy hover:bg-g100/70'
+                          }`}
                           onClick={() => setSimDur(d)}
                         >
                           {d === 1 ? '1 sem' : d === 2 ? '2 sem' : d === 3 ? '3 sem' : '1 mois'}
@@ -59,87 +89,87 @@ export default function NanoCredit() {
                     </div>
                   </div>
                 </div>
-                <div style={{ background: 'linear-gradient(135deg,var(--navy),#1a3a8f)', borderRadius: '16px', padding: '24px', color: '#fff' }}>
-                  <div style={{ marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid rgba(255,255,255,.1)' }}>
-                    <div style={{ color: 'rgba(255,255,255,.65)', fontSize: '12px', marginBottom: '4px' }}>Montant emprunté</div>
-                    <div style={{ fontSize: '24px', fontWeight: 700 }}>{simAmount.toLocaleString('fr-FR')} FCFA</div>
+                <div className="bg-gradient-to-br from-navy to-[#1a3a8f] rounded-2xl p-6 text-white">
+                  <div className="mb-4 pb-4 border-b border-white/10">
+                    <div className="text-white/65 text-xs mb-1">Montant emprunté</div>
+                    <div className="text-2xl font-bold">{simAmount.toLocaleString('fr-FR')} FCFA</div>
                   </div>
-                  <div style={{ marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid rgba(255,255,255,.1)' }}>
-                    <div style={{ color: 'rgba(255,255,255,.65)', fontSize: '12px', marginBottom: '4px' }}>Taux d'intérêt</div>
-                    <div style={{ fontSize: '20px', fontWeight: 700 }}>{(rates[simDur as keyof typeof rates] * 100).toFixed(0)}%</div>
+                  <div className="mb-4 pb-4 border-b border-white/10">
+                    <div className="text-white/65 text-xs mb-1">Taux d'intérêt</div>
+                    <div className="text-xl font-bold">{(rates[simDur as keyof typeof rates] * 100).toFixed(0)}%</div>
                   </div>
-                  <div style={{ marginBottom: '16px', paddingBottom: '16px', borderBottom: '1px solid rgba(255,255,255,.1)' }}>
-                    <div style={{ color: 'rgba(255,255,255,.65)', fontSize: '12px', marginBottom: '4px' }}>Intérêts</div>
-                    <div style={{ fontSize: '20px', fontWeight: 700 }}>{interest.toLocaleString('fr-FR')} FCFA</div>
+                  <div className="mb-4 pb-4 border-b border-white/10">
+                    <div className="text-white/65 text-xs mb-1">Intérêts</div>
+                    <div className="text-xl font-bold">{interest.toLocaleString('fr-FR')} FCFA</div>
                   </div>
-                  <div style={{ background: 'rgba(0,185,142,.2)', padding: '16px', borderRadius: '12px' }}>
-                    <div style={{ color: 'rgba(255,255,255,.65)', fontSize: '12px', marginBottom: '4px' }}>Total à rembourser</div>
-                    <div style={{ fontSize: '28px', fontWeight: 700, color: 'var(--teal)' }}>{total.toLocaleString('fr-FR')} FCFA</div>
+                  <div className="bg-teal/20 p-4 rounded-xl">
+                    <div className="text-white/65 text-xs mb-1">Total à rembourser</div>
+                    <div className="text-[28px] font-bold text-teal">{total.toLocaleString('fr-FR')} FCFA</div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div style={{ marginBottom: '80px' }}>
-            <h2 className="section-title">Conditions d'accès</h2>
-            <div className="cond-grid">
-              <div className="cond-card">
-                <div className="cond-icon">📋</div>
-                <h4 className="cond-title light">Critères obligatoires</h4>
-                <ul className="cond-list light">
-                  <li>✓ Âge minimum 18 ans</li>
-                  <li>✓ Numéro de téléphone actif</li>
-                  <li>✓ Compte Mobile Money</li>
-                  <li>✓ Identité vérifiée</li>
-                  <li>✓ Résidence UEMOA</li>
+          {/* CONDITIONS */}
+          <div className="mb-20">
+            <h2 className="section-title mb-9">Conditions d'accès</h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-white rounded-2xl border border-g100 p-7" data-reveal>
+                <div className="text-teal mb-3.5"><DocumentIcon size={26} /></div>
+                <h4 className="font-display font-bold text-navy text-lg mb-4">Critères obligatoires</h4>
+                <ul className="list-none flex flex-col">
+                  {criteres.map((c, i) => (
+                    <li key={i} className="flex items-center gap-2.5 py-2 border-b border-g100 last:border-0 text-g600 text-sm">
+                      <CheckCircleIcon size={15} strokeWidth={2.2} className="text-teal shrink-0" /> {c}
+                    </li>
+                  ))}
                 </ul>
               </div>
-              <div className="cond-card accent">
-                <div className="cond-icon">⚡</div>
-                <h4 className="cond-title dark">Avantages TOVPAY</h4>
-                <ul className="cond-list dark">
-                  <li>✓ Sans garantie physique</li>
-                  <li>✓ Sans demande d'emploi</li>
-                  <li>✓ Scoring instantané</li>
-                  <li>✓ Décaissement 15 min</li>
-                  <li>✓ Taux transparent</li>
+              <div className="bg-navy rounded-2xl p-7" data-reveal data-reveal-delay="1">
+                <div className="text-lime mb-3.5"><AiSparkIcon size={26} /></div>
+                <h4 className="font-display font-bold text-white text-lg mb-4">Avantages TOVPAY</h4>
+                <ul className="list-none flex flex-col">
+                  {avantages.map((a, i) => (
+                    <li key={i} className="flex items-center gap-2.5 py-2 border-b border-white/10 last:border-0 text-white/75 text-sm">
+                      <CheckCircleIcon size={15} strokeWidth={2.2} className="text-lime shrink-0" /> {a}
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
           </div>
 
+          {/* PROCESSUS */}
           <div>
-            <h2 className="section-title">Processus d'obtention</h2>
-            <div className="steps-grid" style={{ gridTemplateColumns: 'repeat(4,1fr)', marginTop: '44px' }}>
-              <div className="step-card">
-                <div className="step-number">1</div>
-                <div className="step-icon">📱</div>
-                <h4 className="step-title">Télécharger</h4>
-                <p className="step-desc">App Store / Google Play</p>
-              </div>
-              <div className="step-card">
-                <div className="step-number">2</div>
-                <div className="step-icon">🆔</div>
-                <h4 className="step-title">Vérifier</h4>
-                <p className="step-desc">ID + téléphone (5 min)</p>
-              </div>
-              <div className="step-card">
-                <div className="step-number">3</div>
-                <div className="step-icon">🤖</div>
-                <h4 className="step-title">Scorer</h4>
-                <p className="step-desc">IA analyse (1 min)</p>
-              </div>
-              <div className="step-card">
-                <div className="step-number">4</div>
-                <div className="step-icon">✅</div>
-                <h4 className="step-title">Décaisser</h4>
-                <p className="step-desc">Fonds reçus (15 min)</p>
-              </div>
+            <h2 className="section-title mb-9">Processus d'obtention</h2>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+              {steps.map((s, i) => (
+                <div
+                  key={i}
+                  data-reveal
+                  data-reveal-delay={String(i)}
+                  className="bg-g50 rounded-2xl border border-g100 p-7 text-center relative transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:bg-white"
+                >
+                  <div className="absolute top-4 right-4 font-display font-extrabold text-3xl text-g100">{i + 1}</div>
+                  <div className="text-teal flex justify-center mb-3 relative z-10">
+                    <s.Icon size={26} />
+                  </div>
+                  <h4 className="font-display font-bold text-navy text-base mb-2">{s.title}</h4>
+                  <p className="text-g600 text-[13px] leading-relaxed">{s.desc}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
+
+      <FinalCta
+        title="Votre crédit vous attend."
+        desc="Téléchargez l'app, vérifiez votre identité, recevez vos fonds en 15 minutes."
+        primary={{ label: "Télécharger l'app", to: '/services' }}
+        secondary={{ label: 'Voir la FAQ →', to: '/faq' }}
+      />
     </>
   )
 }

@@ -1,7 +1,18 @@
+import { Link } from 'react-router-dom'
+import {
+  CreditIcon, WalletIcon, AiSparkIcon, BuildingIcon,
+  PhoneDownloadIcon, IdIcon, CheckCircleIcon,
+} from '../components/Icon'
+import PageHero from '../components/PageHero'
+import FinalCta from '../components/FinalCta'
+import { useScrollReveal } from '../hooks/useScrollReveal'
+
 export default function Services() {
+  useScrollReveal()
+
   const services = [
     {
-      icon: '💳',
+      icon: CreditIcon,
       color: '#00B98E',
       title: 'Nano-Crédit Mobile',
       desc: 'Accédez instantanément à 1 000 – 20 000 FCFA (équivalent Nigeria) sans paperasse complexe. Scoring basé sur IA, remboursement flexible.',
@@ -9,7 +20,7 @@ export default function Services() {
       link: '/nano-credit'
     },
     {
-      icon: '📱',
+      icon: WalletIcon,
       color: '#1A3FA8',
       title: 'Wallet & Paiements',
       desc: 'Portefeuille numérique complet pour gérer vos fonds. Envoyez, recevez, payez chez les commerçants partenaires.',
@@ -17,7 +28,7 @@ export default function Services() {
       link: '/services'
     },
     {
-      icon: '🤖',
+      icon: AiSparkIcon,
       color: '#7C3AED',
       title: 'Scoring Intelligent',
       desc: 'Moteur IA propriétaire qui évalue votre profil de crédit en temps réel sans historique bancaire complexe.',
@@ -25,7 +36,7 @@ export default function Services() {
       link: '/services'
     },
     {
-      icon: '🏢',
+      icon: BuildingIcon,
       color: '#F5A623',
       title: 'Solutions PME',
       desc: 'Services financiers digitaux pour petites entreprises : lignes renouvelables, gestion trésorerie, tableaux de bord.',
@@ -34,88 +45,90 @@ export default function Services() {
     }
   ]
 
+  const steps = [
+    { Icon: PhoneDownloadIcon, title: "Téléchargez l'app", desc: 'Disponible sur App Store et Google Play. Gratuit et sécurisé.' },
+    { Icon: IdIcon, title: 'Inscrivez-vous', desc: 'Vérification ID + numéro téléphone. Moins de 5 minutes.' },
+    { Icon: AiSparkIcon, title: 'Scoring instantané', desc: 'IA analyse votre profil. Résultat immédiat.' },
+    { Icon: CreditIcon, title: 'Crédit décaissé', desc: 'Fonds sur votre portefeuille en 15 minutes max.' },
+  ]
+
   return (
     <>
-      <section className="page-hero">
-        <div className="page-hero-grid"></div>
-        <div className="page-hero-inner">
-          <div className="breadcrumb">
-            <span className="breadcrumb-item">Accueil</span>
-            <span className="breadcrumb-sep">/</span>
-            <span className="breadcrumb-item">Services</span>
-          </div>
-          <h1>Nos services financiers</h1>
-          <p>Solutions complètes pour l'inclusion financière en Afrique de l'Ouest</p>
-        </div>
-      </section>
+      <PageHero
+        breadcrumb="Accueil / Services"
+        title="Nos services financiers"
+        desc="Solutions complètes pour l'inclusion financière en Afrique de l'Ouest"
+      />
 
-      <section style={{ background: '#fff' }}>
-        <div className="container">
+      <section className="bg-white py-24 px-[5%]">
+        <div className="container-tp">
           {services.map((service, i) => (
-            <div key={i} style={{ marginBottom: i < services.length - 1 ? '80px' : '0' }}>
-              <div className="about-grid">
+            <div key={i}>
+              <div className="grid lg:grid-cols-2 gap-12 items-start" data-reveal>
                 <div>
-                  <div className="service-icon-wrap" style={{ background: `${service.color}18` }}>
-                    {service.icon}
+                  <div
+                    className="w-[60px] h-[60px] rounded-2xl flex items-center justify-center mb-5"
+                    style={{ background: `${service.color}18`, color: service.color }}
+                  >
+                    <service.icon size={26} />
                   </div>
-                  <h2 className="section-title" style={{ marginTop: '0' }}>{service.title}</h2>
-                  <p style={{ color: 'var(--g600)', fontSize: '15px', lineHeight: '1.8', marginBottom: '28px' }}>
-                    {service.desc}
-                  </p>
-                  <a href={service.link} className="btn-primary">En savoir plus →</a>
+                  <h2 className="section-title mt-0">{service.title}</h2>
+                  <p className="text-g600 text-[15px] leading-relaxed mb-7">{service.desc}</p>
+                  <Link to={service.link} className="btn-primary">En savoir plus →</Link>
                 </div>
-                <div className="service-features">
-                  <h4 style={{ fontFamily: "'Syne',sans-serif", fontWeight: 700, color: 'var(--navy)', marginBottom: '18px' }}>
-                    Caractéristiques
-                  </h4>
+                <div className="bg-g50 rounded-2xl p-7">
+                  <h4 className="font-display font-bold text-navy mb-[18px]">Caractéristiques</h4>
                   {service.features.map((f, j) => (
-                    <div key={j} className="feature-row">
-                      <div className="feature-check" style={{ background: `${service.color}18`, color: service.color }}>✓</div>
-                      <span style={{ color: 'var(--g600)', fontSize: '14px' }}>{f}</span>
+                    <div key={j} className="flex items-center gap-3 py-2.5 border-b border-g100 last:border-0">
+                      <div
+                        className="w-[26px] h-[26px] rounded-full flex items-center justify-center shrink-0"
+                        style={{ background: `${service.color}18`, color: service.color }}
+                      >
+                        <CheckCircleIcon size={14} strokeWidth={2.2} />
+                      </div>
+                      <span className="text-g600 text-sm">{f}</span>
                     </div>
                   ))}
                 </div>
               </div>
-              {i < services.length - 1 && <hr style={{ border: 'none', borderTop: '1px solid var(--g100)', margin: '60px 0' }} />}
+              {i < services.length - 1 && <hr className="border-0 border-t border-g100 my-16" />}
             </div>
           ))}
         </div>
       </section>
 
-      <section style={{ background: 'var(--g50)' }}>
-        <div className="container">
-          <div style={{ textAlign: 'center', marginBottom: '44px' }}>
+      <section className="bg-g50 py-24 px-[5%]">
+        <div className="container-tp">
+          <div className="text-center mb-11">
             <span className="section-tag">COMMENCER</span>
-            <h2 className="section-title">Comment ça marche ?</h2>
+            <h2 className="section-title text-center">Comment ça marche ?</h2>
           </div>
-          <div className="steps-grid">
-            <div className="step-card">
-              <div className="step-number">1</div>
-              <div className="step-icon">📱</div>
-              <h4 className="step-title">Téléchargez l'app</h4>
-              <p className="step-desc">Disponible sur App Store et Google Play. Gratuit et sécurisé.</p>
-            </div>
-            <div className="step-card">
-              <div className="step-number">2</div>
-              <div className="step-icon">🆔</div>
-              <h4 className="step-title">Inscrivez-vous</h4>
-              <p className="step-desc">Vérification ID + numéro téléphone. Moins de 5 minutes.</p>
-            </div>
-            <div className="step-card">
-              <div className="step-number">3</div>
-              <div className="step-icon">🤖</div>
-              <h4 className="step-title">Scoring instantané</h4>
-              <p className="step-desc">IA analyse votre profil. Résultat immédiat.</p>
-            </div>
-            <div className="step-card">
-              <div className="step-number">4</div>
-              <div className="step-icon">💰</div>
-              <h4 className="step-title">Crédit décaissé</h4>
-              <p className="step-desc">Fonds sur votre portefeuille en 15 minutes max.</p>
-            </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {steps.map((s, i) => (
+              <div
+                key={i}
+                data-reveal
+                data-reveal-delay={String(i)}
+                className="bg-white rounded-2xl border border-g100 p-7 text-center relative transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
+              >
+                <div className="absolute top-4 right-4 font-display font-extrabold text-3xl text-g100">{i + 1}</div>
+                <div className="text-teal flex justify-center mb-3 relative z-10">
+                  <s.Icon size={26} />
+                </div>
+                <h4 className="font-display font-bold text-navy text-base mb-2">{s.title}</h4>
+                <p className="text-g600 text-[13px] leading-relaxed">{s.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
+
+      <FinalCta
+        title="Une offre, une app, toute la zone UEMOA."
+        desc="Nano-crédit, wallet et scoring intelligent réunis dans une seule application mobile."
+        primary={{ label: 'Demander un crédit', to: '/nano-credit' }}
+        secondary={{ label: 'Nous contacter →', to: '/contact' }}
+      />
     </>
   )
 }

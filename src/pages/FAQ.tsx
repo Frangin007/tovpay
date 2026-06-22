@@ -1,6 +1,20 @@
 import { useState } from 'react'
+import PageHero from '../components/PageHero'
+import { useScrollReveal } from '../hooks/useScrollReveal'
+
+function ChevronIcon({ open }: { open: boolean }) {
+  return (
+    <svg
+      width="18" height="18" viewBox="0 0 24 24" fill="none"
+      className={`shrink-0 transition-transform duration-300 ${open ? 'rotate-180' : 'rotate-0'}`}
+    >
+      <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
 
 export default function FAQ() {
+  useScrollReveal()
   const [openItems, setOpenItems] = useState<number[]>([])
 
   const faqs = [
@@ -58,44 +72,43 @@ export default function FAQ() {
     setOpenItems(openItems.includes(i) ? openItems.filter(x => x !== i) : [...openItems, i])
   }
 
+  const renderFaq = (item: { q: string; a: string }, i: number) => {
+    const isOpen = openItems.includes(i)
+    return (
+      <div key={i} className="border-b border-g100">
+        <button
+          className="w-full flex justify-between items-center gap-4 text-left py-5 font-display font-semibold text-navy text-[15px] hover:text-teal transition-colors duration-200"
+          onClick={() => toggleItem(i)}
+        >
+          {item.q}
+          <span className="text-teal"><ChevronIcon open={isOpen} /></span>
+        </button>
+        <div
+          className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr] opacity-100 pb-5' : 'grid-rows-[0fr] opacity-0'}`}
+        >
+          <div className="overflow-hidden">
+            <p className="text-g600 text-sm leading-relaxed">{item.a}</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <>
-      <section className="page-hero">
-        <div className="page-hero-grid"></div>
-        <div className="page-hero-inner">
-          <div className="breadcrumb">
-            <span className="breadcrumb-item">Accueil</span>
-            <span className="breadcrumb-sep">/</span>
-            <span className="breadcrumb-item">FAQ</span>
-          </div>
-          <h1>Questions fréquentes</h1>
-          <p>Trouvez les réponses à vos questions sur TOVPAY</p>
-        </div>
-      </section>
+      <PageHero
+        breadcrumb="Accueil / FAQ"
+        title="Questions fréquentes"
+        desc="Trouvez les réponses à vos questions sur TOVPAY"
+      />
 
-      <section style={{ background: '#fff' }}>
-        <div className="container" style={{ maxWidth: '760px' }}>
-          <h2 className="section-title" style={{ textAlign: 'center', marginBottom: '60px' }}>Crédit & Simulation</h2>
-          {faqs.slice(0, 6).map((item, i) => (
-            <div key={i} className="faq-item">
-              <button className="faq-question" onClick={() => toggleItem(i)}>
-                {item.q}
-                <span className={`faq-icon ${openItems.includes(i) ? 'open' : ''}`}>+</span>
-              </button>
-              {openItems.includes(i) && <div className="faq-answer open">{item.a}</div>}
-            </div>
-          ))}
+      <section className="bg-white py-24 px-[5%]">
+        <div className="container-tp max-w-[760px]">
+          <h2 className="section-title text-center mb-14">Crédit & Simulation</h2>
+          {faqs.slice(0, 6).map((item, i) => renderFaq(item, i))}
 
-          <h2 className="section-title" style={{ textAlign: 'center', margin: '80px 0 60px 0' }}>Sécurité & Conformité</h2>
-          {faqs.slice(6).map((item, i) => (
-            <div key={i + 6} className="faq-item">
-              <button className="faq-question" onClick={() => toggleItem(i + 6)}>
-                {item.q}
-                <span className={`faq-icon ${openItems.includes(i + 6) ? 'open' : ''}`}>+</span>
-              </button>
-              {openItems.includes(i + 6) && <div className="faq-answer open">{item.a}</div>}
-            </div>
-          ))}
+          <h2 className="section-title text-center my-20">Sécurité & Conformité</h2>
+          {faqs.slice(6).map((item, i) => renderFaq(item, i + 6))}
         </div>
       </section>
     </>
