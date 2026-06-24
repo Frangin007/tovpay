@@ -83,9 +83,7 @@ function StatItem({ value, suffix, label }: { value: number, suffix: string, lab
 export default function Home() {
   const heroRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
-  const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
   const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
-  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 1.08])
 
   return (
     <div className="overflow-x-hidden">
@@ -95,17 +93,12 @@ export default function Home() {
       ═══════════════════════════════════════════════════════ */}
       <div ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden">
 
-        {/* Background image avec parallaxe */}
-        <motion.div
-          className="absolute inset-0 z-0"
-          style={{ y: heroY, scale: heroScale }}
-        >
-          <img
-            src={IMAGES.hero}
-            alt="Entrepreneur africain avec téléphone"
-            className="w-full h-full object-cover object-center"
-          />
-        </motion.div>
+        {/* Background image FIXE (reste figée pendant le scroll) */}
+        <div
+          className="absolute inset-0 z-0 bg-cover bg-center"
+          style={{ backgroundImage: `url(${IMAGES.hero})`, backgroundAttachment: 'fixed' }}
+          aria-label="Entrepreneur africain avec téléphone"
+        />
 
         {/* Overlays multicouches */}
         <div className="absolute inset-0 z-10 bg-gradient-to-r from-navy-deep/95 via-navy-deep/75 to-navy-deep/20" />
@@ -123,20 +116,6 @@ export default function Home() {
           style={{ opacity: heroOpacity }}
         >
           <div className="max-w-[640px]">
-            {/* Badge animé */}
-            <motion.div
-              variants={fadeUp}
-              initial="hidden"
-              animate="visible"
-              custom={0}
-              className="inline-flex items-center gap-2 bg-teal/15 border border-teal/35 rounded-full px-4 py-1.5 mb-8"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-teal animate-pulse" />
-              <span className="text-teal text-xs font-semibold tracking-wide">
-                Partenaire Orabank · Zone UEMOA · 6 pays
-              </span>
-            </motion.div>
-
             {/* Titre principal */}
             <motion.h1
               className="font-display font-extrabold text-[3rem] sm:text-[3.8rem] lg:text-[5rem] leading-[1.02] text-white tracking-tight mb-6"
@@ -176,7 +155,9 @@ export default function Home() {
             >
               <Link to="/nano-credit">
                 <motion.span
-                  className="inline-flex items-center gap-2 bg-teal text-white font-semibold text-[15px] px-7 py-4 rounded-xl shadow-[0_8px_32px_rgba(0,185,142,0.4)] cursor-pointer"
+                  className="inline-flex items-center gap-2 bg-teal text-white font-semibold text-[15px] px-7 py-4 rounded-xl cursor-pointer"
+                  animate={{ boxShadow: ['0 8px 30px rgba(0,185,142,0.4)', '0 10px 48px rgba(0,185,142,0.78)', '0 8px 30px rgba(0,185,142,0.4)'] }}
+                  transition={{ repeat: Infinity, duration: 2.8, ease: 'easeInOut' }}
                   whileHover={{ scale: 1.04, y: -2, boxShadow: '0 16px 40px rgba(0,185,142,0.5)' }}
                   whileTap={{ scale: 0.97 }}
                 >
