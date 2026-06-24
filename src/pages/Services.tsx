@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion'
+import type { Variants } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import {
   CreditIcon, WalletIcon, AiSparkIcon, BuildingIcon,
@@ -5,119 +7,190 @@ import {
 } from '../components/Icon'
 import PageHero from '../components/PageHero'
 import FinalCta from '../components/FinalCta'
-import { useScrollReveal } from '../hooks/useScrollReveal'
+import IMAGES from '../lib/images'
+
+const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
+
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i: number = 0) => ({
+    opacity: 1, y: 0,
+    transition: { duration: 0.7, delay: i * 0.12, ease: EASE },
+  }),
+}
+
+const services = [
+  {
+    icon: CreditIcon,
+    color: '#00B98E',
+    title: 'Nano-Crédit Mobile',
+    desc: 'Accédez à 1 000 – 20 000 FCFA en moins de 15 minutes via Mobile Money. Sans garantie, sans paperasse. Scoring basé sur IA.',
+    features: ['Décaissement en 15 min', 'Sans garantie physique', 'Multi-opérateurs Mobile Money', 'Scoring IA intelligent'],
+    link: '/nano-credit',
+    img: IMAGES.howStep3,
+  },
+  {
+    icon: WalletIcon,
+    color: '#1A3FA8',
+    title: 'Wallet & Paiements',
+    desc: 'Portefeuille numérique multi-opérateurs. Envoyez, recevez, payez chez tous les commerçants partenaires de la zone UEMOA.',
+    features: ['Multi-opérateurs Mobile Money', 'Paiement marchand', 'Transferts instantanés', 'Historique complet'],
+    link: '/services',
+    img: IMAGES.impact2,
+  },
+  {
+    icon: AiSparkIcon,
+    color: '#7C3AED',
+    title: 'Scoring Intelligent',
+    desc: 'Notre moteur IA évalue votre profil en temps réel. Score de crédit sans historique bancaire, sans document complexe.',
+    features: ['Score en temps réel', 'Sans historique bancaire', 'Amélioration continue', 'Transparence totale'],
+    link: '/services',
+    img: IMAGES.impact4,
+  },
+  {
+    icon: BuildingIcon,
+    color: '#F5A623',
+    title: 'Solutions PME',
+    desc: 'Lignes de crédit renouvelables, gestion de trésorerie et tableaux de bord analytiques pour les petites entreprises.',
+    features: ['Ligne de crédit renouvelable', 'Gestion trésorerie', 'Multi-utilisateurs', 'Tableau de bord dédié'],
+    link: '/services',
+    img: IMAGES.whyImg1,
+  }
+]
+
+const steps = [
+  { Icon: PhoneDownloadIcon, n: '01', title: "Téléchargez l'app", desc: 'App Store ou Google Play. Gratuit.', img: IMAGES.howStep1 },
+  { Icon: IdIcon, n: '02', title: 'Inscrivez-vous', desc: 'Pièce ID + téléphone. 5 minutes.', img: IMAGES.howStep2 },
+  { Icon: AiSparkIcon, n: '03', title: 'Scoring instantané', desc: 'IA analyse votre profil. Résultat immédiat.', img: IMAGES.howStep3 },
+  { Icon: CreditIcon, n: '04', title: 'Crédit décaissé', desc: 'Fonds reçus en 15 minutes max.', img: IMAGES.howStep4 },
+]
 
 export default function Services() {
-  useScrollReveal()
-
-  const services = [
-    {
-      icon: CreditIcon,
-      color: '#00B98E',
-      title: 'Nano-Crédit Mobile',
-      desc: 'Accédez instantanément à 1 000 – 20 000 FCFA (équivalent Nigeria) sans paperasse complexe. Scoring basé sur IA, remboursement flexible.',
-      features: ['Décaissement en 15 min', 'Sans garantie physique', 'Multi-opérateurs Mobile Money', 'Scoring IA intelligent'],
-      link: '/nano-credit'
-    },
-    {
-      icon: WalletIcon,
-      color: '#1A3FA8',
-      title: 'Wallet & Paiements',
-      desc: 'Portefeuille numérique complet pour gérer vos fonds. Envoyez, recevez, payez chez les commerçants partenaires.',
-      features: ['Multi-opérateurs', 'Paiement marchand', 'Transferts instantanés', 'Historique détaillé', 'Notification SMS'],
-      link: '/services'
-    },
-    {
-      icon: AiSparkIcon,
-      color: '#7C3AED',
-      title: 'Scoring Intelligent',
-      desc: 'Moteur IA propriétaire qui évalue votre profil de crédit en temps réel sans historique bancaire complexe.',
-      features: ['Score en temps réel', 'Sans historique bancaire', 'Amélioration continue', 'Transparence totale', 'Appel API disponible'],
-      link: '/services'
-    },
-    {
-      icon: BuildingIcon,
-      color: '#F5A623',
-      title: 'Solutions PME',
-      desc: 'Services financiers digitaux pour petites entreprises : lignes renouvelables, gestion trésorerie, tableaux de bord.',
-      features: ['Ligne de crédit renouvelable', 'Gestion trésorerie', 'Multi-utilisateurs', 'Tableau de bord analytique', 'Support dédié'],
-      link: '/services'
-    }
-  ]
-
-  const steps = [
-    { Icon: PhoneDownloadIcon, title: "Téléchargez l'app", desc: 'Disponible sur App Store et Google Play. Gratuit et sécurisé.' },
-    { Icon: IdIcon, title: 'Inscrivez-vous', desc: 'Vérification ID + numéro téléphone. Moins de 5 minutes.' },
-    { Icon: AiSparkIcon, title: 'Scoring instantané', desc: 'IA analyse votre profil. Résultat immédiat.' },
-    { Icon: CreditIcon, title: 'Crédit décaissé', desc: 'Fonds sur votre portefeuille en 15 minutes max.' },
-  ]
-
   return (
     <>
       <PageHero
         breadcrumb="Accueil / Services"
         title="Nos services financiers"
-        desc="Solutions complètes pour l'inclusion financière en Afrique de l'Ouest"
+        desc="Solutions complètes pour l'inclusion financière en Afrique de l'Ouest."
+        bgImage={IMAGES.heroServices}
       />
 
-      <section className="bg-white py-24 px-[5%]">
-        <div className="container-tp">
+      {/* SERVICES LISTE */}
+      <section className="py-28 px-[5%] bg-white">
+        <div className="max-w-[1280px] mx-auto flex flex-col gap-24">
           {services.map((service, i) => (
-            <div key={i}>
-              <div className="grid lg:grid-cols-2 gap-12 items-start" data-reveal>
-                <div>
-                  <div
-                    className="w-[60px] h-[60px] rounded-2xl flex items-center justify-center mb-5"
-                    style={{ background: `${service.color}18`, color: service.color }}
-                  >
-                    <service.icon size={26} />
-                  </div>
-                  <h2 className="section-title mt-0">{service.title}</h2>
-                  <p className="text-g600 text-[15px] leading-relaxed mb-7">{service.desc}</p>
-                  <Link to={service.link} className="btn-primary">En savoir plus →</Link>
+            <motion.div
+              key={i}
+              className={`grid lg:grid-cols-2 gap-14 items-center ${i % 2 === 1 ? 'lg:[&>:first-child]:order-2' : ''}`}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.7, ease: EASE }}
+            >
+              {/* Texte */}
+              <div>
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6"
+                  style={{ background: `${service.color}15`, color: service.color }}
+                >
+                  <service.icon size={28} />
                 </div>
-                <div className="bg-g50 rounded-2xl p-7">
-                  <h4 className="font-display font-bold text-navy mb-[18px]">Caractéristiques</h4>
+                <h2 className="font-display font-extrabold text-[2rem] text-navy mb-4">{service.title}</h2>
+                <p className="text-g600 text-[15px] leading-relaxed mb-7">{service.desc}</p>
+
+                <div className="flex flex-col gap-2.5 mb-8">
                   {service.features.map((f, j) => (
-                    <div key={j} className="flex items-center gap-3 py-2.5 border-b border-g100 last:border-0">
+                    <div key={j} className="flex items-center gap-3">
                       <div
-                        className="w-[26px] h-[26px] rounded-full flex items-center justify-center shrink-0"
-                        style={{ background: `${service.color}18`, color: service.color }}
+                        className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
+                        style={{ background: `${service.color}15`, color: service.color }}
                       >
-                        <CheckCircleIcon size={14} strokeWidth={2.2} />
+                        <CheckCircleIcon size={12} strokeWidth={2.5} />
                       </div>
                       <span className="text-g600 text-sm">{f}</span>
                     </div>
                   ))}
                 </div>
+
+                <Link to={service.link}>
+                  <motion.span
+                    className="inline-flex items-center gap-2 bg-navy text-white font-semibold px-6 py-3.5 rounded-xl cursor-pointer text-sm"
+                    whileHover={{ scale: 1.04, y: -2 }}
+                    whileTap={{ scale: 0.97 }}
+                  >
+                    En savoir plus
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+                  </motion.span>
+                </Link>
               </div>
-              {i < services.length - 1 && <hr className="border-0 border-t border-g100 my-16" />}
-            </div>
+
+              {/* Image */}
+              <motion.div
+                className="relative rounded-3xl overflow-hidden h-[340px] group"
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.4 }}
+              >
+                <img
+                  src={service.img}
+                  alt={service.title}
+                  loading="lazy"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/50 to-transparent" />
+                <div
+                  className="absolute top-5 right-5 w-11 h-11 rounded-xl flex items-center justify-center"
+                  style={{ background: `${service.color}E0`, color: 'white' }}
+                >
+                  <service.icon size={20} />
+                </div>
+              </motion.div>
+            </motion.div>
           ))}
         </div>
       </section>
 
-      <section className="bg-g50 py-24 px-[5%]">
-        <div className="container-tp">
-          <div className="text-center mb-11">
-            <span className="section-tag">COMMENCER</span>
-            <h2 className="section-title text-center">Comment ça marche ?</h2>
-          </div>
+      {/* COMMENT ÇA MARCHE */}
+      <section className="py-28 px-[5%] bg-g50 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ backgroundImage: 'radial-gradient(rgba(0,185,142,0.05) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+        <div className="max-w-[1280px] mx-auto relative">
+          <motion.div className="text-center mb-14" initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <motion.span className="section-tag" variants={fadeUp} custom={0}>PROCESSUS</motion.span>
+            <motion.h2 className="section-title mt-3 text-center" variants={fadeUp} custom={1}>Comment ça marche ?</motion.h2>
+          </motion.div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {steps.map((s, i) => (
-              <div
+              <motion.div
                 key={i}
-                data-reveal
-                data-reveal-delay={String(i)}
-                className="bg-white rounded-2xl border border-g100 p-7 text-center relative transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl"
+                className="group"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.12, duration: 0.6, ease: EASE }}
+                whileHover={{ y: -8 }}
               >
-                <div className="absolute top-4 right-4 font-display font-extrabold text-3xl text-g100">{i + 1}</div>
-                <div className="text-teal flex justify-center mb-3 relative z-10">
-                  <s.Icon size={26} />
+                <div className="bg-white rounded-3xl overflow-hidden border border-g100 shadow-sm h-full group-hover:shadow-xl group-hover:border-teal/20 transition-all duration-300">
+                  <div className="relative h-44 overflow-hidden">
+                    <img
+                      src={s.img}
+                      alt={s.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/90 to-navy/20" />
+                    <div className="absolute top-4 left-4 font-display font-extrabold text-5xl leading-none text-white/20">
+                      {s.n}
+                    </div>
+                    <div className="absolute top-4 right-4 w-9 h-9 bg-teal rounded-xl flex items-center justify-center text-white">
+                      <s.Icon size={18} />
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <h4 className="font-display font-bold text-navy text-lg mb-1.5">{s.title}</h4>
+                    <p className="text-g600 text-sm leading-relaxed">{s.desc}</p>
+                  </div>
                 </div>
-                <h4 className="font-display font-bold text-navy text-base mb-2">{s.title}</h4>
-                <p className="text-g600 text-[13px] leading-relaxed">{s.desc}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -125,9 +198,10 @@ export default function Services() {
 
       <FinalCta
         title="Une offre, une app, toute la zone UEMOA."
-        desc="Nano-crédit, wallet et scoring intelligent réunis dans une seule application mobile."
+        desc="Nano-crédit, wallet et scoring réunis dans une seule application mobile."
         primary={{ label: 'Demander un crédit', to: '/nano-credit' }}
         secondary={{ label: 'Nous contacter →', to: '/contact' }}
+        bgImage={IMAGES.impact1}
       />
     </>
   )

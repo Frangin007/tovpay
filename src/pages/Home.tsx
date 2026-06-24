@@ -1,575 +1,899 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  CreditIcon, WalletIcon, ScoringIcon, BuildingIcon,
+  motion, useScroll, useTransform, useInView,
+} from 'framer-motion'
+import type { Variants, Transition } from 'framer-motion'
+import IMAGES from '../lib/images'
+import {
+  CreditIcon, WalletIcon, BuildingIcon,
   GlobeIcon, HandshakeIcon, AiSparkIcon, ShieldIcon,
   BankIcon, WaveIcon, BroadcastIcon, SignalIcon, GavelIcon,
-  UserIcon, CheckCircleIcon,
+  TrendingUpIcon,
 } from '../components/Icon'
-import Avatar from '../components/Avatar'
-import { useScrollReveal } from '../hooks/useScrollReveal'
 
-// ── Hero carousel slides ──────────────────────────────────────
-const heroSlides = [
-  {
-    tag: 'Partenaire Orabank · Zone UEMOA',
-    title: 'Du cash sur votre\ntéléphone,',
-    accent: 'pas à la banque.',
-    desc: 'Un crédit de 1 000 à 20 000 FCFA en moins de 15 minutes. Sans dossier, sans garantie. Juste votre téléphone.',
-    cta: { label: 'Demander un crédit', path: '/nano-credit' },
-    ghost: { label: 'Comment ça marche', path: '/services' },
-    stat: { val: '15 min', label: 'pour recevoir votre argent' },
-  },
-  {
-    tag: 'Wave · Orange Money · MTN MoMo',
-    title: 'Votre wallet,\ntous vos',
-    accent: 'opérateurs.',
-    desc: 'Envoyez, recevez, payez — peu importe l\'opérateur de votre client ou fournisseur. Un seul compte pour toute la zone UEMOA.',
-    cta: { label: 'Ouvrir un wallet', path: '/services' },
-    ghost: { label: 'Voir les opérateurs', path: '/partners' },
-    stat: { val: '6 pays', label: 'couverts aujourd\'hui' },
-  },
-  {
-    tag: 'Score de crédit · Sans historique bancaire',
-    title: 'Votre score\nconstruit par',
-    accent: 'vos remboursements.',
-    desc: 'Pas de relevé bancaire, pas de garant. Chaque remboursement améliore votre score et débloque des montants plus élevés.',
-    cta: { label: 'Voir mon score', path: '/services' },
-    ghost: { label: 'En savoir plus', path: '/about' },
-    stat: { val: '80%+', label: 'taux de recouvrement' },
-  },
-]
+// ── Ease cubic bezier (tuple as const pour Framer Motion v12) ────
+const EASE_OUT = [0.16, 1, 0.3, 1] as const
 
-// ── Hero Carousel ─────────────────────────────────────────────
-function HeroCarousel() {
-  const [active, setActive] = useState(0)
-  const [animating, setAnimating] = useState(false)
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const transitionRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+// ── Helper transition typée ──────────────────────────────────────
+const tr = (duration: number, delay = 0): Transition => ({
+  duration, delay, ease: [...EASE_OUT] as [number, number, number, number],
+})
 
-  const goTo = (idx: number) => {
-    if (animating || idx === active) return
-    setAnimating(true)
-    transitionRef.current = setTimeout(() => {
-      setActive(idx)
-      setAnimating(false)
-    }, 320)
-  }
+// ── Variants Framer Motion ────────────────────────────────────────
+const fadeUp: Variants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i: number = 0) => ({
+    opacity: 1, y: 0,
+    transition: tr(0.7, i * 0.12),
+  }),
+}
 
+const fadeIn: Variants = {
+  hidden: { opacity: 0 },
+  visible: (i: number = 0) => ({
+    opacity: 1,
+    transition: { duration: 0.8, delay: i * 0.1 },
+  }),
+}
+
+const slideLeft: Variants = {
+  hidden: { opacity: 0, x: -50 },
+  visible: { opacity: 1, x: 0, transition: tr(0.8) },
+}
+
+const slideRight: Variants = {
+  hidden: { opacity: 0, x: 50 },
+  visible: { opacity: 1, x: 0, transition: tr(0.8) },
+}
+
+// ── Hook animé ─────────────────────────────────────────────────
+function useAnimatedCounter(target: number, duration = 2000) {
+  const [count, setCount] = useState(0)
+  const ref = useRef<HTMLElement>(null)
+  const inView = useInView(ref, { once: true, margin: '-50px' })
   useEffect(() => {
-    timerRef.current = setTimeout(() => {
-      setAnimating(true)
-      transitionRef.current = setTimeout(() => {
-        setActive(a => (a + 1) % heroSlides.length)
-        setAnimating(false)
-      }, 320)
-    }, 5500)
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current)
-      if (transitionRef.current) clearTimeout(transitionRef.current)
-    }
-  }, [active])
+    if (!inView) return
+    let start = 0
+    const step = target / (duration / 16)
+    const timer = setInterval(() => {
+      start += step
+      if (start >= target) { setCount(target); clearInterval(timer) }
+      else setCount(Math.floor(start))
+    }, 16)
+    return () => clearInterval(timer)
+  }, [inView, target, duration])
+  return { count, ref }
+}
 
-  const slide = heroSlides[active]
-
+// ── Composant Stat avec count-up ──────────────────────────────
+function StatItem({ value, suffix, label }: { value: number, suffix: string, label: string }) {
+  const { count, ref } = useAnimatedCounter(value)
   return (
-    <section className="relative overflow-hidden min-h-screen flex flex-col justify-center pt-[100px] px-[5%] bg-[linear-gradient(160deg,#0B1F0A_0%,#112A0F_38%,#0D2251_100%)]">
-      {/* Grille de fond */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)',
-          backgroundSize: '72px 72px',
-          maskImage: 'radial-gradient(ellipse 70% 70% at 50% 30%, #000 40%, transparent 90%)',
-          WebkitMaskImage: 'radial-gradient(ellipse 70% 70% at 50% 30%, #000 40%, transparent 90%)',
-        }}
-      />
-      {/* Mesh gradients animés */}
-      <div className="mesh-orb w-[680px] h-[680px] -top-[220px] -right-[160px] bg-[radial-gradient(circle,rgba(159,232,112,0.55),transparent_70%)] opacity-75" />
-      <div className="mesh-orb w-[560px] h-[560px] -bottom-[200px] -left-[140px] bg-[radial-gradient(circle,rgba(0,229,184,0.45),transparent_70%)] opacity-75 [animation-delay:-8s] [animation-duration:20s]" />
-      <div className="mesh-orb w-[420px] h-[420px] top-[30%] left-[35%] bg-[radial-gradient(circle,rgba(26,63,168,0.5),transparent_72%)] opacity-60 [animation-delay:-4s] [animation-duration:22s]" />
-      {/* Halo + fondu bas */}
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_55%_60%_at_80%_30%,rgba(159,232,112,0.16)_0%,transparent_65%)]" />
-      <div className="absolute left-0 right-0 bottom-0 h-[140px] pointer-events-none bg-gradient-to-b from-transparent to-[#0B1F0A]/50" />
-
-      <div
-        className={`relative z-10 max-w-[1280px] mx-auto w-full flex gap-14 items-center flex-wrap pb-14 transition-all duration-300 ${
-          animating ? 'opacity-0 -translate-y-3' : 'opacity-100 translate-y-0'
-        }`}
-      >
-        <div className="flex-1 min-w-[320px] basis-[480px]">
-
-          <div className="inline-flex items-center gap-2 bg-lime/[0.14] border border-lime/35 rounded-full px-3.5 py-1.5 mb-7">
-            <div className="w-1.5 h-1.5 rounded-full bg-lime animate-pulse-dot" />
-            <span className="text-lime text-xs font-semibold">{slide.tag}</span>
-          </div>
-
-          <h1 className="font-display font-extrabold text-[2.2rem] sm:text-[2.8rem] lg:text-[4rem] leading-[1.08] text-white mb-5 tracking-tight">
-            {slide.title.split('\n').map((line, i) => (
-              <span key={i}>{line}<br /></span>
-            ))}
-            <span className="bg-gradient-to-br from-lime to-teal-light bg-clip-text text-transparent">{slide.accent}</span>
-          </h1>
-
-          <p className="text-white/68 text-[17px] leading-relaxed max-w-[460px] mb-8">{slide.desc}</p>
-
-          <div className="flex gap-3 flex-wrap mb-8">
-            <Link to={slide.cta.path} className="btn-primary">{slide.cta.label}</Link>
-            <Link to={slide.ghost.path} className="btn-ghost">{slide.ghost.label} →</Link>
-          </div>
-
-          <div className="flex items-baseline gap-2">
-            <span className="font-display font-extrabold text-[22px] text-lime">{slide.stat.val}</span>
-            <span className="text-white/50 text-[13px]">{slide.stat.label}</span>
-          </div>
-        </div>
-
-        <div className="flex-1 basis-[260px] min-w-[260px] flex justify-center relative">
-          <div className="floating-card top-[6%] -left-[2%] [animation-delay:-1s]">
-            <div className="w-8 h-8 rounded-[10px] flex items-center justify-center bg-teal/12 text-teal shrink-0">
-              <CheckCircleIcon size={16} />
-            </div>
-            <div>
-              <div className="font-semibold text-[12.5px] text-navy whitespace-nowrap">Crédit approuvé</div>
-              <div className="text-[11px] text-slate-500 whitespace-nowrap">10 000 FCFA</div>
-            </div>
-          </div>
-          <div className="floating-card bottom-[12%] -right-[4%] [animation-delay:-3s]">
-            <div className="w-8 h-8 rounded-[10px] flex items-center justify-center bg-lime/22 text-teal-dk shrink-0">
-              <ScoringIcon size={16} />
-            </div>
-            <div>
-              <div className="font-semibold text-[12.5px] text-navy whitespace-nowrap">Score à jour</div>
-              <div className="text-[11px] text-slate-500 whitespace-nowrap">812 / 900</div>
-            </div>
-          </div>
-
-          <div className="hidden lg:block w-[262px] h-[500px] rounded-[38px] p-[18px] relative animate-float bg-gradient-to-br from-white/10 to-white/[0.03] backdrop-blur-xl border border-white/14 shadow-[0_40px_80px_rgba(0,0,0,0.4)]">
-            <div className="w-[76px] h-[11px] bg-white/15 rounded-full mx-auto mb-4" />
-            <div className="bg-navy-deep/40 rounded-3xl p-[18px] h-[calc(100%-34px)]">
-              <div className="text-white/50 text-xs mb-1.5">Solde disponible</div>
-              <div className="font-display font-extrabold text-[26px] text-white mb-4">25 000 <span className="text-base text-white/45 font-medium">FCFA</span></div>
-              <div className="bg-white/[0.06] border border-white/10 rounded-2xl p-3.5 mb-4">
-                <div className="flex justify-between items-center mb-2">
-                  <div>
-                    <div className="text-white/45 text-[11px]">Crédit actif</div>
-                    <div className="text-white font-semibold text-sm">10 000 FCFA</div>
-                  </div>
-                  <span className="text-lime text-[11px] font-semibold">2 sem.</span>
-                </div>
-                <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
-                  <div className="h-full w-2/3 rounded-full bg-gradient-to-r from-teal-dk to-lime" />
-                </div>
-              </div>
-              <div className="grid grid-cols-4 gap-2 mb-4">
-                {[
-                  { Icon: CreditIcon, label: 'Crédit' },
-                  { Icon: WalletIcon, label: 'Paiement' },
-                  { Icon: ScoringIcon, label: 'Scoring' },
-                  { Icon: UserIcon, label: 'Profil' },
-                ].map(({ Icon, label }) => (
-                  <div key={label} className="flex flex-col items-center gap-1">
-                    <div className="text-teal flex justify-center"><Icon size={18} /></div>
-                    <div className="text-white/55 text-[9px]">{label}</div>
-                  </div>
-                ))}
-              </div>
-              <div className="flex items-center gap-1.5 bg-lime/10 border border-lime/20 rounded-lg px-2.5 py-2">
-                <BankIcon size={14} />
-                <span className="text-lime text-[10px] leading-tight">Partenaire Orabank · Sécurisé BCEAO</span>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div className="text-center">
+      <div className="font-display font-extrabold text-[2.8rem] text-white leading-none">
+        <span ref={ref as React.RefObject<HTMLElement>}>{count}</span>{suffix}
       </div>
-
-      {/* Pagination dots */}
-      <div className="relative z-10 flex justify-center gap-2 pb-7">
-        {heroSlides.map((_, i) => (
-          <button
-            key={i}
-            className={`h-2 rounded-full transition-all duration-300 ${i === active ? 'w-7 bg-lime' : 'w-2 bg-white/25 hover:bg-white/40'}`}
-            onClick={() => goTo(i)}
-            aria-label={`Slide ${i + 1}`}
-          />
-        ))}
-      </div>
-
-      {/* Stats bar */}
-      <div className="relative z-10 container-tp w-full">
-        <div className="grid grid-cols-2 lg:grid-cols-4 rounded-2xl overflow-hidden border border-white/10 bg-white/[0.04] mt-2">
-          {[
-            { val: '15 min', label: 'Crédit accordé en' },
-            { val: '6 pays', label: 'Présence UEMOA' },
-            { val: '50K NGN', label: 'Crédit max Nigeria' },
-            { val: '99%', label: 'Disponibilité' },
-          ].map((s, i) => (
-            <div key={i} className={`text-center py-5 px-4 ${i > 0 ? 'border-l border-white/[0.09]' : ''}`}>
-              <div className="font-display font-extrabold text-2xl text-teal">{s.val}</div>
-              <div className="text-white/50 text-xs mt-0.5">{s.label}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
+      <div className="text-white/55 text-sm mt-1.5">{label}</div>
+    </div>
   )
 }
 
-// ── Main Home ─────────────────────────────────────────────────
+// ── Main Home ──────────────────────────────────────────────────
 export default function Home() {
-  const [simDur, setSimDur] = useState(1)
-  const [simAmount, setSimAmount] = useState(10000)
-  const [activeTab, setActiveTab] = useState(0)
-
-  useScrollReveal()
-
-  const rates = { 1: 0.1, 2: 0.15, 3: 0.2, 4: 0.25 }
-  const interest = Math.round(simAmount * rates[simDur as keyof typeof rates])
-  const total = simAmount + interest
-
-  const services = [
-    {
-      icon: CreditIcon,
-      color: '#00B98E',
-      title: 'Nano-Crédit Mobile',
-      desc: 'Accédez à 1 000 – 20 000 FCFA (50 000 NGN) en moins de 15 minutes via Mobile Money. Aucune garantie matérielle requise. Remboursement flexible sur 1 à 4 semaines.',
-      features: ['Décaissement en 15 min', 'Sans garantie physique', 'Via Wave, Orange Money, MTN', 'Scoring IA intelligent']
-    },
-    {
-      icon: WalletIcon,
-      color: '#1A3FA8',
-      title: 'Wallet & Paiements',
-      desc: 'Un portefeuille numérique complet pour envoyer, recevoir et gérer vos fonds au quotidien. Compatible avec tous les opérateurs Mobile Money de la zone UEMOA.',
-      features: ['Multi-opérateurs Mobile Money', 'Paiement marchand', 'Transferts instantanés', 'Historique détaillé']
-    },
-    {
-      icon: AiSparkIcon,
-      color: '#7C3AED',
-      title: 'Scoring Intelligent',
-      desc: "Notre moteur d'IA analyse votre profil de remboursement pour déterminer votre score de crédit en temps réel, sans document complexe ni historique bancaire.",
-      features: ['Score en temps réel', 'Sans historique bancaire', 'Amélioration continue', 'Transparence totale']
-    },
-    {
-      icon: BuildingIcon,
-      color: '#F5A623',
-      title: 'Solutions PME',
-      desc: 'Des services financiers taillés pour les petites entreprises et commerçants : lignes de crédit renouvelables, gestion de trésorerie et suivi personnalisé.',
-      features: ['Ligne de crédit PME', 'Gestion de trésorerie', 'Multi-utilisateurs', 'Tableau de bord dédié']
-    }
-  ]
-
-  const service = services[activeTab]
+  const heroRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
+  const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
+  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 1.08])
 
   return (
-    <>
-      <HeroCarousel />
+    <div className="overflow-x-hidden">
 
-      {/* SERVICES */}
-      <section className="relative overflow-hidden bg-g50 py-24 px-[5%]">
-        <div className="absolute -top-[10%] -right-[8%] w-[420px] h-[420px] rounded-full bg-[radial-gradient(circle,rgba(0,185,142,0.07),transparent_70%)] pointer-events-none" />
-        <div className="container-tp relative">
-          <div className="text-center mb-11">
-            <span className="section-tag">NOS SOLUTIONS</span>
-            <h2 className="section-title text-center">Des services financiers innovants</h2>
-            <p className="section-sub mx-auto text-center">TOVPAY réunit tous les outils pour l'inclusion financière en Afrique</p>
-          </div>
-          <div className="flex gap-0 border-b-2 border-g100 mb-11 overflow-x-auto">
-            {services.map((s, i) => {
-              const Icon = s.icon
-              const active = i === activeTab
-              return (
-                <button
-                  key={i}
-                  className={`flex items-center gap-2 whitespace-nowrap px-5 py-3.5 text-sm font-semibold border-b-[3px] transition-colors duration-200 ${
-                    active ? 'border-teal text-navy' : 'border-transparent text-g600 hover:text-navy'
-                  }`}
-                  onClick={() => setActiveTab(i)}
+      {/* ═══════════════════════════════════════════════════════
+          HERO — Immersif, plein écran, parallaxe
+      ═══════════════════════════════════════════════════════ */}
+      <div ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden">
+
+        {/* Background image avec parallaxe */}
+        <motion.div
+          className="absolute inset-0 z-0"
+          style={{ y: heroY, scale: heroScale }}
+        >
+          <img
+            src={IMAGES.hero}
+            alt="Entrepreneur africain avec téléphone"
+            className="w-full h-full object-cover object-center"
+          />
+        </motion.div>
+
+        {/* Overlays multicouches */}
+        <div className="absolute inset-0 z-10 bg-gradient-to-r from-navy-deep/95 via-navy-deep/75 to-navy-deep/20" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-t from-navy-deep via-transparent to-transparent" />
+
+        {/* Mesh gradient décoratif */}
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] rounded-full z-10 pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(0,185,142,0.2) 0%, transparent 70%)', filter: 'blur(80px)' }} />
+        <div className="absolute bottom-0 left-1/3 w-[400px] h-[400px] rounded-full z-10 pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(159,232,112,0.12) 0%, transparent 70%)', filter: 'blur(60px)' }} />
+
+        {/* Contenu Hero */}
+        <motion.div
+          className="relative z-20 w-full max-w-[1280px] mx-auto px-[5%] pt-28 pb-20"
+          style={{ opacity: heroOpacity }}
+        >
+          <div className="max-w-[640px]">
+            {/* Badge animé */}
+            <motion.div
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              custom={0}
+              className="inline-flex items-center gap-2 bg-teal/15 border border-teal/35 rounded-full px-4 py-1.5 mb-8"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-teal animate-pulse" />
+              <span className="text-teal text-xs font-semibold tracking-wide">
+                Partenaire Orabank · Zone UEMOA · 6 pays
+              </span>
+            </motion.div>
+
+            {/* Titre principal */}
+            <motion.h1
+              className="font-display font-extrabold text-[3rem] sm:text-[3.8rem] lg:text-[5rem] leading-[1.02] text-white tracking-tight mb-6"
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              custom={1}
+            >
+              Le crédit mobile{' '}
+              <br />
+              <span className="bg-gradient-to-r from-teal to-lime bg-clip-text text-transparent">
+                qui change des vies
+              </span>
+              <br />
+              en Afrique.
+            </motion.h1>
+
+            {/* Description */}
+            <motion.p
+              className="text-white/72 text-lg leading-relaxed mb-10 max-w-[480px]"
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              custom={2}
+            >
+              Accédez à 1 000 – 20 000 FCFA en moins de 15 minutes.
+              Sans garantie, sans compte bancaire. Juste votre téléphone.
+            </motion.p>
+
+            {/* Boutons */}
+            <motion.div
+              className="flex flex-wrap gap-4 mb-14"
+              variants={fadeUp}
+              initial="hidden"
+              animate="visible"
+              custom={3}
+            >
+              <Link to="/nano-credit">
+                <motion.span
+                  className="inline-flex items-center gap-2 bg-teal text-white font-semibold text-[15px] px-7 py-4 rounded-xl shadow-[0_8px_32px_rgba(0,185,142,0.4)] cursor-pointer"
+                  whileHover={{ scale: 1.04, y: -2, boxShadow: '0 16px 40px rgba(0,185,142,0.5)' }}
+                  whileTap={{ scale: 0.97 }}
                 >
-                  <Icon size={16} /> {s.title}
-                </button>
-              )
-            })}
-          </div>
-          <div className="grid lg:grid-cols-2 gap-12 items-start" data-reveal key={activeTab}>
-            <div>
-              <div
-                className="w-[60px] h-[60px] rounded-2xl flex items-center justify-center mb-5"
-                style={{ background: `${service.color}18`, color: service.color }}
-              >
-                <service.icon size={26} />
-              </div>
-              <h3 className="font-display font-bold text-[1.7rem] text-navy mb-3.5">{service.title}</h3>
-              <p className="text-g600 text-[15px] leading-relaxed mb-6">{service.desc}</p>
-              <Link to="/services" className="btn-primary">En savoir plus →</Link>
-            </div>
-            <div className="bg-white rounded-2xl border border-g100 p-7">
-              <h4 className="font-display font-bold text-navy mb-4">Fonctionnalités clés</h4>
-              {service.features.map((f, i) => (
-                <div key={i} className="flex items-center gap-3 py-2.5 border-b border-g100 last:border-0">
-                  <div
-                    className="w-[26px] h-[26px] rounded-full flex items-center justify-center shrink-0"
-                    style={{ background: `${service.color}18`, color: service.color }}
-                  >
-                    <CheckCircleIcon size={14} strokeWidth={2.2} />
+                  Demander un crédit
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </motion.span>
+              </Link>
+              <Link to="/services">
+                <motion.span
+                  className="inline-flex items-center gap-2 bg-white/10 backdrop-blur border border-white/25 text-white font-semibold text-[15px] px-7 py-4 rounded-xl cursor-pointer"
+                  whileHover={{ scale: 1.04, y: -2, backgroundColor: 'rgba(255,255,255,0.18)' }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  Comment ça marche
+                </motion.span>
+              </Link>
+            </motion.div>
+
+            {/* Stats rapides */}
+            <motion.div
+              className="flex flex-wrap gap-8"
+              variants={fadeIn}
+              initial="hidden"
+              animate="visible"
+              custom={4}
+            >
+              {[
+                { n: '< 15', label: 'minutes pour recevoir' },
+                { n: '6', label: 'pays UEMOA' },
+                { n: '20K', label: 'FCFA maximum' },
+              ].map((s, i) => (
+                <div key={i} className="flex items-center gap-3">
+                  <div className="w-0.5 h-8 bg-teal/50 rounded-full" />
+                  <div>
+                    <div className="font-display font-extrabold text-white text-xl">{s.n}</div>
+                    <div className="text-white/45 text-xs">{s.label}</div>
                   </div>
-                  <span className="text-g600 text-sm">{f}</span>
                 </div>
               ))}
-            </div>
+            </motion.div>
+          </div>
+
+          {/* Image flottante droite (desktop) */}
+          <motion.div
+            className="hidden xl:block absolute right-[5%] top-1/2 -translate-y-1/2 w-[380px]"
+            initial={{ opacity: 0, x: 60, y: '-50%' }}
+            animate={{ opacity: 1, x: 0, y: '-50%' }}
+            transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <motion.div
+              animate={{ y: [0, -12, 0] }}
+              transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut' }}
+              className="relative"
+            >
+              <div className="absolute -inset-6 rounded-3xl bg-teal/10 blur-2xl" />
+              <img
+                src={IMAGES.impact2}
+                alt="Paiement mobile TovPay"
+                className="relative w-full rounded-3xl shadow-[0_40px_80px_rgba(0,0,0,0.5)] object-cover aspect-[3/4]"
+              />
+              {/* Badge overlay sur l'image */}
+              <motion.div
+                className="absolute -bottom-5 -left-8 bg-white rounded-2xl shadow-xl px-5 py-4 flex items-center gap-3"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1.2, duration: 0.5 }}
+              >
+                <div className="w-10 h-10 rounded-xl bg-teal flex items-center justify-center">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </div>
+                <div>
+                  <div className="font-bold text-navy text-sm">Crédit accordé</div>
+                  <div className="text-g600 text-xs">en 12 minutes</div>
+                </div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2"
+          animate={{ y: [0, 8, 0] }}
+          transition={{ repeat: Infinity, duration: 2 }}
+        >
+          <span className="text-white/40 text-xs tracking-widest uppercase">Défiler</span>
+          <div className="w-px h-8 bg-gradient-to-b from-white/40 to-transparent" />
+        </motion.div>
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════
+          CHIFFRES CLÉS — Bande pleine largeur
+      ═══════════════════════════════════════════════════════ */}
+      <div className="bg-navy py-16 px-[5%] relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ backgroundImage: 'radial-gradient(rgba(0,185,142,0.08) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+        <div className="max-w-[1280px] mx-auto">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 lg:divide-x lg:divide-white/10">
+            {[
+              { value: 330, suffix: '+', label: 'Clients actifs en 2025' },
+              { value: 15, suffix: ' min', label: 'Pour recevoir son argent' },
+              { value: 6, suffix: ' pays', label: 'Présence en zone UEMOA' },
+              { value: 80, suffix: '%+', label: 'Taux de recouvrement' },
+            ].map((s, i) => (
+              <motion.div
+                key={i}
+                className="text-center lg:px-8"
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                custom={i}
+              >
+                <StatItem value={s.value} suffix={s.suffix} label={s.label} />
+              </motion.div>
+            ))}
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* SIMULATOR */}
-      <section className="relative overflow-hidden bg-navy py-24 px-[5%]">
-        <div className="absolute -right-20 -top-20 w-[480px] h-[480px] rounded-full bg-[radial-gradient(circle,rgba(159,232,112,0.16),transparent_70%)] blur-[20px] pointer-events-none" />
-        <div className="absolute -left-[120px] -bottom-[120px] w-[380px] h-[380px] rounded-full bg-[radial-gradient(circle,rgba(0,229,184,0.12),transparent_70%)] blur-[20px] pointer-events-none" />
-        <div className="container-tp relative">
-          <div className="text-center mb-11">
-            <span className="section-tag text-teal">SIMULATEUR</span>
-            <h2 className="section-title text-white text-center">Calculez votre nano-crédit</h2>
-          </div>
-          <div className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-9" data-reveal>
-            <div className="grid md:grid-cols-2 gap-9">
-              <div>
-                <span className="block text-white/55 text-xs mb-2.5">Montant souhaité</span>
-                <div className="font-display font-extrabold text-[34px] text-teal mb-2.5">
-                  {simAmount.toLocaleString('fr-FR')} <span className="text-[15px] text-white/45">FCFA</span>
-                </div>
-                <input
-                  type="range"
-                  min="1000"
-                  max="20000"
-                  step="500"
-                  value={simAmount}
-                  onChange={(e) => setSimAmount(Number(e.target.value))}
-                  className="w-full accent-teal cursor-pointer mb-1"
+      {/* ═══════════════════════════════════════════════════════
+          POURQUOI TOVPAY — Image + Points
+      ═══════════════════════════════════════════════════════ */}
+      <section className="py-28 px-[5%] bg-white relative overflow-hidden">
+        <div className="max-w-[1280px] mx-auto">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Images empilées */}
+            <motion.div
+              className="relative h-[520px]"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-100px' }}
+              variants={slideLeft}
+            >
+              <div className="absolute top-0 left-0 right-8 h-[340px] rounded-3xl overflow-hidden shadow-2xl">
+                <img
+                  src={IMAGES.whyImg1}
+                  alt="Commerçante africaine"
+                  loading="lazy"
+                  className="w-full h-full object-cover"
                 />
-                <div className="flex justify-between text-white/40 text-xs">
-                  <span>1 000</span><span>20 000</span>
+                <div className="absolute inset-0 bg-gradient-to-t from-navy/60 to-transparent" />
+                <div className="absolute bottom-5 left-5 text-white">
+                  <div className="text-xs text-white/70 mb-1">Marché d'Abidjan</div>
+                  <div className="font-display font-bold text-base">Commerce textile</div>
                 </div>
-                <div className="mt-6">
-                  <span className="block text-white/55 text-xs mb-2.5">Durée de remboursement</span>
-                  <div className="grid grid-cols-2 gap-2">
-                    {[1, 2, 3, 4].map(d => (
-                      <button
-                        key={d}
-                        className={`text-xs font-semibold rounded-lg py-2.5 transition-colors duration-200 ${
-                          d === simDur ? 'bg-teal text-white' : 'bg-white/5 text-white/60 hover:bg-white/10'
-                        }`}
-                        onClick={() => setSimDur(d)}
-                      >
-                        {d === 1 ? '1 semaine' : d === 2 ? '2 semaines' : d === 3 ? '3 semaines' : '1 mois'}
-                      </button>
-                    ))}
+              </div>
+              <motion.div
+                className="absolute bottom-0 right-0 left-12 h-[220px] rounded-3xl overflow-hidden shadow-2xl"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, duration: 0.8 }}
+              >
+                <img
+                  src={IMAGES.impact4}
+                  alt="Jeune entrepreneur tech"
+                  loading="lazy"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-navy/50 to-transparent" />
+              </motion.div>
+              {/* Badge flottant */}
+              <motion.div
+                className="absolute top-48 right-0 bg-white rounded-2xl shadow-xl px-4 py-3 border border-g100"
+                animate={{ y: [0, -8, 0] }}
+                transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
+              >
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-teal/10 flex items-center justify-center text-teal">
+                    <TrendingUpIcon size={16} />
+                  </div>
+                  <div>
+                    <div className="text-navy font-bold text-xs">Remboursement</div>
+                    <div className="text-teal text-xs font-semibold">+120% croissance 2024</div>
                   </div>
                 </div>
-              </div>
-              <div>
-                <div className="flex justify-between items-center py-3 border-b border-white/10">
-                  <span className="text-white/55 text-sm">Montant emprunté</span>
-                  <span className="text-white font-semibold text-sm">{simAmount.toLocaleString('fr-FR')} FCFA</span>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-white/10">
-                  <span className="text-white/55 text-sm">Taux d'intérêt</span>
-                  <span className="text-white font-semibold text-sm">{(rates[simDur as keyof typeof rates] * 100).toFixed(0)}%</span>
-                </div>
-                <div className="flex justify-between items-center py-3 border-b border-white/10">
-                  <span className="text-white/55 text-sm">Intérêts</span>
-                  <span className="text-white font-semibold text-sm">{interest.toLocaleString('fr-FR')} FCFA</span>
-                </div>
-                <div className="flex justify-between items-center py-4 mb-5">
-                  <span className="text-white/70 text-sm">Total à rembourser</span>
-                  <span className="font-display font-extrabold text-xl text-teal">{total.toLocaleString('fr-FR')} FCFA</span>
-                </div>
-                <Link to="/nano-credit" className="btn-primary w-full text-center block">Demander ce crédit →</Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+              </motion.div>
+            </motion.div>
 
-      {/* ABOUT PREVIEW */}
-      <section className="bg-white py-24 px-[5%]">
-        <div className="container-tp">
-          <div className="grid lg:grid-cols-2 gap-14 items-center">
-            <div>
-              <span className="section-tag">À PROPOS</span>
-              <h2 className="section-title">Nous rendons le crédit accessible à tous</h2>
-              <p className="text-g600 text-[15px] leading-relaxed mb-4">
-                TOVPAY est une fintech africaine fondée sur la conviction que chaque individu, indépendamment de son statut bancaire, mérite un accès équitable aux services financiers.
-              </p>
-              <p className="text-g600 text-[15px] leading-relaxed mb-7">
-                Notre réseau de chefs d'agence locaux gère jusqu'à 100 clients chacun dans leur zone géographique, garantissant une proximité humaine irremplaçable.
-              </p>
-              <div className="flex gap-9">
+            {/* Texte */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-100px' }}
+              variants={slideRight}
+            >
+              <motion.span className="section-tag" variants={fadeUp} custom={0}>POURQUOI TOVPAY</motion.span>
+              <motion.h2 className="section-title mt-3 mb-6" variants={fadeUp} custom={1}>
+                L'inclusion financière,
+                <br />
+                <span className="text-teal">enfin accessible.</span>
+              </motion.h2>
+              <motion.p className="text-g600 text-base leading-relaxed mb-8" variants={fadeUp} custom={2}>
+                500 millions de personnes en Afrique n'ont pas accès aux services bancaires. TovPay change la donne
+                en rendant le crédit aussi simple qu'un SMS — sans garantie, sans historique bancaire.
+              </motion.p>
+
+              <div className="space-y-5">
                 {[
-                  { val: '330+', label: 'Clients 2026' },
-                  { val: '6', label: 'Pays UEMOA' },
-                  { val: '80%+', label: 'Taux recouvrement' },
-                ].map((s, i) => (
-                  <div key={i}>
-                    <div className="font-display font-extrabold text-2xl text-navy">{s.val}</div>
-                    <div className="text-g600 text-xs mt-0.5">{s.label}</div>
-                  </div>
+                  {
+                    title: 'Décaissement en 15 minutes',
+                    desc: 'Du dossier au virement Mobile Money — plus rapide que n\'importe quelle banque.',
+                    color: '#00B98E',
+                  },
+                  {
+                    title: 'Scoring IA sans historique bancaire',
+                    desc: 'Notre algorithme évalue votre profil réel, pas votre relevé bancaire.',
+                    color: '#1A3FA8',
+                  },
+                  {
+                    title: 'Réseau d\'agents locaux',
+                    desc: 'Des chefs d\'agence formés accompagnent chaque client dans leur quartier.',
+                    color: '#F5A623',
+                  },
+                  {
+                    title: 'Conforme BCEAO & Orabank',
+                    desc: 'Adossés au premier groupe bancaire panafricain privé.',
+                    color: '#7C3AED',
+                  },
+                ].map((item, i) => (
+                  <motion.div
+                    key={i}
+                    className="flex gap-4 items-start"
+                    variants={fadeUp}
+                    custom={i + 3}
+                  >
+                    <div
+                      className="w-2 h-2 rounded-full mt-2 shrink-0"
+                      style={{ backgroundColor: item.color, boxShadow: `0 0 12px ${item.color}80` }}
+                    />
+                    <div>
+                      <div className="font-display font-bold text-navy text-[15px] mb-0.5">{item.title}</div>
+                      <div className="text-g600 text-sm leading-relaxed">{item.desc}</div>
+                    </div>
+                  </motion.div>
                 ))}
               </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { Icon: GlobeIcon, title: 'Impact Panafricain', desc: 'Présents dans 6 pays UEMOA avec expansion à 12 pays d\'ici 2028.', light: true },
-                { Icon: HandshakeIcon, title: 'Partenariat Orabank', desc: 'Adossés au premier groupe bancaire panafricain privé, conformité BCEAO.', light: false },
-                { Icon: AiSparkIcon, title: 'Innovation IA', desc: 'Scoring intelligent en temps réel pour démocratiser le crédit mobile.', light: false },
-                { Icon: ShieldIcon, title: 'Sécurité & Conformité', desc: 'Données chiffrées, conformité KYC/LCB-FT et OHADA garanties.', light: true },
-              ].map((c, i) => (
-                <div
-                  key={i}
-                  data-reveal
-                  data-reveal-delay={String(i)}
-                  className={`rounded-2xl p-6 transition-transform duration-300 hover:-translate-y-1 ${c.light ? 'bg-g50' : 'bg-navy'}`}
-                >
-                  <div className={`w-[42px] h-[42px] rounded-xl flex items-center justify-center mb-3 ${c.light ? 'bg-teal/10 text-teal' : 'bg-lime/12 text-lime'}`}>
-                    <c.Icon size={22} />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════
+          COMMENT ÇA MARCHE — Steps avec images
+      ═══════════════════════════════════════════════════════ */}
+      <section className="py-28 px-[5%] bg-g50 relative overflow-hidden">
+        {/* Background décoratif */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full"
+            style={{ background: 'radial-gradient(circle, rgba(0,185,142,0.05) 0%, transparent 70%)' }} />
+        </div>
+
+        <div className="max-w-[1280px] mx-auto relative">
+          <motion.div
+            className="text-center mb-16"
+            initial="hidden" whileInView="visible" viewport={{ once: true }}
+          >
+            <motion.span className="section-tag" variants={fadeUp} custom={0}>PROCESSUS</motion.span>
+            <motion.h2 className="section-title mt-3 text-center" variants={fadeUp} custom={1}>
+              4 étapes, 15 minutes.
+            </motion.h2>
+            <motion.p className="text-g600 mt-3 max-w-[500px] mx-auto text-center" variants={fadeUp} custom={2}>
+              Le parcours le plus rapide vers un crédit mobile en Afrique.
+            </motion.p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              {
+                n: '01',
+                title: 'Téléchargez',
+                desc: 'App Store ou Google Play. Gratuit et sécurisé.',
+                img: IMAGES.howStep1,
+                color: '#00B98E',
+              },
+              {
+                n: '02',
+                title: 'Identifiez-vous',
+                desc: 'Pièce d\'identité + numéro Mobile Money. 5 minutes.',
+                img: IMAGES.howStep2,
+                color: '#1A3FA8',
+              },
+              {
+                n: '03',
+                title: 'Scoring instantané',
+                desc: 'Notre IA analyse votre profil. Résultat immédiat.',
+                img: IMAGES.howStep3,
+                color: '#7C3AED',
+              },
+              {
+                n: '04',
+                title: 'Recevez l\'argent',
+                desc: 'Fonds sur votre Mobile Money en moins de 15 min.',
+                img: IMAGES.howStep4,
+                color: '#F5A623',
+              },
+            ].map((step, i) => (
+              <motion.div
+                key={i}
+                className="group"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
+                whileHover={{ y: -8 }}
+              >
+                <div className="bg-white rounded-3xl overflow-hidden border border-g100 shadow-sm h-full transition-shadow duration-300 group-hover:shadow-xl group-hover:border-teal/20">
+                  <div className="relative h-48 overflow-hidden">
+                    <img
+                      src={step.img}
+                      alt={step.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/90 to-navy/30" />
+                    <div
+                      className="absolute top-4 left-4 font-display font-extrabold text-5xl leading-none"
+                      style={{ color: `${step.color}60` }}
+                    >
+                      {step.n}
+                    </div>
                   </div>
-                  <h4 className={`font-display font-bold text-base mb-1.5 ${c.light ? 'text-navy' : 'text-white'}`}>{c.title}</h4>
-                  <p className={`text-[13px] leading-relaxed ${c.light ? 'text-g600' : 'text-white/60'}`}>{c.desc}</p>
+                  <div className="p-6">
+                    <div className="w-1 h-6 rounded-full mb-4" style={{ backgroundColor: step.color }} />
+                    <h4 className="font-display font-bold text-navy text-xl mb-2">{step.title}</h4>
+                    <p className="text-g600 text-sm leading-relaxed">{step.desc}</p>
+                  </div>
                 </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════
+          SERVICES — Grid premium
+      ═══════════════════════════════════════════════════════ */}
+      <section className="py-28 px-[5%] bg-white">
+        <div className="max-w-[1280px] mx-auto">
+          <motion.div
+            className="text-center mb-16"
+            initial="hidden" whileInView="visible" viewport={{ once: true }}
+          >
+            <motion.span className="section-tag" variants={fadeUp} custom={0}>NOS SOLUTIONS</motion.span>
+            <motion.h2 className="section-title mt-3 text-center" variants={fadeUp} custom={1}>
+              Tout ce dont vous avez besoin.
+            </motion.h2>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Carte 1 — large */}
+            <motion.div
+              className="relative rounded-3xl overflow-hidden min-h-[380px] group"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              whileHover={{ scale: 1.01 }}
+            >
+              <img
+                src={IMAGES.whyImg1}
+                alt="Nano-crédit mobile"
+                loading="lazy"
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy-deep via-navy/60 to-transparent" />
+              <div className="absolute inset-0 p-8 flex flex-col justify-end">
+                <div className="w-10 h-10 rounded-xl bg-teal flex items-center justify-center mb-4">
+                  <CreditIcon size={22} className="text-white" />
+                </div>
+                <h3 className="font-display font-bold text-white text-2xl mb-2">Nano-Crédit Mobile</h3>
+                <p className="text-white/70 text-sm mb-5 max-w-[320px]">
+                  1 000 à 20 000 FCFA décaissés en 15 min via Wave, Orange Money ou MTN.
+                </p>
+                <Link to="/nano-credit" className="inline-flex items-center gap-2 text-teal text-sm font-semibold hover:gap-3 transition-all">
+                  En savoir plus <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+                </Link>
+              </div>
+            </motion.div>
+
+            {/* Colonne droite — 3 mini cartes */}
+            <div className="flex flex-col gap-6">
+              {[
+                {
+                  Icon: WalletIcon, title: 'Wallet & Paiements', color: '#1A3FA8',
+                  desc: 'Envoyez, recevez, payez. Multi-opérateurs, zone UEMOA.',
+                  bg: 'from-blue/5 to-blue/10'
+                },
+                {
+                  Icon: AiSparkIcon, title: 'Scoring IA', color: '#7C3AED',
+                  desc: 'Score de crédit en temps réel sans historique bancaire.',
+                  bg: 'from-purple-50 to-purple-100/50'
+                },
+                {
+                  Icon: BuildingIcon, title: 'Solutions PME', color: '#F5A623',
+                  desc: 'Lignes de crédit renouvelables pour les petits commerces.',
+                  bg: 'from-amber-50 to-amber-100/50'
+                },
+              ].map((s, i) => (
+                <motion.div
+                  key={i}
+                  className={`bg-gradient-to-br ${s.bg} border border-g100 rounded-3xl p-6 flex items-center gap-5 group cursor-pointer transition-shadow duration-300 hover:shadow-lg`}
+                  initial={{ opacity: 0, x: 40 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, duration: 0.5 }}
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0" style={{ background: `${s.color}15`, color: s.color }}>
+                    <s.Icon size={24} />
+                  </div>
+                  <div>
+                    <h4 className="font-display font-bold text-navy text-base mb-1">{s.title}</h4>
+                    <p className="text-g600 text-sm leading-relaxed">{s.desc}</p>
+                  </div>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="ml-auto shrink-0 text-g400 group-hover:text-teal transition-colors">
+                    <path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </motion.div>
               ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* PARTNERS PREVIEW */}
-      <section className="bg-g50 py-24 px-[5%]">
-        <div className="container-tp">
-          <div className="text-center mb-11">
-            <span className="section-tag">PARTENAIRES</span>
-            <h2 className="section-title text-center">Un écosystème de confiance</h2>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {[
-              { Icon: BankIcon, type: 'Banque Partenaire', name: 'Orabank', desc: 'Groupe bancaire panafricain — 12 pays' },
-              { Icon: WaveIcon, type: 'Mobile Money', name: 'Wave', desc: 'Transferts mobiles CI & SN' },
-              { Icon: SignalIcon, type: 'Mobile Money', name: 'Orange Money', desc: 'Zone UEMOA complète' },
-              { Icon: BroadcastIcon, type: 'Mobile Money', name: 'MTN MoMo', desc: 'Bénin & Nigeria' },
-              { Icon: SignalIcon, type: 'SMS Tech', name: "Africa's Talking", desc: 'Infrastructure SMS panafricaine' },
-              { Icon: GavelIcon, type: 'Régulateur', name: 'BCEAO', desc: 'Conformité réglementaire UEMOA' },
-            ].map((p, i) => (
-              <div
-                key={i}
-                data-reveal
-                data-reveal-delay={String(i)}
-                className="bg-white rounded-2xl border border-g100 p-5 text-center transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:border-teal/30"
+      {/* ═══════════════════════════════════════════════════════
+          IMPACT — Section avec grande image de fond
+      ═══════════════════════════════════════════════════════ */}
+      <section className="relative py-28 px-[5%] overflow-hidden">
+        {/* Background image avec overlay */}
+        <div className="absolute inset-0">
+          <img
+            src={IMAGES.impact1}
+            alt="Impact TovPay"
+            loading="lazy"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-navy-deep/97 via-navy-deep/90 to-navy-deep/75" />
+        </div>
+        {/* Décoratifs */}
+        <div className="absolute right-0 top-0 w-[500px] h-full pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse at right, rgba(0,185,142,0.15), transparent 70%)' }} />
+
+        <div className="max-w-[1280px] mx-auto relative">
+          <div className="grid lg:grid-cols-[1fr_1.2fr] gap-16 items-center">
+            <motion.div
+              initial="hidden" whileInView="visible" viewport={{ once: true }}
+            >
+              <motion.span className="section-tag" variants={fadeUp} custom={0}>IMPACT RÉEL</motion.span>
+              <motion.h2
+                className="font-display font-extrabold text-[2rem] sm:text-[2.8rem] text-white leading-tight mt-3 mb-6"
+                variants={fadeUp} custom={1}
               >
-                <div className="w-[52px] h-[52px] rounded-2xl flex items-center justify-center mx-auto mb-3 bg-teal/10 text-teal">
-                  <p.Icon size={26} />
-                </div>
-                <span className="block text-g400 text-[10px] uppercase tracking-wider font-semibold mb-1">{p.type}</span>
-                <div className="font-display font-bold text-navy text-sm mb-1">{p.name}</div>
-                <div className="text-g600 text-xs leading-snug">{p.desc}</div>
-              </div>
-            ))}
+                Des vies transformées
+                <br />
+                <span className="text-teal">à travers l'Afrique.</span>
+              </motion.h2>
+              <motion.p className="text-white/65 text-base leading-relaxed mb-8" variants={fadeUp} custom={2}>
+                Chaque crédit TovPay représente une famille qui peut approvisionner sa boutique,
+                un artisan qui peut acheter ses matières premières, un rêve qui devient réalité.
+              </motion.p>
+              <motion.div variants={fadeUp} custom={3}>
+                <Link to="/about">
+                  <motion.span
+                    className="inline-flex items-center gap-2 bg-teal text-white font-semibold px-6 py-3.5 rounded-xl cursor-pointer"
+                    whileHover={{ scale: 1.04, y: -2 }}
+                    whileTap={{ scale: 0.97 }}
+                  >
+                    Notre mission
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                  </motion.span>
+                </Link>
+              </motion.div>
+            </motion.div>
+
+            <motion.div
+              className="grid grid-cols-2 gap-4"
+              initial="hidden" whileInView="visible" viewport={{ once: true }}
+            >
+              {[
+                { Icon: GlobeIcon, title: '6 pays actifs', desc: 'CI, SN, BJ, TG + Mali & Niger bientôt', color: '#00B98E' },
+                { Icon: HandshakeIcon, title: 'Orabank Group', desc: 'Adossés au leader bancaire panafricain', color: '#9fe870' },
+                { Icon: AiSparkIcon, title: 'IA propriétaire', desc: 'Scoring sans historique bancaire requis', color: '#7C3AED' },
+                { Icon: ShieldIcon, title: 'Conforme BCEAO', desc: 'KYC/LCB-FT & OHADA respectés', color: '#F5A623' },
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  className="bg-white/5 backdrop-blur border border-white/10 rounded-2xl p-5"
+                  variants={fadeUp}
+                  custom={i}
+                  whileHover={{ backgroundColor: 'rgba(255,255,255,0.1)', scale: 1.02 }}
+                >
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: `${item.color}20`, color: item.color }}>
+                    <item.Icon size={20} />
+                  </div>
+                  <div className="font-display font-bold text-white text-sm mb-1">{item.title}</div>
+                  <div className="text-white/55 text-xs leading-relaxed">{item.desc}</div>
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
-      <section className="bg-white py-24 px-[5%]">
-        <div className="container-tp">
-          <div className="text-center mb-11">
-            <span className="section-tag">TÉMOIGNAGES</span>
-            <h2 className="section-title text-center">Ils font confiance à TOVPAY</h2>
-          </div>
+      {/* ═══════════════════════════════════════════════════════
+          PARTENAIRES
+      ═══════════════════════════════════════════════════════ */}
+      <section className="py-20 px-[5%] bg-g50 relative overflow-hidden">
+        <div className="max-w-[1280px] mx-auto">
+          <motion.div
+            className="text-center mb-12"
+            initial="hidden" whileInView="visible" viewport={{ once: true }}
+          >
+            <motion.p className="text-g400 text-sm mb-6" variants={fadeIn}>
+              ÉCOSYSTÈME PARTENAIRE
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            className="flex flex-wrap justify-center items-center gap-6"
+            initial="hidden" whileInView="visible" viewport={{ once: true }}
+          >
+            {[
+              { Icon: BankIcon, name: 'Orabank', type: 'Banque adossement' },
+              { Icon: WaveIcon, name: 'Wave', type: 'Mobile Money' },
+              { Icon: SignalIcon, name: 'Orange Money', type: 'Mobile Money' },
+              { Icon: BroadcastIcon, name: 'MTN MoMo', type: 'Mobile Money' },
+              { Icon: SignalIcon, name: "Africa's Talking", type: 'SMS' },
+              { Icon: GavelIcon, name: 'BCEAO', type: 'Régulateur' },
+            ].map((p, i) => (
+              <motion.div
+                key={i}
+                className="flex items-center gap-2.5 bg-white border border-g100 rounded-2xl px-5 py-3.5 text-navy font-semibold text-sm shadow-sm"
+                variants={fadeUp}
+                custom={i}
+                whileHover={{ y: -4, scale: 1.03, boxShadow: '0 12px 30px rgba(13,34,81,0.12)' }}
+              >
+                <p.Icon size={18} className="text-teal" />
+                <div>
+                  <div className="font-bold text-navy text-sm leading-none">{p.name}</div>
+                  <div className="text-g400 text-[10px] leading-none mt-0.5">{p.type}</div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════
+          TÉMOIGNAGES — Style premium
+      ═══════════════════════════════════════════════════════ */}
+      <section className="py-28 px-[5%] bg-white overflow-hidden">
+        <div className="max-w-[1280px] mx-auto">
+          <motion.div
+            className="text-center mb-16"
+            initial="hidden" whileInView="visible" viewport={{ once: true }}
+          >
+            <motion.span className="section-tag" variants={fadeUp} custom={0}>TÉMOIGNAGES</motion.span>
+            <motion.h2 className="section-title mt-3 text-center" variants={fadeUp} custom={1}>
+              Ils font confiance à TovPay.
+            </motion.h2>
+          </motion.div>
+
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { quote: "Grâce à TOVPAY j'ai pu réapprovisionner mon stock en urgence. Le crédit était sur mon compte Wave en 10 minutes. Incroyable !", name: 'Aminata Diallo', role: 'Commerçante — Dakar, Sénégal' },
-              { quote: 'Le processus est simple, rapide et transparent. Je recommande à tous les petits commerçants qui ont besoin de trésorerie.', name: 'Kwame Asante', role: "Artisan — Abidjan, Côte d'Ivoire" },
-              { quote: 'TOVPAY a vraiment changé ma façon de gérer mes finances. Le scoring est juste et les taux sont clairs dès le départ.', name: 'Fatoumata Koné', role: 'Micro-entrepreneuse — Lomé, Togo' },
+              {
+                quote: "J'ai pu réapprovisionner mon stock en urgence. Le crédit était sur Wave en 10 minutes. Je n'avais jamais vu ça de ma vie.",
+                name: 'Aminata Diallo',
+                role: 'Commerçante tissu — Dakar',
+                img: IMAGES.testi1,
+                stars: 5,
+              },
+              {
+                quote: "Grâce à TovPay, j'ai acheté du matériel pour mon atelier sans attendre un mois. Le taux est clair, pas de surprise.",
+                name: 'Kwame Asante',
+                role: 'Artisan menuisier — Abidjan',
+                img: IMAGES.testi2,
+                stars: 5,
+              },
+              {
+                quote: "Simple, rapide, honnête. Mon score a augmenté après chaque remboursement et maintenant j'ai accès à 20 000 FCFA.",
+                name: 'Fatoumata Koné',
+                role: 'Micro-entrepreneuse — Lomé',
+                img: IMAGES.testi3,
+                stars: 5,
+              },
             ].map((t, i) => (
-              <div
+              <motion.div
                 key={i}
-                data-reveal
-                data-reveal-delay={String(i)}
-                className="bg-white rounded-[20px] border border-g100 shadow-[0_4px_22px_rgba(13,34,81,0.06)] p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_18px_44px_rgba(0,185,142,0.12)]"
+                className="bg-white border border-g100 rounded-3xl p-7 shadow-sm relative overflow-hidden group"
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15, duration: 0.6 }}
+                whileHover={{ y: -6, boxShadow: '0 24px 60px rgba(0,185,142,0.12)' }}
               >
-                <div className="font-display text-teal text-4xl leading-none mb-2.5">❝</div>
-                <p className="text-g600 text-[15px] leading-relaxed mb-6">{t.quote}</p>
+                {/* Accent top */}
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal to-lime rounded-t-3xl" />
+
+                {/* Stars */}
+                <div className="flex gap-1 mb-5">
+                  {Array.from({ length: t.stars }).map((_, j) => (
+                    <svg key={j} width="14" height="14" viewBox="0 0 24 24" fill="#F5A623">
+                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                  ))}
+                </div>
+
+                <p className="text-g600 text-[15px] leading-relaxed mb-6 italic">"{t.quote}"</p>
+
                 <div className="flex items-center gap-3">
-                  <Avatar name={t.name} size={44} />
+                  <img
+                    src={t.img}
+                    alt={t.name}
+                    loading="lazy"
+                    className="w-11 h-11 rounded-full object-cover ring-2 ring-teal/20"
+                  />
                   <div>
                     <div className="font-semibold text-navy text-sm">{t.name}</div>
-                    <div className="text-g600 text-xs">{t.role}</div>
+                    <div className="text-g400 text-xs">{t.role}</div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* BLOG PREVIEW */}
-      <section className="bg-white py-24 px-[5%]">
-        <div className="container-tp">
-          <div className="flex flex-wrap justify-between items-end gap-4 mb-11">
-            <div>
-              <span className="section-tag">BLOG</span>
-              <h2 className="section-title mb-0">Dernières publications</h2>
-            </div>
-            <Link to="/blog" className="btn-outline">Voir tous les articles →</Link>
-          </div>
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              { Icon: ScoringIcon, tag: 'Inclusion Financière', reading: '5 min', title: 'Comment le nano-crédit transforme les économies informelles en Afrique', date: 'Mai 2026', gradient: 'linear-gradient(135deg,#0D2251,#00B98E)' },
-              { Icon: AiSparkIcon, tag: 'Innovation IA', reading: '4 min', title: 'Le scoring mobile : la révolution du crédit sans garantie', date: 'Avril 2026', gradient: 'linear-gradient(135deg,#1A3FA8,#00B98E)' },
-              { Icon: HandshakeIcon, tag: 'Partenariat', reading: '6 min', title: "TOVPAY & Orabank : un partenariat historique pour l'UEMOA", date: 'Mars 2026', gradient: 'linear-gradient(135deg,#0B4A3F,#00B98E)' },
-            ].map((b, i) => (
-              <div
-                key={i}
-                data-reveal
-                data-reveal-delay={String(i)}
-                className="bg-white rounded-2xl border border-g100 overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:border-teal/30"
-              >
-                <div className="h-[150px] flex items-center justify-center relative overflow-hidden" style={{ background: b.gradient }}>
-                  <b.Icon size={30} className="text-white/90 relative z-10" />
-                  <div
-                    className="absolute inset-0 opacity-50"
-                    style={{ backgroundImage: 'radial-gradient(rgba(255,255,255,0.14) 1px, transparent 1px)', backgroundSize: '14px 14px' }}
-                  />
-                </div>
-                <div className="p-5">
-                  <div className="flex justify-between items-center mb-2.5">
-                    <span className="text-teal text-[11px] font-semibold uppercase tracking-wide">{b.tag}</span>
-                    <span className="text-g400 text-xs">{b.reading}</span>
-                  </div>
-                  <h4 className="font-display font-bold text-navy text-base leading-snug mb-3">{b.title}</h4>
-                  <div className="text-g400 text-xs">{b.date}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+      {/* ═══════════════════════════════════════════════════════
+          CTA FINAL — Immersif avec image
+      ═══════════════════════════════════════════════════════ */}
+      <section className="relative py-32 px-[5%] overflow-hidden">
+        <div className="absolute inset-0">
+          <img
+            src={IMAGES.impact3}
+            alt="Impact TovPay"
+            loading="lazy"
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-navy-deep/97 via-navy-deep/92 to-navy/80" />
+        </div>
+
+        {/* Décos */}
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(159,232,112,0.12) 0%, transparent 70%)', filter: 'blur(60px)' }} />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(0,185,142,0.1) 0%, transparent 70%)', filter: 'blur(60px)' }} />
+
+        <div className="max-w-[800px] mx-auto text-center relative z-10">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
+            <motion.h2
+              className="font-display font-extrabold text-[2.4rem] sm:text-[3.2rem] lg:text-[3.8rem] text-white leading-tight mb-6 tracking-tight"
+              variants={fadeUp} custom={0}
+            >
+              Prêt à changer votre vie
+              <br />
+              <span className="bg-gradient-to-r from-teal to-lime bg-clip-text text-transparent">
+                avec TovPay ?
+              </span>
+            </motion.h2>
+
+            <motion.p
+              className="text-white/65 text-lg leading-relaxed mb-10"
+              variants={fadeUp} custom={1}
+            >
+              Rejoignez les milliers d'entrepreneurs africains qui font confiance à TovPay
+              pour financer leurs activités et faire grandir leur commerce.
+            </motion.p>
+
+            <motion.div
+              className="flex flex-wrap gap-4 justify-center"
+              variants={fadeUp} custom={2}
+            >
+              <Link to="/nano-credit">
+                <motion.span
+                  className="inline-flex items-center gap-2 bg-teal text-white font-semibold text-[16px] px-8 py-[18px] rounded-xl shadow-[0_8px_40px_rgba(0,185,142,0.45)] cursor-pointer"
+                  whileHover={{ scale: 1.05, y: -3 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  Demander mon crédit maintenant
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </motion.span>
+              </Link>
+              <Link to="/contact">
+                <motion.span
+                  className="inline-flex items-center gap-2 bg-white/10 backdrop-blur border border-white/25 text-white font-semibold text-[16px] px-8 py-[18px] rounded-xl cursor-pointer"
+                  whileHover={{ scale: 1.05, y: -3, backgroundColor: 'rgba(255,255,255,0.18)' }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  Parler à un conseiller
+                </motion.span>
+              </Link>
+            </motion.div>
+
+            <motion.p
+              className="text-white/30 text-xs mt-8"
+              variants={fadeIn} custom={3}
+            >
+              Conforme BCEAO · Partenaire Orabank · Données chiffrées
+            </motion.p>
+          </motion.div>
         </div>
       </section>
 
-      {/* CTA FINAL */}
-      <section className="relative overflow-hidden py-24 px-[5%] bg-[linear-gradient(150deg,#0B1F0A_0%,#112A0F_45%,#0D2251_100%)]">
-        <div className="mesh-orb w-[520px] h-[520px] -top-[180px] left-[8%] bg-[radial-gradient(circle,rgba(159,232,112,0.3),transparent_70%)]" />
-        <div className="mesh-orb w-[420px] h-[420px] -bottom-[160px] right-[10%] bg-[radial-gradient(circle,rgba(0,229,184,0.22),transparent_70%)] [animation-delay:-6s] [animation-duration:22s]" />
-        <div className="container-tp relative">
-          <div className="max-w-[640px] mx-auto text-center" data-reveal>
-            <h2 className="font-display font-extrabold text-[1.9rem] sm:text-[2.4rem] lg:text-[2.8rem] text-white leading-tight mb-4 tracking-tight">
-              Prêt à accéder à votre premier crédit ?
-            </h2>
-            <p className="text-white/68 text-base leading-relaxed mb-9">
-              Téléchargez l'application, vérifiez votre identité, et recevez vos fonds en moins de 15 minutes.
-            </p>
-            <div className="flex gap-3.5 justify-center flex-wrap">
-              <Link to="/nano-credit" className="btn-primary">Demander un crédit</Link>
-              <Link to="/contact" className="btn-ghost">Parler à un conseiller →</Link>
-            </div>
-          </div>
-        </div>
-      </section>
-    </>
+    </div>
   )
 }
