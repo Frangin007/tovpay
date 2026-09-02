@@ -54,7 +54,7 @@ export default function Footer() {
             <div className="flex flex-col gap-2.5">
               <Link to="/faq" className="footer-link">FAQ</Link>
               <Link to="/contact" className="footer-link">Contact</Link>
-              <a href="https://wa.me/2290191003991" className="footer-link">WhatsApp</a>
+              <a href="https://wa.me/33763731050" className="footer-link">WhatsApp</a>
               <a href="#" className="footer-link">CGU</a>
             </div>
           </div>
