@@ -18,10 +18,10 @@ export default function Nav() {
   const links = [
     { name: 'Accueil', path: '/' },
     { name: 'Services', path: '/services' },
+    { name: "Chefs d'Agence", path: '/agents' },
     { name: 'À Propos', path: '/about' },
     { name: 'Investisseurs', path: '/investors' },
     { name: 'Partenaires', path: '/partners' },
-    { name: 'Blog', path: '/blog' },
     { name: 'Contact', path: '/contact' },
   ]
 

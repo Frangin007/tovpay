@@ -1,17 +1,18 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useEffect } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import Nav from './components/Nav'
 import Footer from './components/Footer'
 import Home from './pages/Home'
-import About from './pages/About'
-import Services from './pages/Services'
-import NanoCredit from './pages/NanoCredit'
-import Partners from './pages/Partners'
-import Investors from './pages/Investors'
-import Blog from './pages/Blog'
-import FAQ from './pages/FAQ'
-import Contact from './pages/Contact'
+
+const About = lazy(() => import('./pages/About'))
+const Services = lazy(() => import('./pages/Services'))
+const NanoCredit = lazy(() => import('./pages/NanoCredit'))
+const Agents = lazy(() => import('./pages/Agents'))
+const Partners = lazy(() => import('./pages/Partners'))
+const Investors = lazy(() => import('./pages/Investors'))
+const FAQ = lazy(() => import('./pages/FAQ'))
+const Contact = lazy(() => import('./pages/Contact'))
 
 // Scroll to top on route change
 function ScrollToTop() {
@@ -42,18 +43,20 @@ function AnimatedRoutes() {
         animate="animate"
         exit="exit"
       >
-        <Routes location={location}>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/nano-credit" element={<NanoCredit />} />
-          <Route path="/partners" element={<Partners />} />
-          <Route path="/investors" element={<Investors />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <Suspense fallback={<div className="min-h-dvh" />}>
+          <Routes location={location}>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/nano-credit" element={<NanoCredit />} />
+            <Route path="/agents" element={<Agents />} />
+            <Route path="/partners" element={<Partners />} />
+            <Route path="/investors" element={<Investors />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
         <Footer />
       </motion.div>
     </AnimatePresence>

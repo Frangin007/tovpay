@@ -71,7 +71,7 @@ export default function Avatar({ name, src, size = 64, variant }: AvatarProps) {
         alignItems: 'center',
         justifyContent: 'center',
         color: '#fff',
-        fontFamily: "'Syne', sans-serif",
+        fontFamily: 'var(--font-sans)',
         fontWeight: 700,
         fontSize: size * 0.34,
         letterSpacing: '0.5px',

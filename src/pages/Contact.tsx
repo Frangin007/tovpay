@@ -1,9 +1,14 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import type { Variants } from 'framer-motion'
+import { useLocation } from 'react-router-dom'
 import { MailIcon, BriefcaseIcon, HandshakeIcon, BroadcastIcon, MapPinIcon, CheckCircleIcon } from '../components/Icon'
 import PageHero from '../components/PageHero'
 import IMAGES from '../lib/images'
+import type { SimulationTransfer } from '../lib/simulator'
+import { useDocumentMeta } from '../hooks/useDocumentMeta'
+
+const fmt = (n: number) => n.toLocaleString('fr-FR')
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 const fadeUp: Variants = {
@@ -29,28 +34,77 @@ function SocialIcon({ href, label, children }: { href: string; label: string; ch
 }
 
 const coords = [
-  { Icon: MailIcon, label: 'Email général', val: 'contact@tovpay.com', href: 'mailto:contact@tovpay.com' },
-  { Icon: BriefcaseIcon, label: 'Investisseurs', val: 'investors@tovpay.com', href: 'mailto:investors@tovpay.com' },
-  { Icon: HandshakeIcon, label: 'Partenariats', val: 'partners@tovpay.com', href: 'mailto:partners@tovpay.com' },
-  { Icon: BroadcastIcon, label: 'WhatsApp', val: '+225 XX XX XX XX', href: '#' },
-  { Icon: MapPinIcon, label: 'Siège social', val: "Abidjan, Côte d'Ivoire", href: '#' },
+  { Icon: MailIcon, label: 'Direction générale', val: 'dg@tovpay.africa', href: 'mailto:dg@tovpay.africa' },
+  { Icon: BriefcaseIcon, label: 'Investisseurs', val: 'dg@tovpay.africa', href: 'mailto:dg@tovpay.africa' },
+  { Icon: HandshakeIcon, label: 'Partenariats', val: 'dg@tovpay.africa', href: 'mailto:dg@tovpay.africa' },
+  { Icon: BroadcastIcon, label: 'WhatsApp', val: '+33 7 63 73 10 50', href: 'https://wa.me/33763731050' },
+  { Icon: MapPinIcon, label: 'Siège opérationnel', val: 'Lomé, Togo', href: '#' },
 ]
 
 const inputCls = 'w-full px-4 py-3.5 rounded-xl border border-g100 bg-g50 text-sm text-navy outline-none transition-all duration-200 focus:border-teal focus:bg-white focus:ring-2 focus:ring-teal/10 placeholder:text-g400'
 
 export default function Contact() {
+  useDocumentMeta(
+    'Contact',
+    'Contactez TOVPAY pour une demande de crédit, un partenariat ou pour devenir Chef d\'Agence. Réponse sous 24h.'
+  )
+  const location = useLocation()
+  const simulation = (location.state as { simulation?: SimulationTransfer } | null)?.simulation
+
   const [submitted, setSubmitted] = useState(false)
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', subject: 'credit', message: '' })
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState('')
+  const [formData, setFormData] = useState(() => ({
+    name: '', email: '', phone: '',
+    subject: 'credit',
+    message: simulation
+      ? `Bonjour, je souhaite faire une demande de crédit ${simulation.productName} de ${fmt(simulation.amount)} FCFA (total estimé à rembourser : ${fmt(simulation.total)} FCFA, échéance le ${simulation.dueDateLabel}). Cette simulation est indicative et non contractuelle.`
+      : '',
+  }))
+
+  const subjectLabels: Record<string, string> = {
+    credit: 'Demande de crédit',
+    agent: "Devenir Chef d'Agence",
+    partnership: 'Partenariat',
+    investor: 'Investisseur',
+    other: 'Autre',
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSubmitted(true)
-    setTimeout(() => setSubmitted(false), 5000)
-    setFormData({ name: '', email: '', phone: '', subject: 'credit', message: '' })
+    setError('')
+    setSending(true)
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
+          subject: `TOVPAY - ${subjectLabels[formData.subject] ?? formData.subject}`,
+          from_name: 'Site Web TOVPAY',
+          replyto: formData.email,
+          'Nom complet': formData.name,
+          Email: formData.email,
+          'Téléphone / WhatsApp': formData.phone || 'Non renseigné',
+          Sujet: subjectLabels[formData.subject] ?? formData.subject,
+          Message: formData.message,
+        }),
+      })
+      const data = await res.json()
+      if (!data.success) throw new Error(data.message || 'Échec de l\'envoi')
+
+      setSubmitted(true)
+      setTimeout(() => setSubmitted(false), 5000)
+      setFormData({ name: '', email: '', phone: '', subject: 'credit', message: '' })
+    } catch {
+      setError('Une erreur est survenue. Merci de réessayer ou de nous écrire directement à dg@tovpay.africa.')
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -58,11 +112,11 @@ export default function Contact() {
       <PageHero
         breadcrumb="Accueil / Contact"
         title="Parlons de votre projet"
-        desc="Crédit, partenariat ou investissement — notre équipe vous répond en moins de 24h."
+        desc="Crédit, partenariat ou investissement - notre équipe vous répond en moins de 24h."
         bgImage={IMAGES.heroContact}
       />
 
-      <section className="py-28 px-[5%] bg-white">
+      <section className="py-20 px-[5%] bg-white">
         <div className="max-w-[1280px] mx-auto">
           <div className="grid lg:grid-cols-[1fr_1.5fr] gap-14">
 
@@ -162,6 +216,12 @@ export default function Contact() {
                   className="bg-g50 rounded-3xl border border-g100 p-8 flex flex-col gap-5"
                   onSubmit={handleSubmit}
                 >
+                  {simulation && (
+                    <div className="flex items-center gap-2 bg-teal/10 text-teal text-xs font-semibold rounded-xl px-4 py-3 -mt-1">
+                      <CheckCircleIcon size={16} className="shrink-0" />
+                      Simulation transférée : {simulation.productName} · {fmt(simulation.amount)} FCFA
+                    </div>
+                  )}
                   <h3 className="font-display font-bold text-xl text-navy mb-1">Envoyez-nous un message</h3>
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
@@ -175,13 +235,13 @@ export default function Contact() {
                   </div>
                   <div>
                     <label className="block text-navy text-xs font-semibold mb-1.5 uppercase tracking-wide">Téléphone / WhatsApp</label>
-                    <input className={inputCls} type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+225 XX XX XX XX" />
+                    <input className={inputCls} type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+229 XX XX XX XX XX" />
                   </div>
                   <div>
                     <label className="block text-navy text-xs font-semibold mb-1.5 uppercase tracking-wide">Sujet *</label>
                     <select className={inputCls} name="subject" value={formData.subject} onChange={handleChange}>
                       <option value="credit">Demande de crédit</option>
-                      <option value="pme">Solution PME</option>
+                      <option value="agent">Devenir Chef d'Agence</option>
                       <option value="partnership">Partenariat</option>
                       <option value="investor">Investisseur</option>
                       <option value="other">Autre</option>
@@ -191,13 +251,19 @@ export default function Contact() {
                     <label className="block text-navy text-xs font-semibold mb-1.5 uppercase tracking-wide">Message *</label>
                     <textarea className={`${inputCls} resize-none`} name="message" rows={5} value={formData.message} onChange={handleChange} placeholder="Décrivez votre demande..." required />
                   </div>
+                  {error && (
+                    <div className="bg-red-50 text-red-600 text-xs font-semibold rounded-xl px-4 py-3 -mb-1">
+                      {error}
+                    </div>
+                  )}
                   <motion.button
                     type="submit"
-                    className="w-full bg-teal text-white font-semibold py-4 rounded-xl shadow-[0_8px_32px_rgba(0,185,142,0.3)] text-[15px]"
-                    whileHover={{ scale: 1.02, y: -2 }}
-                    whileTap={{ scale: 0.98 }}
+                    disabled={sending}
+                    className="w-full bg-teal text-white font-semibold py-4 rounded-xl shadow-[0_8px_32px_rgba(0,185,142,0.3)] text-[15px] disabled:opacity-60 disabled:cursor-not-allowed"
+                    whileHover={sending ? {} : { scale: 1.02, y: -2 }}
+                    whileTap={sending ? {} : { scale: 0.98 }}
                   >
-                    Envoyer le message →
+                    {sending ? 'Envoi en cours...' : 'Envoyer le message →'}
                   </motion.button>
                   <p className="text-g400 text-xs text-center">Vos données sont traitées de manière confidentielle · BCEAO</p>
                 </form>

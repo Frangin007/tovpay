@@ -25,26 +25,6 @@ export function CreditIcon({ size = 24, strokeWidth = 1.8, className }: IconProp
   )
 }
 
-export function WalletIcon({ size = 24, strokeWidth = 1.8, className }: IconProps) {
-  return (
-    <svg {...base(size)} className={className}>
-      <path d="M3 7.5A2.5 2.5 0 0 1 5.5 5h11A2.5 2.5 0 0 1 19 7.5V8H5.5A2.5 2.5 0 0 1 3 5.5" stroke="currentColor" strokeWidth={strokeWidth} strokeLinejoin="round" />
-      <rect x="3" y="8" width="18" height="11" rx="2.2" stroke="currentColor" strokeWidth={strokeWidth} />
-      <circle cx="16" cy="13.5" r="1.4" fill="currentColor" />
-    </svg>
-  )
-}
-
-export function ScoringIcon({ size = 24, strokeWidth = 1.8, className }: IconProps) {
-  return (
-    <svg {...base(size)} className={className}>
-      <path d="M3 19V5" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" />
-      <path d="M3 19h18" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" />
-      <path d="M6.5 16v-3.5M11 16V8.5M15.5 16v-6M20 16V5.5" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" />
-    </svg>
-  )
-}
-
 export function BuildingIcon({ size = 24, strokeWidth = 1.8, className }: IconProps) {
   return (
     <svg {...base(size)} className={className}>
@@ -127,15 +107,6 @@ export function BankIcon({ size = 24, strokeWidth = 1.8, className }: IconProps)
       <path d="M2.5 9.5 12 3.5l9.5 6" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
       <path d="M4 9.5h16v9.5H4z" stroke="currentColor" strokeWidth={strokeWidth} strokeLinejoin="round" />
       <path d="M2.5 19h19M7 12.5v4M12 12.5v4M17 12.5v4" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" />
-    </svg>
-  )
-}
-
-export function WaveIcon({ size = 24, strokeWidth = 1.8, className }: IconProps) {
-  return (
-    <svg {...base(size)} className={className}>
-      <path d="M2.5 12c1.8-3 3.6-3 5.4 0s3.6 3 5.4 0 3.6-3 5.4 0 3.6 3 5.4 0" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M2.5 17c1.8-3 3.6-3 5.4 0s3.6 3 5.4 0 3.6-3 5.4 0 3.6 3 5.4 0" stroke="currentColor" strokeWidth={strokeWidth * 0.7} strokeLinecap="round" strokeLinejoin="round" opacity="0.45" />
     </svg>
   )
 }
@@ -226,27 +197,11 @@ export function MapPinIcon({ size = 24, strokeWidth = 1.8, className }: IconProp
   )
 }
 
-export function ChatIcon({ size = 24, strokeWidth = 1.8, className }: IconProps) {
-  return (
-    <svg {...base(size)} className={className}>
-      <path d="M3 5.5A2.5 2.5 0 0 1 5.5 3h13A2.5 2.5 0 0 1 21 5.5v8A2.5 2.5 0 0 1 18.5 16H9l-5 4.5V16h-.5A2.5 2.5 0 0 1 1 13.5" stroke="currentColor" strokeWidth={strokeWidth} strokeLinejoin="round" />
-    </svg>
-  )
-}
-
 export function DocumentIcon({ size = 24, strokeWidth = 1.8, className }: IconProps) {
   return (
     <svg {...base(size)} className={className}>
       <path d="M6 2.5h8l4 4v14.5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1v-17.5a1 1 0 0 1 1-1Z" stroke="currentColor" strokeWidth={strokeWidth} strokeLinejoin="round" />
       <path d="M14 2.5V7h4M8.5 12h7M8.5 15.5h7M8.5 19h4" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" />
-    </svg>
-  )
-}
-
-export function ArrowRightIcon({ size = 24, strokeWidth = 1.8, className }: IconProps) {
-  return (
-    <svg {...base(size)} className={className}>
-      <path d="M4 12h16M14 6l6 6-6 6" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }
@@ -267,22 +222,19 @@ export function PlayStoreIcon({ size = 24, className }: IconProps) {
   )
 }
 
-export function UserIcon({ size = 24, strokeWidth = 1.8, className }: IconProps) {
+export function CalendarIcon({ size = 24, strokeWidth = 1.8, className }: IconProps) {
   return (
     <svg {...base(size)} className={className}>
-      <circle cx="12" cy="8" r="3.6" stroke="currentColor" strokeWidth={strokeWidth} />
-      <path d="M5 20c.9-3.6 3.6-5.5 7-5.5s6.1 1.9 7 5.5" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" />
+      <rect x="3" y="4.5" width="18" height="16" rx="2.2" stroke="currentColor" strokeWidth={strokeWidth} />
+      <path d="M3 9.5h18M7.5 2.5v4M16.5 2.5v4" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" />
     </svg>
   )
 }
 
-export function QrCodeIcon({ size = 24, strokeWidth = 1.8, className }: IconProps) {
+export function ChevronDownIcon({ size = 24, strokeWidth = 1.8, className }: IconProps) {
   return (
     <svg {...base(size)} className={className}>
-      <rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" strokeWidth={strokeWidth} />
-      <rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" strokeWidth={strokeWidth} />
-      <rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" strokeWidth={strokeWidth} />
-      <path d="M14 14h3v3h-3zM20 14v3M14 20h3M19 20h2" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5 8.5 12 15.5 19 8.5" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }

@@ -2,12 +2,13 @@ import { motion } from 'framer-motion'
 import type { Variants } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import {
-  CreditIcon, WalletIcon, AiSparkIcon, BuildingIcon,
+  CreditIcon, AiSparkIcon, HandshakeIcon,
   PhoneDownloadIcon, IdIcon, CheckCircleIcon,
 } from '../components/Icon'
 import PageHero from '../components/PageHero'
 import FinalCta from '../components/FinalCta'
 import IMAGES from '../lib/images'
+import { useDocumentMeta } from '../hooks/useDocumentMeta'
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
@@ -24,48 +25,43 @@ const services = [
     icon: CreditIcon,
     color: '#00B98E',
     title: 'Nano-Crédit Mobile',
-    desc: 'Accédez à 1 000 – 20 000 FCFA en moins de 15 minutes via Mobile Money. Sans garantie, sans paperasse. Scoring basé sur IA.',
-    features: ['Décaissement en 15 min', 'Sans garantie physique', 'Multi-opérateurs Mobile Money', 'Scoring IA intelligent'],
+    desc: 'Cinq forfaits de crédit court terme - Express, Hebdomadaire, Duo Chauffeur, Cycle Marchand, Fonctionnaire - chacun adapté à un profil et un cycle de revenus. Décaissement en moins de 15 minutes, en espèces ou via Mobile Money.',
+    features: ['Décaissement en 15 min', 'Sans garantie physique', 'Taux et total affichés avant validation', '5 forfaits selon votre profil'],
     link: '/nano-credit',
     img: IMAGES.howStep3,
   },
   {
-    icon: WalletIcon,
+    icon: HandshakeIcon,
     color: '#1A3FA8',
-    title: 'Wallet & Paiements',
-    desc: 'Portefeuille numérique multi-opérateurs. Envoyez, recevez, payez chez tous les commerçants partenaires de la zone UEMOA.',
-    features: ['Multi-opérateurs Mobile Money', 'Paiement marchand', 'Transferts instantanés', 'Historique complet'],
-    link: '/services',
+    title: 'Réseau de Chefs d\'Agence',
+    desc: "Nos Chefs d'Agence sont le moteur humain de la plateforme : ils prospectent, vérifient l'identité des clients, initient le premier crédit et assurent le recouvrement de proximité. Rémunérés exclusivement à la commission.",
+    features: ["Présence de proximité, quartier par quartier", 'KYC et vérification d\'identité', 'Validation des demandes sous 24h', 'Rémunération à la commission'],
+    link: '/agents',
     img: IMAGES.impact2,
   },
   {
     icon: AiSparkIcon,
     color: '#7C3AED',
     title: 'Scoring Intelligent',
-    desc: 'Notre moteur IA évalue votre profil en temps réel. Score de crédit sans historique bancaire, sans document complexe.',
-    features: ['Score en temps réel', 'Sans historique bancaire', 'Amélioration continue', 'Transparence totale'],
-    link: '/services',
+    desc: "Chaque client - et chaque Chef d'Agence - dispose d'un score qui évolue en temps réel selon son comportement. Sans historique bancaire requis, avec des paliers de crédit clairs et progressifs.",
+    features: ['Score en temps réel', 'Sans historique bancaire', 'Paliers de crédit progressifs', 'Transparence totale'],
+    link: '/agents',
     img: IMAGES.impact4,
   },
-  {
-    icon: BuildingIcon,
-    color: '#F5A623',
-    title: 'Solutions PME',
-    desc: 'Lignes de crédit renouvelables, gestion de trésorerie et tableaux de bord analytiques pour les petites entreprises.',
-    features: ['Ligne de crédit renouvelable', 'Gestion trésorerie', 'Multi-utilisateurs', 'Tableau de bord dédié'],
-    link: '/services',
-    img: IMAGES.whyImg1,
-  }
 ]
 
 const steps = [
-  { Icon: PhoneDownloadIcon, n: '01', title: "Téléchargez l'app", desc: 'App Store ou Google Play. Gratuit.', img: IMAGES.howStep1 },
-  { Icon: IdIcon, n: '02', title: 'Inscrivez-vous', desc: 'Pièce ID + téléphone. 5 minutes.', img: IMAGES.howStep2 },
-  { Icon: AiSparkIcon, n: '03', title: 'Scoring instantané', desc: 'IA analyse votre profil. Résultat immédiat.', img: IMAGES.howStep3 },
-  { Icon: CreditIcon, n: '04', title: 'Crédit décaissé', desc: 'Fonds reçus en 15 minutes max.', img: IMAGES.howStep4 },
+  { Icon: PhoneDownloadIcon, n: '01', title: "Rencontrez un agent ou téléchargez l'app", desc: 'Un Chef d\'Agence près de chez vous, ou l\'application mobile.', img: IMAGES.howStep1 },
+  { Icon: IdIcon, n: '02', title: 'Inscrivez-vous', desc: 'Pièce ID + téléphone. Vérification (KYC) en quelques heures.', img: IMAGES.howStep2 },
+  { Icon: AiSparkIcon, n: '03', title: 'Choisissez votre forfait', desc: 'Taux et total à rembourser affichés avant validation.', img: IMAGES.howStep3 },
+  { Icon: CreditIcon, n: '04', title: 'Crédit décaissé', desc: 'Fonds reçus en 15 minutes max, espèces ou Mobile Money.', img: IMAGES.howStep4 },
 ]
 
 export default function Services() {
+  useDocumentMeta(
+    'Services : nano-crédit, Chefs d\'Agence & scoring',
+    'Nos solutions financières : nano-crédit mobile, réseau de Chefs d\'Agence de proximité et scoring intelligent pour l\'inclusion financière en Afrique.'
+  )
   return (
     <>
       <PageHero
@@ -76,7 +72,7 @@ export default function Services() {
       />
 
       {/* SERVICES LISTE */}
-      <section className="py-28 px-[5%] bg-white">
+      <section className="py-20 px-[5%] bg-white">
         <div className="max-w-[1280px] mx-auto flex flex-col gap-24">
           {services.map((service, i) => (
             <motion.div
@@ -150,7 +146,7 @@ export default function Services() {
       </section>
 
       {/* COMMENT ÇA MARCHE */}
-      <section className="py-28 px-[5%] bg-g50 relative overflow-hidden">
+      <section className="py-20 px-[5%] bg-g50 relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none"
           style={{ backgroundImage: 'radial-gradient(rgba(0,185,142,0.05) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
         <div className="max-w-[1280px] mx-auto relative">
@@ -197,8 +193,8 @@ export default function Services() {
       </section>
 
       <FinalCta
-        title="Une offre, une app, toute la zone UEMOA."
-        desc="Nano-crédit, wallet et scoring réunis dans une seule application mobile."
+        title="Une offre, une app, une ambition panafricaine."
+        desc="Nano-crédit et scoring intelligent, portés par un réseau de Chefs d'Agence de terrain."
         primary={{ label: 'Demander un crédit', to: '/nano-credit' }}
         secondary={{ label: 'Nous contacter →', to: '/contact' }}
         bgImage={IMAGES.impact1}

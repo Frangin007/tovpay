@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   THÈME DE MARQUE TOVPAY — Tailwind v4 (CSS-first config)
+   THÈME DE MARQUE TOVPAY - Tailwind v4 (CSS-first config)
    ========================================================================== */
 @theme {
   /* Couleurs de marque */
@@ -23,42 +23,8 @@
   --color-g900: #0F172A;
 
   /* Typographie de marque */
-  --font-sans: 'DM Sans', sans-serif;
-  --font-display: 'Syne', sans-serif;
-
-  /* Animations Stripe-like custom */
-  --animate-float: float 4s ease-in-out infinite;
-  --animate-float-card: floatCard 5s ease-in-out infinite;
-  --animate-mesh: meshFloat 18s ease-in-out infinite;
-  --animate-pulse-dot: pulseDot 2s ease-in-out infinite;
-  --animate-fade-up: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
-  --animate-shine: shine 2.5s linear infinite;
-
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(-14px); }
-  }
-  @keyframes floatCard {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(-10px); }
-  }
-  @keyframes meshFloat {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33%      { transform: translate(30px, -24px) scale(1.06); }
-    66%      { transform: translate(-22px, 18px) scale(0.96); }
-  }
-  @keyframes pulseDot {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50%      { opacity: 0.5; transform: scale(0.8); }
-  }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes shine {
-    from { transform: translateX(-150%); }
-    to   { transform: translateX(150%); }
-  }
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
 }
 
 /* ==========================================================================
@@ -78,10 +44,15 @@
     background: #fff;
     color: var(--color-g900);
     overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    font-variant-numeric: tabular-nums;
   }
 
   h1, h2, h3, h4, h5 {
     font-family: var(--font-display);
+    letter-spacing: -0.01em;
   }
 
   *:focus-visible {
@@ -99,13 +70,9 @@
 }
 
 /* ==========================================================================
-   COMPOSANTS RÉUTILISABLES — classes utilitaires custom (Tailwind @layer)
+   COMPOSANTS RÉUTILISABLES - classes utilitaires custom (Tailwind @layer)
    ========================================================================== */
 @layer components {
-  .container-tp {
-    @apply max-w-[1280px] mx-auto;
-  }
-
   .section-tag {
     @apply text-teal font-semibold text-[11px] tracking-[3px] uppercase;
   }
@@ -128,24 +95,6 @@
     @apply absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-200;
   }
 
-  .btn-ghost {
-    @apply inline-block bg-white/[0.08] border border-white/20 text-white font-semibold text-[15px] px-7 py-3.5 rounded-xl transition-colors duration-200 hover:bg-white/[0.14] no-underline;
-  }
-
-  .btn-outline {
-    @apply inline-block bg-transparent border-2 border-teal text-teal font-semibold text-[14px] px-6 py-3 rounded-xl transition-all duration-200 hover:bg-teal hover:text-white no-underline;
-  }
-
-  .btn-cta {
-    @apply inline-flex items-center font-semibold text-[14px] text-lime-dk bg-lime px-5 py-2.5 rounded-full transition-all duration-150 hover:bg-[#8fd960] hover:-translate-y-0.5 no-underline;
-  }
-
-  /* Mesh gradient orbs */
-  .mesh-orb {
-    @apply absolute rounded-full pointer-events-none animate-mesh;
-    filter: blur(80px);
-  }
-
   /* Footer links avec underline animée */
   .footer-link {
     @apply relative w-fit text-white/55 text-sm no-underline transition-colors duration-200 hover:text-white;
@@ -157,60 +106,13 @@
   .footer-link:hover::after {
     @apply w-full;
   }
-
-  /* Line clamp */
-  .line-clamp-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  .line-clamp-3 {
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  /* Padding utilitaires manquants */
-  .py-4\.5 { padding-top: 1.125rem; padding-bottom: 1.125rem; }
-  .px-5\.5 { padding-left: 1.375rem; padding-right: 1.375rem; }
-
-  /* Image hover premium */
-  .img-hover {
-    @apply overflow-hidden rounded-2xl;
-  }
-  .img-hover img {
-    @apply transition-transform duration-700;
-  }
-  .img-hover:hover img {
-    @apply scale-105;
-  }
 }
 
 /* ==========================================================================
-   REVEAL AU SCROLL
+   ACCESSIBILITÉ - réduction des animations
    ========================================================================== */
-[data-reveal] {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  will-change: opacity, transform;
-}
-[data-reveal].in-view {
-  opacity: 1;
-  transform: translateY(0);
-}
-[data-reveal-delay="1"] { transition-delay: 0.08s; }
-[data-reveal-delay="2"] { transition-delay: 0.16s; }
-[data-reveal-delay="3"] { transition-delay: 0.24s; }
-[data-reveal-delay="4"] { transition-delay: 0.32s; }
-[data-reveal-delay="5"] { transition-delay: 0.40s; }
-[data-reveal-delay="6"] { transition-delay: 0.48s; }
-
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  [data-reveal] { opacity: 1 !important; transform: none !important; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

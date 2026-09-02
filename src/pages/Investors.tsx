@@ -1,9 +1,10 @@
 import { motion } from 'framer-motion'
 import type { Variants } from 'framer-motion'
-import { GlobeIcon, TrendingUpIcon, HandshakeIcon, CoinsIcon, BuildingIcon, NetworkIcon, MailIcon } from '../components/Icon'
+import { GlobeIcon, ShieldIcon, HandshakeIcon, CoinsIcon, BuildingIcon, NetworkIcon, MailIcon } from '../components/Icon'
 import PageHero from '../components/PageHero'
 import FinalCta from '../components/FinalCta'
 import IMAGES from '../lib/images'
+import { useDocumentMeta } from '../hooks/useDocumentMeta'
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 const fadeUp: Variants = {
@@ -14,28 +15,36 @@ const fadeUp: Variants = {
   }),
 }
 
-const kpis = [
-  { label: 'Clients actifs', y24: '50', y25: '330', y26: '2 000' },
-  { label: 'Crédits accordés (M FCFA)', y24: '25', y25: '200', y26: '1 200' },
-  { label: 'Taux recouvrement', y24: '92%', y25: '85%', y26: '83%' },
-  { label: 'Pays opérationnels', y24: '1', y25: '4', y26: '6' },
-  { label: 'Revenue (M FCFA)', y24: '2.5', y25: '22', y26: '140' },
-  { label: 'Marge opérationnelle', y24: '-40%', y25: '-15%', y26: '18%' },
+const identity = [
+  { label: 'Filiation', val: 'Filiale de GROUPE TOV' },
+  { label: 'Siège opérationnel', val: 'Lomé, Togo' },
+  { label: 'Siège administratif', val: '102 impasse Darnaudet, 64300 Baigts de Béarn, France' },
+  { label: 'Bureaux', val: 'Lomé (opérationnel) · Cotonou (régional) · Abidjan (commercial)' },
+  { label: 'Pays d\'activité pilote', val: 'Bénin - activité notifiée à la BCEAO, phase pilote en cours' },
+  { label: 'Date de démarrage', val: '30 juin 2026 (notification BCEAO), confirmée le 16 juillet 2026' },
+  { label: 'Ambition de déploiement', val: '18 pays africains (objectif, hors activité confirmée à date)' },
+  { label: 'RCCM', val: 'TG-LFW-01-2026-B13-00733' },
+  { label: 'NIF', val: '1002113124' },
+  { label: 'Capital social', val: '100 000 000 FCFA' },
 ]
 
 const points = [
-  { Icon: GlobeIcon, title: 'Marché géant', desc: '500M+ personnes non bancarisées en Afrique. TAM: $50B+', color: '#00B98E' },
-  { Icon: TrendingUpIcon, title: 'Croissance 7×', desc: 'Revenue CAGR 120% 2024-2026. Profitabilité en vue.', color: '#9fe870' },
-  { Icon: HandshakeIcon, title: 'Orabank backing', desc: 'Adossement bancaire solide. Conformité BCEAO garantie.', color: '#F5A623' },
+  { Icon: GlobeIcon, title: 'Marché géant', desc: '500M+ personnes non bancarisées en Afrique de l\'Ouest.', color: '#00B98E' },
+  { Icon: ShieldIcon, title: 'Un modèle sans risque de crédit', desc: "TOVPAY ne prête jamais en son nom propre et ne supporte pas le risque de crédit - une plateforme technologique, pas un bilan bancaire.", color: '#9fe870' },
+  { Icon: HandshakeIcon, title: 'Conformité dès le premier jour', desc: 'Notification volontaire à la BCEAO avant tout déploiement, démarche proactive au-delà de nos obligations directes.', color: '#F5A623' },
 ]
 
 const profiles = [
   { Icon: CoinsIcon, title: 'Family Offices', desc: 'Impact investing africain + rendements solides' },
   { Icon: BuildingIcon, title: 'VC Panafricains', desc: 'Spécialisés fintech inclusive' },
-  { Icon: NetworkIcon, title: 'Impact Funds', desc: 'SDG 1, 5, 8, 10 — Inclusion financière mesurable' },
+  { Icon: NetworkIcon, title: 'Impact Funds', desc: 'SDG 1, 5, 8, 10 - Inclusion financière mesurable' },
 ]
 
 export default function Investors() {
+  useDocumentMeta(
+    'Espace investisseurs',
+    'Investissez dans l\'inclusion financière africaine : découvrez le modèle, le statut réel et la vision panafricaine de TOVPAY.'
+  )
   return (
     <>
       <PageHero
@@ -46,7 +55,7 @@ export default function Investors() {
       />
 
       {/* Points clés */}
-      <section className="relative py-28 px-[5%] overflow-hidden">
+      <section className="relative py-20 px-[5%] overflow-hidden">
         <div className="absolute inset-0">
           <img src={IMAGES.impact3} alt="" loading="lazy" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-navy-deep/95" />
@@ -80,12 +89,15 @@ export default function Investors() {
         </div>
       </section>
 
-      {/* KPI Table */}
-      <section className="py-28 px-[5%] bg-white">
+      {/* Identité légale */}
+      <section className="py-20 px-[5%] bg-white">
         <div className="max-w-[1280px] mx-auto">
           <motion.div className="text-center mb-12" initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <motion.span className="section-tag" variants={fadeUp} custom={0}>MODÈLE ÉCONOMIQUE</motion.span>
-            <motion.h2 className="section-title mt-3 text-center" variants={fadeUp} custom={1}>Données financières.</motion.h2>
+            <motion.span className="section-tag" variants={fadeUp} custom={0}>IDENTITÉ & STATUT</motion.span>
+            <motion.h2 className="section-title mt-3 text-center" variants={fadeUp} custom={1}>Le réel, sans détour.</motion.h2>
+            <motion.p className="section-sub max-w-xl mx-auto text-center" variants={fadeUp} custom={2}>
+              Ce document reflète le statut réel de TOVPAY à date, et non une activité déjà engagée hors du Bénin.
+            </motion.p>
           </motion.div>
           <motion.div
             className="overflow-x-auto rounded-2xl border border-g100 shadow-sm"
@@ -95,28 +107,18 @@ export default function Investors() {
             transition={{ duration: 0.6, ease: EASE }}
           >
             <table className="w-full border-collapse min-w-[480px]">
-              <thead>
-                <tr className="bg-navy">
-                  <th className="text-left text-white/80 text-xs font-semibold uppercase tracking-wider py-4 px-6">Métrique</th>
-                  <th className="text-right text-white/80 text-xs font-semibold uppercase tracking-wider py-4 px-6">2024</th>
-                  <th className="text-right text-white/80 text-xs font-semibold uppercase tracking-wider py-4 px-6">2025E</th>
-                  <th className="text-right text-teal text-xs font-semibold uppercase tracking-wider py-4 px-6">2026P</th>
-                </tr>
-              </thead>
               <tbody>
-                {kpis.map((r, i) => (
+                {identity.map((r, i) => (
                   <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-g50'}>
-                    <td className="text-g600 text-sm py-3.5 px-6">{r.label}</td>
-                    <td className="text-right text-navy text-sm font-medium py-3.5 px-6">{r.y24}</td>
-                    <td className="text-right text-navy text-sm font-medium py-3.5 px-6">{r.y25}</td>
-                    <td className="text-right text-navy text-sm font-bold py-3.5 px-6">{r.y26}</td>
+                    <td className="text-g400 text-xs font-semibold uppercase tracking-wide py-3.5 px-6 whitespace-nowrap align-top">{r.label}</td>
+                    <td className="text-navy text-sm font-medium py-3.5 px-6">{r.val}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </motion.div>
 
-          {/* Série A */}
+          {/* Statut réel */}
           <motion.div
             className="mt-12 bg-gradient-to-br from-navy to-blue rounded-3xl p-9 overflow-hidden relative"
             initial={{ opacity: 0, y: 30 }}
@@ -126,13 +128,13 @@ export default function Investors() {
           >
             <div className="absolute -right-12 -top-12 w-48 h-48 rounded-full"
               style={{ background: 'radial-gradient(circle, rgba(159,232,112,0.15), transparent 70%)' }} />
-            <h3 className="text-white text-2xl font-display font-bold mb-4">Levée de fonds Série A — 2M USD</h3>
+            <h3 className="text-white text-2xl font-display font-bold mb-4">Où en est TOVPAY aujourd'hui ?</h3>
             <p className="text-white/70 leading-relaxed mb-5 max-w-[600px]">
-              Expansion 6 pays supplémentaires, tech IA/ML avancée, recrutement équipes locales. Closing prévu fin 2026.
+              TOVPAY est en phase pilote au Bénin depuis le 30 juin 2026, et en recherche active d'un partenaire bancaire (Orabank Bénin) pour porter les crédits distribués. Aucune levée de fonds n'est annoncée à ce jour - nous échangeons avec des investisseurs qui partagent notre vision panafricaine de l'inclusion financière.
             </p>
             <div className="flex items-center gap-2 text-white/70 text-sm">
               <MailIcon size={16} className="text-teal" />
-              Contactez : <strong className="text-teal">investors@tovpay.com</strong>
+              Contactez : <strong className="text-teal">dg@tovpay.africa</strong>
             </div>
           </motion.div>
 
@@ -166,8 +168,8 @@ export default function Investors() {
 
       <FinalCta
         title="Investissez dans l'inclusion financière africaine."
-        desc="Discutons de notre Série A et de notre vision panafricaine."
-        primary={{ label: "Contacter l'équipe", to: 'mailto:investors@tovpay.com', mailto: true }}
+        desc="Discutons de notre phase pilote au Bénin et de notre vision panafricaine."
+        primary={{ label: "Contacter l'équipe", to: 'mailto:dg@tovpay.africa', mailto: true }}
         secondary={{ label: 'Découvrir TovPay →', to: '/about' }}
         bgImage={IMAGES.heroInvestors}
       />

@@ -20,19 +20,23 @@ export default function Footer() {
               <div className="inline-flex items-center gap-1.5 bg-white/[0.08] border border-white/10 rounded-lg px-3 py-1.5 text-white text-[11px] font-semibold">
                 <AppleIcon size={15} /> App Store
               </div>
-              <div className="inline-flex items-center gap-1.5 bg-white/[0.08] border border-white/10 rounded-lg px-3 py-1.5 text-white text-[11px] font-semibold">
-                <PlayStoreIcon size={15} /> Google Play
-              </div>
+              <a
+                href="https://expo.dev/accounts/frangins-team/projects/tovpay/builds/9c059a82-6967-4921-ad08-5b917537a379"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 bg-white/[0.08] border border-white/10 rounded-lg px-3 py-1.5 text-white text-[11px] font-semibold hover:bg-white/[0.14] transition-colors duration-200"
+              >
+                <PlayStoreIcon size={15} /> Android (APK)
+              </a>
             </div>
           </div>
 
           <div>
             <div className="text-white font-semibold text-sm mb-4">Services</div>
             <div className="flex flex-col gap-2.5">
-              <Link to="/services" className="footer-link">Nano-Crédit</Link>
-              <Link to="/services" className="footer-link">Wallet & Paiement</Link>
-              <Link to="/services" className="footer-link">Scoring IA</Link>
-              <Link to="/services" className="footer-link">Solutions PME</Link>
+              <Link to="/nano-credit" className="footer-link">Nano-Crédit</Link>
+              <Link to="/agents" className="footer-link">Chefs d'Agence</Link>
+              <Link to="/services" className="footer-link">Scoring intelligent</Link>
             </div>
           </div>
 
@@ -42,7 +46,6 @@ export default function Footer() {
               <Link to="/about" className="footer-link">À Propos</Link>
               <Link to="/partners" className="footer-link">Partenaires</Link>
               <Link to="/investors" className="footer-link">Investisseurs</Link>
-              <Link to="/blog" className="footer-link">Blog</Link>
             </div>
           </div>
 
@@ -51,7 +54,7 @@ export default function Footer() {
             <div className="flex flex-col gap-2.5">
               <Link to="/faq" className="footer-link">FAQ</Link>
               <Link to="/contact" className="footer-link">Contact</Link>
-              <a href="https://wa.me/22500000000" className="footer-link">WhatsApp</a>
+              <a href="https://wa.me/2290191003991" className="footer-link">WhatsApp</a>
               <a href="#" className="footer-link">CGU</a>
             </div>
           </div>
@@ -59,11 +62,11 @@ export default function Footer() {
 
         <div className="flex flex-col sm:flex-row justify-between items-center gap-3 pt-7 border-t border-white/10">
           <span className="text-white/35 text-xs">
-            © 2026 TOVPAY. Tous droits réservés. · Conforme BCEAO & OHADA
+            © 2026 TOVPAY, filiale de GROUPE TOV. Tous droits réservés. · Notifié BCEAO
           </span>
 
           <span className="inline-flex items-center gap-1.5 text-white/30 text-xs">
-            <HandshakeIcon size={15} /> En partenariat avec <span className="text-teal">Orabank</span>
+            <HandshakeIcon size={15} /> Partenariat bancaire en cours avec <span className="text-teal">Orabank Bénin</span>
           </span>
         </div>
       </div>

@@ -24,7 +24,7 @@ const fadeUp: Variants = {
 
 export default function FinalCta({ title, desc, primary, secondary, bgImage }: FinalCtaProps) {
   return (
-    <section className="relative overflow-hidden py-28 px-[5%]">
+    <section className="relative overflow-hidden py-20 px-[5%]">
       {/* Background */}
       {bgImage ? (
         <>

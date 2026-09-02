@@ -1,49 +1,48 @@
 // ── Bibliothèque d'images libres de droits (Unsplash)
 // Licence Unsplash : usage commercial gratuit, attribution non requise
 // Format CDN: https://images.unsplash.com/photo-{ID}?w=...
+// Sélection 2026 : écosystème africain (marchés, équipes, mobile money),
+// chaque image vérifiée manuellement (contenu + disponibilité) avant intégration.
 
-const U = (id: string, params = 'w=1600&q=80&auto=format&fit=crop') =>
+// Défaut pensé pour les images de contenu (cartes ~340-620px de large) : pas besoin
+// des 1600px/q80 d'origine, qui téléchargeaient bien plus de pixels que ce qui est
+// jamais affiché. Les heroes plein écran ci-dessous reçoivent un override plus large.
+const U = (id: string, params = 'w=960&q=70&auto=format&fit=crop') =>
   `https://images.unsplash.com/photo-${id}?${params}`
+
+const HERO_PARAMS = 'w=1920&q=72&auto=format&fit=crop'
 
 export const IMAGES = {
   // ── Hero principal
-  hero: U('1531746020798-e6953c6e8e04'),        // femme africaine smartphone, sourire confiant
+  hero: U('1687422809654-579d81c29d32', HERO_PARAMS),          // commerçante africaine souriante, téléphone en main, étal de marché
 
-  // ── Heroes pages secondaires — images immersives uniques
-  heroAbout:     U('1521791136064-7986c2920216'),  // réunion d'équipe diverse, table de travail
-  heroServices:  U('1556742049-0cfed4f6a45d'),     // main tenant téléphone, paiement mobile
-  heroPartners:  U('1454165804606-c3d57bc86b40'),  // poignée de main business, partenariat
-  heroInvestors: U('1611974789855-9c2a0a7236a3'),  // écran graphiques financiers, croissance
-  heroBlog:      U('1499750310107-5fef28a66643'),  // laptop ouvert, espace de travail moderne
-  heroFaq:       U('1516321318423-f06f85e504b3'),  // personne avec téléphone, aide client
-  heroContact:   U('1423345264291-ef113e5a1d18'),  // bureau moderne, communication
-  heroNanoCredit:U('1579621970795-87facc2f976d'),  // billets de banque, argent, transaction
+  // ── Heroes pages secondaires - images immersives uniques
+  heroAbout:     U('1573164574511-73c773193279', HERO_PARAMS),  // équipe diverse en réunion, bureau moderne lumineux
+  heroServices:  U('1775215595284-8eb97d44e761', HERO_PARAMS),  // vendeur africain de noix de coco, rue ensoleillée
+  heroPartners:  U('1784202464389-de4ce60886df', HERO_PARAMS),  // hommes africains en costume, poignée de main, partenariat
+  heroInvestors: U('1611974789855-9c2a0a7236a3', HERO_PARAMS),  // écran graphiques financiers, croissance
+  heroFaq:       U('1761370980657-22586ea44093', HERO_PARAMS),  // marchande africaine souriante, étal de bananes
+  heroContact:   U('1739298061707-cefee19941b7', HERO_PARAMS),  // équipe diverse en réunion, bureau clair
+  heroNanoCredit:U('1579621970795-87facc2f976d', HERO_PARAMS),  // pièces de monnaie et pousse verte, épargne/crédit
 
   // ── Section Pourquoi TovPay
-  whyImg1: U('1589156280159-27698a70f29e'),       // femme africaine commerçante, étal tissu
-  whyImg2: U('1488521787816-4ee05db8bef2'),       // jeune homme africain téléphone, souriant
-  whyImg3: U('1460925895917-afdab827c52f'),       // entrepreneur, ordinateur portable
+  whyImg1: U('1746171114403-f4c4877b1f04'),       // marché africain animé, étals colorés, minibus
+  whyImg2: U('1687422809617-a7d97879b3b0'),       // vendeur africain devant son étal de fruits
 
-  // ── Steps — processus d'obtention crédit
+  // ── Steps - processus d'obtention crédit
   howStep1: U('1512941937669-90a1b58e7e9c'),      // smartphone dans les mains, apps
-  howStep2: U('1563013544-824ae1b704d3'),         // carte d'identité, vérification
-  howStep3: U('1551288831-5a04b974f651'),         // paiement mobile, transaction
-  howStep4: U('1579621970795-87facc2f976d'),      // satisfaction client, succès
-
-  // ── Témoignages — portraits réels (crop visage)
-  testi1: U('1494790108377-be9c29b29330', 'w=200&h=200&q=80&auto=format&fit=crop&crop=faces'),
-  testi2: U('1531746020798-e6953c6e8e04', 'w=200&h=200&q=80&auto=format&fit=crop&crop=faces'),
-  testi3: U('1507003211169-0a1dd7228f2d', 'w=200&h=200&q=80&auto=format&fit=crop&crop=faces'),
+  howStep2: U('1761370980776-93f2110a99a7'),      // jeune homme africain au marché, regard direct, vérification terrain
+  howStep3: U('1678693362793-e2fffac536d0'),      // mains africaines comptant des billets, transaction
+  howStep4: U('1633504214759-e1013f422ed7'),      // femme africaine, billets et téléphone, réaction joyeuse
 
   // ── Impact / Features
-  impact1: U('1541777236-8d58dab020ee'),          // agriculture, verdure, Afrique
-  impact2: U('1556742049-0cfed4f6a45d'),          // paiement sans contact, technologie
-  impact3: U('1521791136064-7986c2920216'),       // réunion d'affaires africaine
-  impact4: U('1529156069898-49953e39b3ac'),       // jeune équipe diverse, fintech
+  impact1: U('1602516818688-715dfc1b77d5'),       // champs agricoles verdoyants, Afrique
+  impact2: U('1765584829997-12ab011bb5b3'),       // femme africaine préparant des produits à son étal, marché
+  impact3: U('1573167101669-476636b96cea'),       // équipe africaine au travail, ordinateurs portables
+  impact4: U('1573165706511-3ffde6ef1fe3'),       // jeune équipe diverse, bureau, fintech
 
   // ── Backgrounds texturés
-  bgCity:   U('1534430480872-3498386e7856'),      // skyline africaine la nuit
-  bgDark:   U('1557683316-973673baf926'),         // fond abstrait géométrique sombre
+  bgCity: U('1636706519609-988babca3dd5'),        // skyline de Johannesburg au coucher du soleil
 } as const
 
 export default IMAGES

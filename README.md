@@ -7,7 +7,7 @@ Site vitrine de TOVPAY, plateforme de nano-crédit mobile et de paiements digita
 - **React 19** + **TypeScript**
 - **Vite** pour le build et le dev server
 - **React Router** pour la navigation
-- **Tailwind CSS v4** (config CSS-first via `@theme`, pas de `tailwind.config.js`) — palette de marque navy/teal/lime, typographies DM Sans + Syne, animations custom (mesh gradients, reveal au scroll, floating cards)
+- **Tailwind CSS v4** (config CSS-first via `@theme`, pas de `tailwind.config.js`) — palette de marque navy/teal/lime, typographie Inter, animations custom (mesh gradients, reveal au scroll, floating cards)
 
 ## Démarrer en local
 
@@ -46,15 +46,16 @@ src/
 
 public/
 └── brand/
-    ├── tovpay-icon.png     # Logo carré (nav, favicon)
-    └── tovpay-logo.png     # Logo complet (footer, usages larges)
+    ├── tovpay-icon.png                # Logo carré source (haute résolution)
+    ├── tovpay-logo.png                # Logo complet source (haute résolution)
+    └── tovpay-logo-transparent.png    # Logo utilisé (nav, footer)
 ```
 
 ## Système de design
 
 Toute la palette et les animations sont centralisées dans `src/index.css` via la directive `@theme` de Tailwind v4 :
 - Couleurs : `navy`, `navy-deep`, `blue`, `teal`, `teal-dk`, `teal-light`, `lime`, `lime-dk`, `gold`, `g50`→`g900`
-- Fonts : `font-sans` (DM Sans), `font-display` (Syne)
+- Fonts : `font-sans` et `font-display` (Inter)
 - Animations : `animate-float`, `animate-float-card`, `animate-mesh`, `animate-pulse-dot`, `animate-fade-up`, `animate-shine`
 
 Classes composants réutilisables (`@layer components`) : `.btn-primary`, `.btn-ghost`, `.btn-outline`, `.btn-cta`, `.floating-card`, `.mesh-orb`, `.footer-link`, `.section-title`, `.section-tag`, `.section-sub`, `.container-tp`.

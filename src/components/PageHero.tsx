@@ -20,7 +20,7 @@ export default function PageHero({ breadcrumb, title, desc, bgImage }: PageHeroP
   const parts = breadcrumb.split(' / ')
 
   return (
-    <section className="relative overflow-hidden pt-[130px] pb-[80px] px-[5%]">
+    <section className="relative overflow-hidden h-[440px] flex items-center px-[5%]">
       {/* Background */}
       {bgImage ? (
         <>
@@ -71,7 +71,7 @@ export default function PageHero({ breadcrumb, title, desc, bgImage }: PageHeroP
 
           {/* Titre */}
           <motion.h1
-            className="font-display font-extrabold text-[2.2rem] sm:text-[3rem] lg:text-[3.6rem] text-white leading-tight tracking-tight max-w-[760px] mb-5"
+            className="font-display font-extrabold text-[2.2rem] sm:text-[3rem] lg:text-[3.6rem] text-white leading-tight tracking-tight max-w-[760px] mb-5 line-clamp-2"
             variants={fadeUp}
             custom={1}
           >
@@ -80,7 +80,7 @@ export default function PageHero({ breadcrumb, title, desc, bgImage }: PageHeroP
 
           {/* Description */}
           <motion.p
-            className="text-white/65 text-base sm:text-lg leading-relaxed max-w-[560px]"
+            className="text-white/65 text-base sm:text-lg leading-relaxed max-w-[560px] line-clamp-2"
             variants={fadeUp}
             custom={2}
           >

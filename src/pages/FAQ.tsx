@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import PageHero from '../components/PageHero'
 import IMAGES from '../lib/images'
+import { useDocumentMeta } from '../hooks/useDocumentMeta'
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
@@ -11,15 +12,15 @@ const faqs = [
     items: [
       {
         q: "Quel est le montant minimum et maximum d'un crédit ?",
-        a: "Le montant minimum est 1 000 FCFA et le maximum est 20 000 FCFA (équivalent au Nigeria). Le montant accordé dépend de votre score de crédit et de votre historique de remboursement."
+        a: "Le montant minimum est 1 000 FCFA et le maximum est 20 000 FCFA. Le montant accordé dépend de votre score de crédit et de votre historique de remboursement."
       },
       {
         q: "Combien de temps faut-il pour recevoir le crédit ?",
-        a: "Une fois approuvé, les fonds sont versés sur votre portefeuille Mobile Money en moins de 15 minutes. L'approbation elle-même prend environ 5 à 10 minutes."
+        a: "Une fois votre demande validée par le Chef d'Agence, les fonds sont versés en espèces ou sur Mobile Money en moins de 15 minutes."
       },
       {
         q: "Quels sont les taux d'intérêt appliqués ?",
-        a: "Les taux varient selon la durée : 10% pour 1 semaine, 15% pour 2 semaines, 20% pour 3 semaines, 25% pour 1 mois. Ces taux sont affichés clairement, sans frais cachés."
+        a: "Cinq forfaits, chacun avec son propre taux : Express (8 % sur 1 jour), Hebdomadaire (10 % sur 7 jours), Duo Chauffeur (18 % sur 10 jours), Cycle Marchand (20 % sur 24 jours, remboursement quotidien) et Fonctionnaire (20 % sur 1 mois). Le taux et le total à rembourser sont toujours affichés avant validation, et une pénalité de retard de 2 %/jour s'applique au-delà de l'échéance."
       },
       {
         q: "Puis-je rembourser avant la date limite ?",
@@ -36,7 +37,7 @@ const faqs = [
     items: [
       {
         q: "Qu'est-ce que le scoring TOVPAY ?",
-        a: "Notre moteur d'IA analyse votre comportement transactionnel, votre stabilité téléphonique et d'autres signaux pour évaluer votre capacité de remboursement — sans historique bancaire requis."
+        a: "Notre moteur d'IA analyse votre comportement transactionnel, votre stabilité téléphonique et d'autres signaux pour évaluer votre capacité de remboursement - sans historique bancaire requis."
       },
       {
         q: "Quels documents dois-je fournir ?",
@@ -53,15 +54,15 @@ const faqs = [
     items: [
       {
         q: "TOVPAY est-elle une entreprise fiable et réglementée ?",
-        a: "Oui, TOVPAY est conforme BCEAO, adossée au groupe bancaire Orabank, et respecte les normes KYC/LCB-FT et OHADA. Toutes les données sont chiffrées selon les standards bancaires."
+        a: "TOVPAY n'est ni une banque ni une institution de microfinance : c'est une plateforme technologique de distribution, qui connecte les emprunteurs à un établissement de crédit agréé partenaire (Orabank Bénin, partenariat en cours de finalisation). TOVPAY a adressé une notification volontaire de démarrage d'activité à la BCEAO avant tout déploiement, démarche confirmée par la Direction Nationale pour le Bénin."
       },
       {
         q: "Mes données personnelles sont-elles protégées ?",
-        a: "Absolument. Vos données sont chiffrées de bout en bout, stockées sur des serveurs sécurisés, et ne sont jamais revendues à des tiers."
+        a: "Oui. La vérification d'identité (KYC) est systématique avant toute validation de compte ou de crédit, et vos données ne sont jamais revendues à des tiers."
       },
       {
         q: "Que se passe-t-il si je ne rembourse pas à temps ?",
-        a: "Des pénalités de retard s'appliquent (2%/jour). Après 4 semaines sans remboursement, votre compte est suspendu et un processus de recouvrement est enclenché."
+        a: "Une pénalité de retard de 2 %/jour s'applique au-delà de l'échéance. Un retard de plus de 30 jours affecte fortement votre score, et toute fraude détectée entraîne le blocage immédiat du compte."
       },
     ]
   },
@@ -112,6 +113,10 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
 }
 
 export default function FAQ() {
+  useDocumentMeta(
+    'Questions fréquentes',
+    'Toutes les réponses sur le nano-crédit et le micro-crédit mobile TOVPAY : taux, délais, remboursement et conformité.'
+  )
   return (
     <>
       <PageHero
@@ -121,7 +126,7 @@ export default function FAQ() {
         bgImage={IMAGES.heroFaq}
       />
 
-      <section className="py-28 px-[5%] bg-white">
+      <section className="py-20 px-[5%] bg-white">
         <div className="max-w-[1280px] mx-auto">
           <div className="grid lg:grid-cols-[1fr_2fr] gap-16">
 

@@ -6,11 +6,11 @@ import {
 import type { Variants, Transition } from 'framer-motion'
 import IMAGES from '../lib/images'
 import {
-  CreditIcon, WalletIcon, BuildingIcon,
+  CreditIcon,
   GlobeIcon, HandshakeIcon, AiSparkIcon, ShieldIcon,
-  BankIcon, WaveIcon, BroadcastIcon, SignalIcon, GavelIcon,
-  TrendingUpIcon,
+  BankIcon, SignalIcon, GavelIcon, TrendingUpIcon,
 } from '../components/Icon'
+import { useDocumentMeta } from '../hooks/useDocumentMeta'
 
 // ── Ease cubic bezier (tuple as const pour Framer Motion v12) ────
 const EASE_OUT = [0.16, 1, 0.3, 1] as const
@@ -71,7 +71,7 @@ function StatItem({ value, suffix, label }: { value: number, suffix: string, lab
   const { count, ref } = useAnimatedCounter(value)
   return (
     <div className="text-center">
-      <div className="font-display font-extrabold text-[2.8rem] text-white leading-none">
+      <div className="font-display font-extrabold text-[2rem] sm:text-[2.8rem] text-white leading-none">
         <span ref={ref as React.RefObject<HTMLElement>}>{count}</span>{suffix}
       </div>
       <div className="text-white/55 text-sm mt-1.5">{label}</div>
@@ -81,6 +81,10 @@ function StatItem({ value, suffix, label }: { value: number, suffix: string, lab
 
 // ── Main Home ──────────────────────────────────────────────────
 export default function Home() {
+  useDocumentMeta(
+    'Nano-crédit & micro-crédit mobile en Afrique de l\'Ouest',
+    'TOVPAY : nano-crédit et micro-crédit mobile de 1 000 à 20 000 FCFA en 15 minutes, sans garantie. Phase pilote au Bénin, ambition panafricaine.'
+  )
   const heroRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
   const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
@@ -89,14 +93,14 @@ export default function Home() {
     <div className="overflow-x-hidden">
 
       {/* ═══════════════════════════════════════════════════════
-          HERO — Immersif, plein écran, parallaxe
+          HERO - Immersif, plein écran, parallaxe
       ═══════════════════════════════════════════════════════ */}
-      <div ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden">
+      <div ref={heroRef} className="relative min-h-dvh flex items-center overflow-hidden">
 
-        {/* Background image FIXE (reste figée pendant le scroll) */}
+        {/* Background image FIXE (reste figée pendant le scroll, sauf mobile où bg-fixed est buggé) */}
         <div
-          className="absolute inset-0 z-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${IMAGES.hero})`, backgroundAttachment: 'fixed' }}
+          className="absolute inset-0 z-0 bg-cover bg-center bg-scroll lg:bg-fixed"
+          style={{ backgroundImage: `url(${IMAGES.hero})` }}
           aria-label="Entrepreneur africain avec téléphone"
         />
 
@@ -118,7 +122,7 @@ export default function Home() {
           <div className="max-w-[640px]">
             {/* Titre principal */}
             <motion.h1
-              className="font-display font-extrabold text-[3rem] sm:text-[3.8rem] lg:text-[5rem] leading-[1.02] text-white tracking-tight mb-6"
+              className="font-display font-bold text-[2.6rem] sm:text-[3.8rem] lg:text-[5rem] leading-[1.05] sm:leading-[1.02] text-white tracking-tight mb-6"
               variants={fadeUp}
               initial="hidden"
               animate="visible"
@@ -188,7 +192,7 @@ export default function Home() {
             >
               {[
                 { n: '< 15', label: 'minutes pour recevoir' },
-                { n: '6', label: 'pays UEMOA' },
+                { n: 'Bénin', label: 'phase pilote active' },
                 { n: '20K', label: 'FCFA maximum' },
               ].map((s, i) => (
                 <div key={i} className="flex items-center gap-3">
@@ -201,44 +205,6 @@ export default function Home() {
               ))}
             </motion.div>
           </div>
-
-          {/* Image flottante droite (desktop) */}
-          <motion.div
-            className="hidden xl:block absolute right-[5%] top-1/2 -translate-y-1/2 w-[380px]"
-            initial={{ opacity: 0, x: 60, y: '-50%' }}
-            animate={{ opacity: 1, x: 0, y: '-50%' }}
-            transition={{ duration: 1, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <motion.div
-              animate={{ y: [0, -12, 0] }}
-              transition={{ repeat: Infinity, duration: 5, ease: 'easeInOut' }}
-              className="relative"
-            >
-              <div className="absolute -inset-6 rounded-3xl bg-teal/10 blur-2xl" />
-              <img
-                src={IMAGES.impact2}
-                alt="Paiement mobile TovPay"
-                className="relative w-full rounded-3xl shadow-[0_40px_80px_rgba(0,0,0,0.5)] object-cover aspect-[3/4]"
-              />
-              {/* Badge overlay sur l'image */}
-              <motion.div
-                className="absolute -bottom-5 -left-8 bg-white rounded-2xl shadow-xl px-5 py-4 flex items-center gap-3"
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.2, duration: 0.5 }}
-              >
-                <div className="w-10 h-10 rounded-xl bg-teal flex items-center justify-center">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="white" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
-                </div>
-                <div>
-                  <div className="font-bold text-navy text-sm">Crédit accordé</div>
-                  <div className="text-g600 text-xs">en 12 minutes</div>
-                </div>
-              </motion.div>
-            </motion.div>
-          </motion.div>
         </motion.div>
 
         {/* Scroll indicator */}
@@ -253,7 +219,7 @@ export default function Home() {
       </div>
 
       {/* ═══════════════════════════════════════════════════════
-          CHIFFRES CLÉS — Bande pleine largeur
+          CHIFFRES CLÉS - Bande pleine largeur
       ═══════════════════════════════════════════════════════ */}
       <div className="bg-navy py-16 px-[5%] relative overflow-hidden">
         <div className="absolute inset-0 pointer-events-none"
@@ -261,10 +227,10 @@ export default function Home() {
         <div className="max-w-[1280px] mx-auto">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 lg:divide-x lg:divide-white/10">
             {[
-              { value: 330, suffix: '+', label: 'Clients actifs en 2025' },
+              { value: 1, suffix: ' pays', label: 'En phase pilote actuellement (Bénin)' },
+              { value: 5, suffix: '', label: 'Produits de crédit court terme' },
               { value: 15, suffix: ' min', label: 'Pour recevoir son argent' },
-              { value: 6, suffix: ' pays', label: 'Présence en zone UEMOA' },
-              { value: 80, suffix: '%+', label: 'Taux de recouvrement' },
+              { value: 18, suffix: ' pays', label: "Notre ambition de déploiement panafricain" },
             ].map((s, i) => (
               <motion.div
                 key={i}
@@ -283,9 +249,9 @@ export default function Home() {
       </div>
 
       {/* ═══════════════════════════════════════════════════════
-          POURQUOI TOVPAY — Image + Points
+          POURQUOI TOVPAY - Image + Points
       ═══════════════════════════════════════════════════════ */}
-      <section className="py-28 px-[5%] bg-white relative overflow-hidden">
+      <section className="py-20 px-[5%] bg-white relative overflow-hidden">
         <div className="max-w-[1280px] mx-auto">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Images empilées */}
@@ -305,7 +271,7 @@ export default function Home() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-navy/60 to-transparent" />
                 <div className="absolute bottom-5 left-5 text-white">
-                  <div className="text-xs text-white/70 mb-1">Marché d'Abidjan</div>
+                  <div className="text-xs text-white/70 mb-1">Marché de Cotonou, Bénin</div>
                   <div className="font-display font-bold text-base">Commerce textile</div>
                 </div>
               </div>
@@ -335,8 +301,8 @@ export default function Home() {
                     <TrendingUpIcon size={16} />
                   </div>
                   <div>
-                    <div className="text-navy font-bold text-xs">Remboursement</div>
-                    <div className="text-teal text-xs font-semibold">+120% croissance 2024</div>
+                    <div className="text-navy font-bold text-xs">Décaissement</div>
+                    <div className="text-teal text-xs font-semibold">Moins de 15 minutes</div>
                   </div>
                 </div>
               </motion.div>
@@ -357,14 +323,14 @@ export default function Home() {
               </motion.h2>
               <motion.p className="text-g600 text-base leading-relaxed mb-8" variants={fadeUp} custom={2}>
                 500 millions de personnes en Afrique n'ont pas accès aux services bancaires. TovPay change la donne
-                en rendant le crédit aussi simple qu'un SMS — sans garantie, sans historique bancaire.
+                en rendant le crédit aussi simple qu'un SMS - sans garantie, sans historique bancaire.
               </motion.p>
 
               <div className="space-y-5">
                 {[
                   {
                     title: 'Décaissement en 15 minutes',
-                    desc: 'Du dossier au virement Mobile Money — plus rapide que n\'importe quelle banque.',
+                    desc: 'Du dossier au virement Mobile Money - plus rapide que n\'importe quelle banque.',
                     color: '#00B98E',
                   },
                   {
@@ -378,8 +344,8 @@ export default function Home() {
                     color: '#F5A623',
                   },
                   {
-                    title: 'Conforme BCEAO & Orabank',
-                    desc: 'Adossés au premier groupe bancaire panafricain privé.',
+                    title: 'Démarche BCEAO transparente',
+                    desc: 'Notification volontaire de nos activités, en toute transparence avec le régulateur.',
                     color: '#7C3AED',
                   },
                 ].map((item, i) => (
@@ -406,9 +372,9 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════
-          COMMENT ÇA MARCHE — Steps avec images
+          COMMENT ÇA MARCHE - Steps avec images
       ═══════════════════════════════════════════════════════ */}
-      <section className="py-28 px-[5%] bg-g50 relative overflow-hidden">
+      <section className="py-20 px-[5%] bg-g50 relative overflow-hidden">
         {/* Background décoratif */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full"
@@ -498,9 +464,9 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════
-          SERVICES — Grid premium
+          SERVICES - Grid premium
       ═══════════════════════════════════════════════════════ */}
-      <section className="py-28 px-[5%] bg-white">
+      <section className="py-20 px-[5%] bg-white">
         <div className="max-w-[1280px] mx-auto">
           <motion.div
             className="text-center mb-16"
@@ -513,7 +479,7 @@ export default function Home() {
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {/* Carte 1 — large */}
+            {/* Carte 1 - large */}
             <motion.div
               className="relative rounded-3xl overflow-hidden min-h-[380px] group"
               initial={{ opacity: 0, scale: 0.95 }}
@@ -535,7 +501,7 @@ export default function Home() {
                 </div>
                 <h3 className="font-display font-bold text-white text-2xl mb-2">Nano-Crédit Mobile</h3>
                 <p className="text-white/70 text-sm mb-5 max-w-[320px]">
-                  1 000 à 20 000 FCFA décaissés en 15 min via Wave, Orange Money ou MTN.
+                  1 000 à 20 000 FCFA décaissés en 15 min, en espèces ou via Mobile Money.
                 </p>
                 <Link to="/nano-credit" className="inline-flex items-center gap-2 text-teal text-sm font-semibold hover:gap-3 transition-all">
                   En savoir plus <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
@@ -543,45 +509,49 @@ export default function Home() {
               </div>
             </motion.div>
 
-            {/* Colonne droite — 3 mini cartes */}
+            {/* Colonne droite - 3 mini cartes */}
             <div className="flex flex-col gap-6">
               {[
                 {
-                  Icon: WalletIcon, title: 'Wallet & Paiements', color: '#1A3FA8',
-                  desc: 'Envoyez, recevez, payez. Multi-opérateurs, zone UEMOA.',
-                  bg: 'from-blue/5 to-blue/10'
+                  Icon: HandshakeIcon, title: 'Réseau de Chefs d\'Agence', color: '#1A3FA8',
+                  desc: 'Des agents de terrain, rémunérés à la commission, qui accompagnent chaque client.',
+                  bg: 'from-blue/5 to-blue/10',
+                  link: '/agents',
                 },
                 {
-                  Icon: AiSparkIcon, title: 'Scoring IA', color: '#7C3AED',
-                  desc: 'Score de crédit en temps réel sans historique bancaire.',
-                  bg: 'from-purple-50 to-purple-100/50'
+                  Icon: AiSparkIcon, title: 'Scoring intelligent', color: '#7C3AED',
+                  desc: 'Score client et score agent, évolutifs et transparents, sans historique bancaire.',
+                  bg: 'from-purple-50 to-purple-100/50',
+                  link: '/services',
                 },
                 {
-                  Icon: BuildingIcon, title: 'Solutions PME', color: '#F5A623',
-                  desc: 'Lignes de crédit renouvelables pour les petits commerces.',
-                  bg: 'from-amber-50 to-amber-100/50'
+                  Icon: ShieldIcon, title: 'Conformité & transparence', color: '#F5A623',
+                  desc: 'KYC systématique, taux affiché avant validation, notification volontaire à la BCEAO.',
+                  bg: 'from-amber-50 to-amber-100/50',
+                  link: '/faq',
                 },
               ].map((s, i) => (
-                <motion.div
-                  key={i}
-                  className={`bg-gradient-to-br ${s.bg} border border-g100 rounded-3xl p-6 flex items-center gap-5 group cursor-pointer transition-shadow duration-300 hover:shadow-lg`}
-                  initial={{ opacity: 0, x: 40 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1, duration: 0.5 }}
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0" style={{ background: `${s.color}15`, color: s.color }}>
-                    <s.Icon size={24} />
-                  </div>
-                  <div>
-                    <h4 className="font-display font-bold text-navy text-base mb-1">{s.title}</h4>
-                    <p className="text-g600 text-sm leading-relaxed">{s.desc}</p>
-                  </div>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="ml-auto shrink-0 text-g400 group-hover:text-teal transition-colors">
-                    <path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
-                </motion.div>
+                <Link key={i} to={s.link} className="no-underline">
+                  <motion.div
+                    className={`bg-gradient-to-br ${s.bg} border border-g100 rounded-3xl p-6 flex items-center gap-5 group cursor-pointer transition-shadow duration-300 hover:shadow-lg`}
+                    initial={{ opacity: 0, x: 40 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1, duration: 0.5 }}
+                    whileHover={{ scale: 1.02 }}
+                  >
+                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0" style={{ background: `${s.color}15`, color: s.color }}>
+                      <s.Icon size={24} />
+                    </div>
+                    <div>
+                      <h4 className="font-display font-bold text-navy text-base mb-1">{s.title}</h4>
+                      <p className="text-g600 text-sm leading-relaxed">{s.desc}</p>
+                    </div>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="ml-auto shrink-0 text-g400 group-hover:text-teal transition-colors">
+                      <path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
+                  </motion.div>
+                </Link>
               ))}
             </div>
           </div>
@@ -589,9 +559,9 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════
-          IMPACT — Section avec grande image de fond
+          IMPACT - Section avec grande image de fond
       ═══════════════════════════════════════════════════════ */}
-      <section className="relative py-28 px-[5%] overflow-hidden">
+      <section className="relative py-20 px-[5%] overflow-hidden">
         {/* Background image avec overlay */}
         <div className="absolute inset-0">
           <img
@@ -645,10 +615,10 @@ export default function Home() {
               initial="hidden" whileInView="visible" viewport={{ once: true }}
             >
               {[
-                { Icon: GlobeIcon, title: '6 pays actifs', desc: 'CI, SN, BJ, TG + Mali & Niger bientôt', color: '#00B98E' },
-                { Icon: HandshakeIcon, title: 'Orabank Group', desc: 'Adossés au leader bancaire panafricain', color: '#9fe870' },
-                { Icon: AiSparkIcon, title: 'IA propriétaire', desc: 'Scoring sans historique bancaire requis', color: '#7C3AED' },
-                { Icon: ShieldIcon, title: 'Conforme BCEAO', desc: 'KYC/LCB-FT & OHADA respectés', color: '#F5A623' },
+                { Icon: GlobeIcon, title: 'Phase pilote au Bénin', desc: 'Ambition de déploiement dans 18 pays africains', color: '#00B98E' },
+                { Icon: HandshakeIcon, title: 'Orabank Bénin', desc: 'Partenariat bancaire en cours de finalisation', color: '#9fe870' },
+                { Icon: AiSparkIcon, title: 'Scoring propriétaire', desc: 'Score client et agent, sans historique bancaire requis', color: '#7C3AED' },
+                { Icon: ShieldIcon, title: 'Conforme BCEAO', desc: 'Notification volontaire, KYC systématique', color: '#F5A623' },
               ].map((item, i) => (
                 <motion.div
                   key={i}
@@ -679,7 +649,7 @@ export default function Home() {
             initial="hidden" whileInView="visible" viewport={{ once: true }}
           >
             <motion.p className="text-g400 text-sm mb-6" variants={fadeIn}>
-              ÉCOSYSTÈME PARTENAIRE
+              ÉCOSYSTÈME EN CONSTRUCTION
             </motion.p>
           </motion.div>
 
@@ -688,12 +658,11 @@ export default function Home() {
             initial="hidden" whileInView="visible" viewport={{ once: true }}
           >
             {[
-              { Icon: BankIcon, name: 'Orabank', type: 'Banque adossement' },
-              { Icon: WaveIcon, name: 'Wave', type: 'Mobile Money' },
-              { Icon: SignalIcon, name: 'Orange Money', type: 'Mobile Money' },
-              { Icon: BroadcastIcon, name: 'MTN MoMo', type: 'Mobile Money' },
-              { Icon: SignalIcon, name: "Africa's Talking", type: 'SMS' },
-              { Icon: GavelIcon, name: 'BCEAO', type: 'Régulateur' },
+              { Icon: BankIcon, name: 'Orabank Bénin', type: 'Partenaire bancaire visé' },
+              { Icon: SignalIcon, name: 'MTN MoMo · Moov Money', type: 'Mobile Money envisagés' },
+              { Icon: SignalIcon, name: 'TMoney · Flooz', type: 'Mobile Money envisagés' },
+              { Icon: CreditIcon, name: 'FeexPay', type: 'Agrégateur de paiement agréé BCEAO' },
+              { Icon: GavelIcon, name: 'BCEAO', type: 'Régulateur - notifié' },
             ].map((p, i) => (
               <motion.div
                 key={i}
@@ -714,87 +683,7 @@ export default function Home() {
       </section>
 
       {/* ═══════════════════════════════════════════════════════
-          TÉMOIGNAGES — Style premium
-      ═══════════════════════════════════════════════════════ */}
-      <section className="py-28 px-[5%] bg-white overflow-hidden">
-        <div className="max-w-[1280px] mx-auto">
-          <motion.div
-            className="text-center mb-16"
-            initial="hidden" whileInView="visible" viewport={{ once: true }}
-          >
-            <motion.span className="section-tag" variants={fadeUp} custom={0}>TÉMOIGNAGES</motion.span>
-            <motion.h2 className="section-title mt-3 text-center" variants={fadeUp} custom={1}>
-              Ils font confiance à TovPay.
-            </motion.h2>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                quote: "J'ai pu réapprovisionner mon stock en urgence. Le crédit était sur Wave en 10 minutes. Je n'avais jamais vu ça de ma vie.",
-                name: 'Aminata Diallo',
-                role: 'Commerçante tissu — Dakar',
-                img: IMAGES.testi1,
-                stars: 5,
-              },
-              {
-                quote: "Grâce à TovPay, j'ai acheté du matériel pour mon atelier sans attendre un mois. Le taux est clair, pas de surprise.",
-                name: 'Kwame Asante',
-                role: 'Artisan menuisier — Abidjan',
-                img: IMAGES.testi2,
-                stars: 5,
-              },
-              {
-                quote: "Simple, rapide, honnête. Mon score a augmenté après chaque remboursement et maintenant j'ai accès à 20 000 FCFA.",
-                name: 'Fatoumata Koné',
-                role: 'Micro-entrepreneuse — Lomé',
-                img: IMAGES.testi3,
-                stars: 5,
-              },
-            ].map((t, i) => (
-              <motion.div
-                key={i}
-                className="bg-white border border-g100 rounded-3xl p-7 shadow-sm relative overflow-hidden group"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.15, duration: 0.6 }}
-                whileHover={{ y: -6, boxShadow: '0 24px 60px rgba(0,185,142,0.12)' }}
-              >
-                {/* Accent top */}
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-teal to-lime rounded-t-3xl" />
-
-                {/* Stars */}
-                <div className="flex gap-1 mb-5">
-                  {Array.from({ length: t.stars }).map((_, j) => (
-                    <svg key={j} width="14" height="14" viewBox="0 0 24 24" fill="#F5A623">
-                      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                    </svg>
-                  ))}
-                </div>
-
-                <p className="text-g600 text-[15px] leading-relaxed mb-6 italic">"{t.quote}"</p>
-
-                <div className="flex items-center gap-3">
-                  <img
-                    src={t.img}
-                    alt={t.name}
-                    loading="lazy"
-                    className="w-11 h-11 rounded-full object-cover ring-2 ring-teal/20"
-                  />
-                  <div>
-                    <div className="font-semibold text-navy text-sm">{t.name}</div>
-                    <div className="text-g400 text-xs">{t.role}</div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ═══════════════════════════════════════════════════════
-          CTA FINAL — Immersif avec image
+          CTA FINAL - Immersif avec image
       ═══════════════════════════════════════════════════════ */}
       <section className="relative py-32 px-[5%] overflow-hidden">
         <div className="absolute inset-0">
@@ -834,7 +723,7 @@ export default function Home() {
               className="text-white/65 text-lg leading-relaxed mb-10"
               variants={fadeUp} custom={1}
             >
-              Rejoignez les milliers d'entrepreneurs africains qui font confiance à TovPay
+              Rejoignez les entrepreneurs béninois qui font confiance à TovPay
               pour financer leurs activités et faire grandir leur commerce.
             </motion.p>
 
@@ -869,7 +758,7 @@ export default function Home() {
               className="text-white/30 text-xs mt-8"
               variants={fadeIn} custom={3}
             >
-              Conforme BCEAO · Partenaire Orabank · Données chiffrées
+              Notifié à la BCEAO · Phase pilote au Bénin · Données chiffrées
             </motion.p>
           </motion.div>
         </div>
