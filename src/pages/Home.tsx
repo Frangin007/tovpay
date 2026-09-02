@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import {
-  motion, useScroll, useTransform, useInView,
+  motion, useScroll, useTransform, useReducedMotion,
 } from 'framer-motion'
 import type { Variants, Transition } from 'framer-motion'
 import IMAGES from '../lib/images'
@@ -11,6 +11,7 @@ import {
   BankIcon, SignalIcon, GavelIcon, TrendingUpIcon,
 } from '../components/Icon'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
+import StatCounter from '../components/ui/StatCounter'
 
 // ── Ease cubic bezier (tuple as const pour Framer Motion v12) ────
 const EASE_OUT = [0.16, 1, 0.3, 1] as const
@@ -47,33 +48,15 @@ const slideRight: Variants = {
   visible: { opacity: 1, x: 0, transition: tr(0.8) },
 }
 
-// ── Hook animé ─────────────────────────────────────────────────
-function useAnimatedCounter(target: number, duration = 2000) {
-  const [count, setCount] = useState(0)
-  const ref = useRef<HTMLElement>(null)
-  const inView = useInView(ref, { once: true, margin: '-50px' })
-  useEffect(() => {
-    if (!inView) return
-    let start = 0
-    const step = target / (duration / 16)
-    const timer = setInterval(() => {
-      start += step
-      if (start >= target) { setCount(target); clearInterval(timer) }
-      else setCount(Math.floor(start))
-    }, 16)
-    return () => clearInterval(timer)
-  }, [inView, target, duration])
-  return { count, ref }
-}
-
 // ── Composant Stat avec count-up ──────────────────────────────
 function StatItem({ value, suffix, label }: { value: number, suffix: string, label: string }) {
-  const { count, ref } = useAnimatedCounter(value)
   return (
     <div className="text-center">
-      <div className="font-display font-extrabold text-[2rem] sm:text-[2.8rem] text-white leading-none">
-        <span ref={ref as React.RefObject<HTMLElement>}>{count}</span>{suffix}
-      </div>
+      <StatCounter
+        value={value}
+        suffix={suffix}
+        className="text-h2 text-white leading-none"
+      />
       <div className="text-white/55 text-sm mt-1.5">{label}</div>
     </div>
   )
@@ -87,7 +70,9 @@ export default function Home() {
   )
   const heroRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] })
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0])
+  const reduceMotion = useReducedMotion()
+  const heroOpacityMotion = useTransform(scrollYProgress, [0, 0.7], [1, 0])
+  const heroOpacity = reduceMotion ? 1 : heroOpacityMotion
 
   return (
     <div className="overflow-x-hidden">
@@ -205,16 +190,6 @@ export default function Home() {
               ))}
             </motion.div>
           </div>
-        </motion.div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-2"
-          animate={{ y: [0, 8, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-        >
-          <span className="text-white/40 text-xs tracking-widest uppercase">Défiler</span>
-          <div className="w-px h-8 bg-gradient-to-b from-white/40 to-transparent" />
         </motion.div>
       </div>
 
