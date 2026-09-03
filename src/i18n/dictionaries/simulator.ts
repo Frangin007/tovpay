@@ -1,0 +1,86 @@
+export const productLabels = {
+  fr: {
+    'express-marche': { name: 'Express Marché', tagline: 'Trésorerie du jour pour les commerçants de marché', durationLabel: '1 jour' },
+    'hebdomadaire': { name: 'Hebdomadaire', tagline: 'Pour couvrir les besoins de la semaine', durationLabel: '7 jours' },
+    'duo-chauffeur': { name: 'Duo Chauffeur', tagline: 'Financement pour chauffeurs et transporteurs', durationLabel: '10 jours' },
+    'cycle-marchand': { name: 'Cycle Marchand', tagline: 'Capital renouvelé, remboursé chaque jour', durationLabel: '24 jours' },
+    'fonctionnaire': { name: 'Fonctionnaire', tagline: 'Avance sur salaire remboursée au jour de la paie', durationLabel: '1 mois' },
+  },
+  en: {
+    'express-marche': { name: 'Express Market', tagline: 'Same-day cash flow for market vendors', durationLabel: '1 day' },
+    'hebdomadaire': { name: 'Weekly', tagline: 'To cover your weekly needs', durationLabel: '7 days' },
+    'duo-chauffeur': { name: 'Driver Duo', tagline: 'Financing for drivers and transporters', durationLabel: '10 days' },
+    'cycle-marchand': { name: 'Merchant Cycle', tagline: 'Revolving capital, repaid daily', durationLabel: '24 days' },
+    'fonctionnaire': { name: 'Civil Servant', tagline: 'Salary advance repaid on payday', durationLabel: '1 month' },
+  },
+} as const
+
+export const fr = {
+  eyebrow: 'SIMULATEUR',
+  title: 'Calculez votre crédit en temps réel.',
+  sub: 'Une projection immédiate, hors-ligne, sans aucun engagement.',
+  productLabel: 'Produit',
+  amountLabel: 'Montant souhaité',
+  plafondLabel: (amount: string) => `Plafond : ${amount}`,
+  result: {
+    amountBorrowed: 'Montant emprunté',
+    interest: 'Intérêts',
+    duration: 'Durée',
+    dueDate: 'Échéance',
+    total: 'Total à rembourser',
+    annualRate: (rate: string) => `Taux annualisé équivalent (indicatif) : ${rate}% - donnée fournie à titre de transparence.`,
+    latePenalty: "Pénalité de retard : 2%/jour au-delà de l'échéance · remboursement anticipé possible sans pénalité.",
+  },
+  schedule: {
+    toggle: (installments: number, dailyPayment: string) => `Échéancier - ${installments} versements de ~${dailyPayment} FCFA/jour`,
+    colIndex: '#',
+    colDate: 'Date',
+    colAmount: 'Montant',
+  },
+  ctaApply: 'Faire une demande →',
+  disclaimer: "Simulation indicative et non contractuelle · Le montant final dépend de l'évaluation de votre dossier.",
+  compareTitle: (amount: string) => `Comparer les 5 produits pour ${amount} FCFA`,
+  interestOf: (interest: string) => `dont ${interest} FCFA d'intérêt`,
+  historyTitle: 'Vos dernières simulations',
+  relative: {
+    now: "à l'instant",
+    minutesAgo: (min: number) => `il y a ${min} min`,
+    hoursAgo: (h: number) => `il y a ${h} h`,
+    daysAgo: (d: number) => `il y a ${d} j`,
+  },
+}
+
+export const en: typeof fr = {
+  eyebrow: 'SIMULATOR',
+  title: 'Calculate your credit in real time.',
+  sub: 'An instant, offline projection - no commitment.',
+  productLabel: 'Product',
+  amountLabel: 'Desired amount',
+  plafondLabel: (amount: string) => `Limit: ${amount}`,
+  result: {
+    amountBorrowed: 'Amount borrowed',
+    interest: 'Interest',
+    duration: 'Duration',
+    dueDate: 'Due date',
+    total: 'Total to repay',
+    annualRate: (rate: string) => `Equivalent annualized rate (indicative): ${rate}% - provided for transparency.`,
+    latePenalty: 'Late penalty: 2%/day past the due date · early repayment possible with no penalty.',
+  },
+  schedule: {
+    toggle: (installments: number, dailyPayment: string) => `Repayment schedule - ${installments} installments of ~${dailyPayment} FCFA/day`,
+    colIndex: '#',
+    colDate: 'Date',
+    colAmount: 'Amount',
+  },
+  ctaApply: 'Apply now →',
+  disclaimer: 'Indicative, non-contractual simulation · The final amount depends on your file review.',
+  compareTitle: (amount: string) => `Compare all 5 products for ${amount} FCFA`,
+  interestOf: (interest: string) => `including ${interest} FCFA in interest`,
+  historyTitle: 'Your recent simulations',
+  relative: {
+    now: 'just now',
+    minutesAgo: (min: number) => `${min} min ago`,
+    hoursAgo: (h: number) => `${h} h ago`,
+    daysAgo: (d: number) => `${d} d ago`,
+  },
+}

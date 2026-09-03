@@ -1,6 +1,36 @@
 import { Link, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import { motion, useScroll, useSpring } from 'framer-motion'
+import { useLanguage, useT } from '../i18n/LanguageContext'
+import { fr, en } from '../i18n/dictionaries/nav'
+
+function LangToggle({ onDark, className = '' }: { onDark: boolean; className?: string }) {
+  const { lang, setLang } = useLanguage()
+  const t = useT(fr, en)
+  return (
+    <div
+      role="group"
+      aria-label={t.langToggleAriaLabel}
+      className={`inline-flex items-center gap-0.5 rounded-lg p-0.5 ${onDark ? 'bg-white/10' : 'bg-g50'} ${className}`}
+    >
+      {(['fr', 'en'] as const).map(l => (
+        <button
+          key={l}
+          type="button"
+          onClick={() => setLang(l)}
+          aria-pressed={lang === l}
+          className={`px-2 py-1 rounded-md text-[11px] font-bold uppercase tracking-wide transition-colors duration-200 ${
+            lang === l
+              ? 'bg-white text-navy shadow-sm'
+              : onDark ? 'text-white/60 hover:text-white' : 'text-g400 hover:text-navy'
+          }`}
+        >
+          {l}
+        </button>
+      ))}
+    </div>
+  )
+}
 
 export default function Nav() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -8,6 +38,7 @@ export default function Nav() {
   const location = useLocation()
   const { scrollYProgress } = useScroll()
   const scaleX = useSpring(scrollYProgress, { stiffness: 200, damping: 30 })
+  const t = useT(fr, en)
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40)
@@ -15,15 +46,7 @@ export default function Nav() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const links = [
-    { name: 'Accueil', path: '/' },
-    { name: 'Services', path: '/services' },
-    { name: "Chefs d'Agence", path: '/agents' },
-    { name: 'À Propos', path: '/about' },
-    { name: 'Investisseurs', path: '/investors' },
-    { name: 'Partenaires', path: '/partners' },
-    { name: 'Contact', path: '/contact' },
-  ]
+  const links = t.links
 
   const onDark = !scrolled
 
@@ -86,14 +109,15 @@ export default function Nav() {
           </div>
 
           {/* CTA */}
-          <div className="hidden lg:flex items-center ml-auto shrink-0">
+          <div className="hidden lg:flex items-center gap-3 ml-auto shrink-0">
+            <LangToggle onDark={onDark} />
             <Link to="/nano-credit">
               <motion.span
                 className="inline-flex items-center gap-2 bg-teal text-white font-semibold text-[13px] px-5 py-2.5 rounded-xl shadow-[0_4px_20px_rgba(0,185,142,0.3)] cursor-pointer"
                 whileHover={{ scale: 1.04, y: -1 }}
                 whileTap={{ scale: 0.97 }}
               >
-                Demander un crédit
+                {t.cta}
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
                   <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                 </svg>
@@ -105,7 +129,7 @@ export default function Nav() {
           <button
             className="lg:hidden ml-auto flex flex-col justify-center gap-[5px] p-2 rounded-lg"
             onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Menu de navigation"
+            aria-label={t.menuAriaLabel}
           >
             <motion.span
               className={`block h-0.5 rounded-full transition-colors ${onDark ? 'bg-white' : 'bg-navy'}`}
@@ -141,12 +165,13 @@ export default function Nav() {
               {link.name}
             </Link>
           ))}
+          <LangToggle onDark={false} className="mt-1 self-start" />
           <Link
             to="/nano-credit"
             className="mt-2 bg-teal text-white font-semibold text-center py-3 rounded-xl no-underline"
             onClick={() => setMobileOpen(false)}
           >
-            Demander un crédit
+            {t.cta}
           </Link>
         </motion.div>
       </motion.nav>

@@ -9,6 +9,8 @@ import PageHero from '../components/PageHero'
 import FinalCta from '../components/FinalCta'
 import IMAGES from '../lib/images'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
+import { useT } from '../i18n/LanguageContext'
+import { fr, en } from '../i18n/dictionaries/services'
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
@@ -20,128 +22,106 @@ const fadeUp: Variants = {
   }),
 }
 
-const services = [
-  {
-    icon: CreditIcon,
-    color: '#00B98E',
-    title: 'Nano-Crédit Mobile',
-    desc: 'Cinq forfaits de crédit court terme - Express, Hebdomadaire, Duo Chauffeur, Cycle Marchand, Fonctionnaire - chacun adapté à un profil et un cycle de revenus. Décaissement en moins de 15 minutes, en espèces ou via Mobile Money.',
-    features: ['Décaissement en 15 min', 'Sans garantie physique', 'Taux et total affichés avant validation', '5 forfaits selon votre profil'],
-    link: '/nano-credit',
-    img: IMAGES.howStep3,
-  },
-  {
-    icon: HandshakeIcon,
-    color: '#1A3FA8',
-    title: 'Réseau de Chefs d\'Agence',
-    desc: "Nos Chefs d'Agence sont le moteur humain de la plateforme : ils prospectent, vérifient l'identité des clients, initient le premier crédit et assurent le recouvrement de proximité. Rémunérés exclusivement à la commission.",
-    features: ["Présence de proximité, quartier par quartier", 'KYC et vérification d\'identité', 'Validation des demandes sous 24h', 'Rémunération à la commission'],
-    link: '/agents',
-    img: IMAGES.impact2,
-  },
-  {
-    icon: AiSparkIcon,
-    color: '#7C3AED',
-    title: 'Scoring Intelligent',
-    desc: "Chaque client - et chaque Chef d'Agence - dispose d'un score qui évolue en temps réel selon son comportement. Sans historique bancaire requis, avec des paliers de crédit clairs et progressifs.",
-    features: ['Score en temps réel', 'Sans historique bancaire', 'Paliers de crédit progressifs', 'Transparence totale'],
-    link: '/agents',
-    img: IMAGES.impact4,
-  },
+const SERVICES_DATA = [
+  { icon: CreditIcon, color: '#00B98E', link: '/nano-credit', img: IMAGES.howStep3 },
+  { icon: HandshakeIcon, color: '#1A3FA8', link: '/agents', img: IMAGES.impact2 },
+  { icon: AiSparkIcon, color: '#7C3AED', link: '/agents', img: IMAGES.impact4 },
 ]
 
-const steps = [
-  { Icon: PhoneDownloadIcon, n: '01', title: "Rencontrez un agent ou téléchargez l'app", desc: 'Un Chef d\'Agence près de chez vous, ou l\'application mobile.', img: IMAGES.howStep1 },
-  { Icon: IdIcon, n: '02', title: 'Inscrivez-vous', desc: 'Pièce ID + téléphone. Vérification (KYC) en quelques heures.', img: IMAGES.howStep2 },
-  { Icon: AiSparkIcon, n: '03', title: 'Choisissez votre forfait', desc: 'Taux et total à rembourser affichés avant validation.', img: IMAGES.howStep3 },
-  { Icon: CreditIcon, n: '04', title: 'Crédit décaissé', desc: 'Fonds reçus en 15 minutes max, espèces ou Mobile Money.', img: IMAGES.howStep4 },
+const STEPS_DATA = [
+  { Icon: PhoneDownloadIcon, img: IMAGES.howStep1 },
+  { Icon: IdIcon, img: IMAGES.howStep2 },
+  { Icon: AiSparkIcon, img: IMAGES.howStep3 },
+  { Icon: CreditIcon, img: IMAGES.howStep4 },
 ]
 
 export default function Services() {
-  useDocumentMeta(
-    'Services : nano-crédit, Chefs d\'Agence & scoring',
-    'Nos solutions financières : nano-crédit mobile, réseau de Chefs d\'Agence de proximité et scoring intelligent pour l\'inclusion financière en Afrique.'
-  )
+  const t = useT(fr, en)
+  useDocumentMeta(t.meta.title, t.meta.description)
   return (
     <>
       <PageHero
-        breadcrumb="Accueil / Services"
-        title="Nos services financiers"
-        desc="Solutions complètes pour l'inclusion financière en Afrique de l'Ouest."
+        breadcrumb={t.hero.breadcrumb}
+        title={t.hero.title}
+        desc={t.hero.desc}
         bgImage={IMAGES.heroServices}
       />
 
       {/* SERVICES LISTE */}
       <section className="py-20 px-[5%] bg-white">
         <div className="max-w-[1280px] mx-auto flex flex-col gap-24">
-          {services.map((service, i) => (
-            <motion.div
-              key={i}
-              className={`grid lg:grid-cols-2 gap-14 items-center ${i % 2 === 1 ? 'lg:[&>:first-child]:order-2' : ''}`}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.7, ease: EASE }}
-            >
-              {/* Texte */}
-              <div>
-                <div
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6"
-                  style={{ background: `${service.color}15`, color: service.color }}
-                >
-                  <service.icon size={28} />
-                </div>
-                <h2 className="font-display font-extrabold text-[2rem] text-navy mb-4">{service.title}</h2>
-                <p className="text-g600 text-[15px] leading-relaxed mb-7">{service.desc}</p>
-
-                <div className="flex flex-col gap-2.5 mb-8">
-                  {service.features.map((f, j) => (
-                    <div key={j} className="flex items-center gap-3">
-                      <div
-                        className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
-                        style={{ background: `${service.color}15`, color: service.color }}
-                      >
-                        <CheckCircleIcon size={12} strokeWidth={2.5} />
-                      </div>
-                      <span className="text-g600 text-sm">{f}</span>
-                    </div>
-                  ))}
-                </div>
-
-                <Link to={service.link}>
-                  <motion.span
-                    className="inline-flex items-center gap-2 bg-navy text-white font-semibold px-6 py-3.5 rounded-xl cursor-pointer text-sm"
-                    whileHover={{ scale: 1.04, y: -2 }}
-                    whileTap={{ scale: 0.97 }}
-                  >
-                    En savoir plus
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
-                  </motion.span>
-                </Link>
-              </div>
-
-              {/* Image */}
+          {t.services.map((service, i) => {
+            const data = SERVICES_DATA[i]
+            const ServiceIcon = data.icon
+            return (
               <motion.div
-                className="relative rounded-3xl overflow-hidden h-[340px] group"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.4 }}
+                key={i}
+                className={`grid lg:grid-cols-2 gap-14 items-center ${i % 2 === 1 ? 'lg:[&>:first-child]:order-2' : ''}`}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.7, ease: EASE }}
               >
-                <img
-                  src={service.img}
-                  alt={service.title}
-                  loading="lazy"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/50 to-transparent" />
-                <div
-                  className="absolute top-5 right-5 w-11 h-11 rounded-xl flex items-center justify-center"
-                  style={{ background: `${service.color}E0`, color: 'white' }}
-                >
-                  <service.icon size={20} />
+                {/* Texte */}
+                <div>
+                  <div
+                    className="w-14 h-14 rounded-2xl flex items-center justify-center mb-6"
+                    style={{ background: `${data.color}15`, color: data.color }}
+                  >
+                    <ServiceIcon size={28} />
+                  </div>
+                  <h2 className="font-display font-extrabold text-[2rem] text-navy mb-4">{service.title}</h2>
+                  <p className="text-g600 text-[15px] leading-relaxed mb-7">{service.desc}</p>
+
+                  <div className="flex flex-col gap-2.5 mb-8">
+                    {service.features.map((f, j) => (
+                      <div key={j} className="flex items-center gap-3">
+                        <div
+                          className="w-5 h-5 rounded-full flex items-center justify-center shrink-0"
+                          style={{ background: `${data.color}15`, color: data.color }}
+                        >
+                          <CheckCircleIcon size={12} strokeWidth={2.5} />
+                        </div>
+                        <span className="text-g600 text-sm">{f}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <Link to={data.link}>
+                    <motion.span
+                      className="inline-flex items-center gap-2 bg-navy text-white font-semibold px-6 py-3.5 rounded-xl cursor-pointer text-sm"
+                      whileHover={{ scale: 1.04, y: -2 }}
+                      whileTap={{ scale: 0.97 }}
+                    >
+                      {t.learnMore}
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+                    </motion.span>
+                  </Link>
                 </div>
+
+                {/* Image */}
+                <motion.div
+                  className="relative rounded-3xl overflow-hidden h-[340px] group"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <img
+                    src={data.img}
+                    alt={service.title}
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/50 to-transparent" />
+                  <div
+                    className="absolute top-5 right-5 w-11 h-11 rounded-xl flex items-center justify-center"
+                    style={{ background: `${data.color}E0`, color: 'white' }}
+                  >
+                    <ServiceIcon size={20} />
+                  </div>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          ))}
+            )
+          })}
         </div>
       </section>
 
@@ -151,52 +131,59 @@ export default function Services() {
           style={{ backgroundImage: 'radial-gradient(rgba(0,185,142,0.05) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
         <div className="max-w-[1280px] mx-auto relative">
           <motion.div className="text-center mb-14" initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <motion.span className="section-tag" variants={fadeUp} custom={0}>PROCESSUS</motion.span>
-            <motion.h2 className="section-title mt-3 text-center" variants={fadeUp} custom={1}>Comment ça marche ?</motion.h2>
+            <motion.span className="section-tag" variants={fadeUp} custom={0}>{t.howItWorks.eyebrow}</motion.span>
+            <motion.h2 className="section-title mt-3 text-center" variants={fadeUp} custom={1}>{t.howItWorks.title}</motion.h2>
           </motion.div>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {steps.map((s, i) => (
-              <motion.div
-                key={i}
-                className="group"
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.12, duration: 0.6, ease: EASE }}
-                whileHover={{ y: -8 }}
-              >
-                <div className="bg-white rounded-3xl overflow-hidden border border-g100 shadow-sm h-full group-hover:shadow-xl group-hover:border-teal/20 transition-all duration-300">
-                  <div className="relative h-44 overflow-hidden">
-                    <img
-                      src={s.img}
-                      alt={s.title}
-                      loading="lazy"
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/90 to-navy/20" />
-                    <div className="absolute top-4 left-4 font-display font-extrabold text-5xl leading-none text-white/20">
-                      {s.n}
+            {t.howItWorks.steps.map((s, i) => {
+              const data = STEPS_DATA[i]
+              const StepIcon = data.Icon
+              return (
+                <motion.div
+                  key={i}
+                  className="group"
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.12, duration: 0.6, ease: EASE }}
+                  whileHover={{ y: -8 }}
+                >
+                  <div className="bg-white rounded-3xl overflow-hidden border border-g100 shadow-sm h-full group-hover:shadow-xl group-hover:border-teal/20 transition-all duration-300">
+                    <div className="relative h-44 overflow-hidden">
+                      <img
+                        src={data.img}
+                        alt={s.title}
+                        loading="lazy"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/90 to-navy/20" />
+                      <div className="absolute top-4 left-4 font-display font-extrabold text-5xl leading-none text-white/20">
+                        {String(i + 1).padStart(2, '0')}
+                      </div>
+                      <div className="absolute top-4 right-4 w-9 h-9 bg-teal rounded-xl flex items-center justify-center text-white">
+                        <StepIcon size={18} />
+                      </div>
                     </div>
-                    <div className="absolute top-4 right-4 w-9 h-9 bg-teal rounded-xl flex items-center justify-center text-white">
-                      <s.Icon size={18} />
+                    <div className="p-5">
+                      <h4 className="font-display font-bold text-navy text-lg mb-1.5">{s.title}</h4>
+                      <p className="text-g600 text-sm leading-relaxed">{s.desc}</p>
                     </div>
                   </div>
-                  <div className="p-5">
-                    <h4 className="font-display font-bold text-navy text-lg mb-1.5">{s.title}</h4>
-                    <p className="text-g600 text-sm leading-relaxed">{s.desc}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              )
+            })}
           </div>
+          <p className="text-g600 text-sm text-center max-w-xl mx-auto mt-10">
+            {t.howItWorks.closing}
+          </p>
         </div>
       </section>
 
       <FinalCta
-        title="Une offre, une app, une ambition panafricaine."
-        desc="Nano-crédit et scoring intelligent, portés par un réseau de Chefs d'Agence de terrain."
-        primary={{ label: 'Demander un crédit', to: '/nano-credit' }}
-        secondary={{ label: 'Nous contacter →', to: '/contact' }}
+        title={t.finalCta.title}
+        desc={t.finalCta.desc}
+        primary={{ label: t.finalCta.primary, to: '/nano-credit' }}
+        secondary={{ label: t.finalCta.secondary, to: '/contact' }}
         bgImage={IMAGES.impact1}
       />
     </>

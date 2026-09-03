@@ -6,6 +6,8 @@ import PageHero from '../components/PageHero'
 import FinalCta from '../components/FinalCta'
 import IMAGES from '../lib/images'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
+import { useT } from '../i18n/LanguageContext'
+import { fr, en } from '../i18n/dictionaries/about'
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 
@@ -17,33 +19,15 @@ const fadeUp: Variants = {
   }),
 }
 
-const timeline = [
-  { year: 'Juillet 2026', title: 'Fondation de TOVPAY', desc: "Lancement de la phase pilote au Bénin avec les premiers clients pionniers" },
-]
-
-const team = [
-  { name: 'Arnaud Toviakou', role: 'Fondateur' },
-  { name: 'Frangin Gbessemehlan', role: 'Responsable Technique' },
-]
-
-const valeurs = [
-  'Accessibilité : crédit pour tous, partout',
-  'Transparence : zéro frais cachés',
-  "Innovation : l'IA au service de l'humain",
-  'Intégrité : conformité BCEAO totale',
-]
-
 export default function About() {
-  useDocumentMeta(
-    'Notre histoire et notre vision',
-    'TOVPAY, filiale de GROUPE TOV : notre mission, notre histoire et notre ambition panafricaine pour l\'inclusion financière.'
-  )
+  const t = useT(fr, en)
+  useDocumentMeta(t.meta.title, t.meta.description)
   return (
     <>
       <PageHero
-        breadcrumb="Accueil / À Propos"
-        title="Notre histoire"
-        desc="Filiale de GROUPE TOV, TOVPAY déploie son modèle de crédit mobile en phase pilote au Bénin."
+        breadcrumb={t.hero.breadcrumb}
+        title={t.hero.title}
+        desc={t.hero.desc}
         bgImage={IMAGES.heroAbout}
       />
 
@@ -54,19 +38,19 @@ export default function About() {
             <motion.div
               initial="hidden" whileInView="visible" viewport={{ once: true }}
             >
-              <motion.span className="section-tag" variants={fadeUp} custom={0}>MISSION</motion.span>
+              <motion.span className="section-tag" variants={fadeUp} custom={0}>{t.mission.eyebrow}</motion.span>
               <motion.h2 className="section-title mt-3 mb-5" variants={fadeUp} custom={1}>
-                Démocratiser le crédit
-                <br /><span className="text-teal">en Afrique de l'Ouest.</span>
+                {t.mission.titleLine1}
+                <br /><span className="text-teal">{t.mission.titleLine2}</span>
               </motion.h2>
               <motion.p className="text-g600 leading-relaxed text-[15px] mb-5" variants={fadeUp} custom={2}>
-                TOVPAY est fondée sur la conviction que le crédit est un droit, pas un privilège. Chaque entrepreneur africain, quel que soit son statut bancaire, mérite une chance de financer son activité.
+                {t.mission.p1}
               </motion.p>
               <motion.p className="text-g600 leading-relaxed text-[15px] mb-5" variants={fadeUp} custom={3}>
-                Notre réseau de chefs d'agence locaux forme la colonne vertébrale de notre modèle : proximité humaine et technologie pour un résultat concret.
+                {t.mission.p2}
               </motion.p>
               <motion.p className="text-g600 leading-relaxed text-[15px]" variants={fadeUp} custom={4}>
-                Filiale de <strong className="text-navy">GROUPE TOV</strong>, TOVPAY opère depuis son siège de Lomé (Togo), avec des bureaux à Cotonou (Bénin) et Abidjan. Notre phase pilote a démarré au Bénin - notre ambition est de couvrir 18 pays africains.
+                {t.mission.p3}
               </motion.p>
             </motion.div>
 
@@ -81,7 +65,7 @@ export default function About() {
               >
                 <img
                   src={IMAGES.whyImg2}
-                  alt="Mission TovPay"
+                  alt={t.mission.imgAlt}
                   loading="lazy"
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
@@ -93,10 +77,10 @@ export default function About() {
                 initial="hidden" whileInView="visible" viewport={{ once: true }}
               >
                 <motion.h3 className="font-display font-bold text-xl text-navy mb-4" variants={fadeUp} custom={0}>
-                  Nos valeurs
+                  {t.mission.valeursTitle}
                 </motion.h3>
                 <ul className="flex flex-col gap-2.5">
-                  {valeurs.map((v, i) => (
+                  {t.mission.valeurs.map((v, i) => (
                     <motion.li key={i} className="flex items-center gap-3" variants={fadeUp} custom={i + 1}>
                       <CheckCircleIcon size={17} className="text-teal shrink-0" />
                       <span className="text-g600 text-sm">{v}</span>
@@ -117,13 +101,13 @@ export default function About() {
         />
         <div className="max-w-[1280px] mx-auto relative">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <motion.span className="section-tag" variants={fadeUp} custom={0}>HISTOIRE</motion.span>
+            <motion.span className="section-tag" variants={fadeUp} custom={0}>{t.history.eyebrow}</motion.span>
             <motion.h2 className="section-title mt-3 mb-10" variants={fadeUp} custom={1}>
-              Une trajectoire remarquable.
+              {t.history.title}
             </motion.h2>
           </motion.div>
           <div className="relative pl-8 border-l-2 border-g100 flex flex-col gap-10">
-            {timeline.map((t, i) => (
+            {t.history.timeline.map((item, i) => (
               <motion.div
                 key={i}
                 className="relative"
@@ -133,9 +117,9 @@ export default function About() {
                 transition={{ duration: 0.6, delay: i * 0.1, ease: EASE }}
               >
                 <div className="absolute -left-[39px] top-1 w-3.5 h-3.5 rounded-full bg-teal ring-4 ring-white" />
-                <div className="text-teal font-display font-bold text-sm mb-1">{t.year}</div>
-                <h4 className="font-display font-bold text-navy text-xl mb-1.5">{t.title}</h4>
-                <p className="text-g600 text-sm leading-relaxed">{t.desc}</p>
+                <div className="text-teal font-display font-bold text-sm mb-1">{item.year}</div>
+                <h4 className="font-display font-bold text-navy text-xl mb-1.5">{item.title}</h4>
+                <p className="text-g600 text-sm leading-relaxed">{item.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -146,11 +130,11 @@ export default function About() {
       <section className="pt-14 pb-20 px-[5%] bg-white">
         <div className="max-w-[1280px] mx-auto">
           <motion.div className="text-center mb-14" initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <motion.span className="section-tag" variants={fadeUp} custom={0}>ÉQUIPE</motion.span>
-            <motion.h2 className="section-title mt-3 text-center" variants={fadeUp} custom={1}>Notre leadership.</motion.h2>
+            <motion.span className="section-tag" variants={fadeUp} custom={0}>{t.team.eyebrow}</motion.span>
+            <motion.h2 className="section-title mt-3 text-center" variants={fadeUp} custom={1}>{t.team.title}</motion.h2>
           </motion.div>
           <div className="grid sm:grid-cols-2 gap-6 max-w-xl mx-auto">
-            {team.map((m, i) => (
+            {t.team.members.map((m, i) => (
               <motion.div
                 key={i}
                 className="bg-white rounded-3xl border border-g100 p-7 text-center flex flex-col items-center shadow-sm group"
@@ -173,10 +157,10 @@ export default function About() {
       </section>
 
       <FinalCta
-        title="Construisons ensemble l'inclusion financière."
-        desc="Client, partenaire ou investisseur - il y a une place pour vous chez TOVPAY."
-        primary={{ label: 'Nous contacter', to: '/contact' }}
-        secondary={{ label: 'Espace investisseurs →', to: '/investors' }}
+        title={t.finalCta.title}
+        desc={t.finalCta.desc}
+        primary={{ label: t.finalCta.primary, to: '/contact' }}
+        secondary={{ label: t.finalCta.secondary, to: '/investors' }}
         bgImage={IMAGES.impact3}
       />
     </>

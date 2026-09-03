@@ -5,6 +5,8 @@ import PageHero from '../components/PageHero'
 import FinalCta from '../components/FinalCta'
 import IMAGES from '../lib/images'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
+import { useT } from '../i18n/LanguageContext'
+import { fr, en } from '../i18n/dictionaries/investors'
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
 const fadeUp: Variants = {
@@ -15,42 +17,19 @@ const fadeUp: Variants = {
   }),
 }
 
-const identity = [
-  { label: 'Filiation', val: 'Filiale de GROUPE TOV' },
-  { label: 'Siège opérationnel', val: 'Lomé, Togo' },
-  { label: 'Siège administratif', val: '102 impasse Darnaudet, 64300 Baigts de Béarn, France' },
-  { label: 'Bureaux', val: 'Lomé (opérationnel) · Cotonou (régional) · Abidjan (commercial)' },
-  { label: 'Pays d\'activité pilote', val: 'Bénin - activité notifiée à la BCEAO, phase pilote en cours' },
-  { label: 'Date de démarrage', val: '30 juin 2026 (notification BCEAO), confirmée le 16 juillet 2026' },
-  { label: 'Ambition de déploiement', val: '18 pays africains (objectif, hors activité confirmée à date)' },
-  { label: 'RCCM', val: 'TG-LFW-01-2026-B13-00733' },
-  { label: 'NIF', val: '1002113124' },
-  { label: 'Capital social', val: '100 000 000 FCFA' },
-]
-
-const points = [
-  { Icon: GlobeIcon, title: 'Marché géant', desc: '500M+ personnes non bancarisées en Afrique de l\'Ouest.', color: '#00B98E' },
-  { Icon: ShieldIcon, title: 'Un modèle sans risque de crédit', desc: "TOVPAY ne prête jamais en son nom propre et ne supporte pas le risque de crédit - une plateforme technologique, pas un bilan bancaire.", color: '#9fe870' },
-  { Icon: HandshakeIcon, title: 'Conformité dès le premier jour', desc: 'Notification volontaire à la BCEAO avant tout déploiement, démarche proactive au-delà de nos obligations directes.', color: '#F5A623' },
-]
-
-const profiles = [
-  { Icon: CoinsIcon, title: 'Family Offices', desc: 'Impact investing africain + rendements solides' },
-  { Icon: BuildingIcon, title: 'VC Panafricains', desc: 'Spécialisés fintech inclusive' },
-  { Icon: NetworkIcon, title: 'Impact Funds', desc: 'SDG 1, 5, 8, 10 - Inclusion financière mesurable' },
-]
+const POINT_ICONS = [GlobeIcon, ShieldIcon, HandshakeIcon]
+const POINT_COLORS = ['#00B98E', '#9fe870', '#F5A623']
+const PROFILE_ICONS = [CoinsIcon, BuildingIcon, NetworkIcon]
 
 export default function Investors() {
-  useDocumentMeta(
-    'Espace investisseurs',
-    'Investissez dans l\'inclusion financière africaine : découvrez le modèle, le statut réel et la vision panafricaine de TOVPAY.'
-  )
+  const t = useT(fr, en)
+  useDocumentMeta(t.meta.title, t.meta.description)
   return (
     <>
       <PageHero
-        breadcrumb="Accueil / Investisseurs"
-        title="Opportunité d'investissement"
-        desc="Participez à la révolution de l'inclusion financière africaine."
+        breadcrumb={t.hero.breadcrumb}
+        title={t.hero.title}
+        desc={t.hero.desc}
         bgImage={IMAGES.heroInvestors}
       />
 
@@ -62,29 +41,32 @@ export default function Investors() {
         </div>
         <div className="max-w-[1280px] mx-auto relative z-10">
           <motion.div className="text-center mb-14" initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <motion.span className="section-tag" variants={fadeUp} custom={0}>POURQUOI INVESTIR</motion.span>
+            <motion.span className="section-tag" variants={fadeUp} custom={0}>{t.why.eyebrow}</motion.span>
             <motion.h2 className="font-display font-extrabold text-[2.4rem] text-white text-center mt-3" variants={fadeUp} custom={1}>
-              Une opportunité unique.
+              {t.why.title}
             </motion.h2>
           </motion.div>
           <div className="grid md:grid-cols-3 gap-6">
-            {points.map((p, i) => (
-              <motion.div
-                key={i}
-                className="bg-white/5 backdrop-blur border border-white/10 rounded-3xl p-7"
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.12, duration: 0.6, ease: EASE }}
-                whileHover={{ backgroundColor: 'rgba(255,255,255,0.1)', y: -6 }}
-              >
-                <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: `${p.color}20`, color: p.color }}>
-                  <p.Icon size={24} />
-                </div>
-                <h4 className="font-display font-bold text-white text-xl mb-2">{p.title}</h4>
-                <p className="text-white/60 text-sm leading-relaxed">{p.desc}</p>
-              </motion.div>
-            ))}
+            {t.why.points.map((p, i) => {
+              const PointIcon = POINT_ICONS[i]
+              return (
+                <motion.div
+                  key={i}
+                  className="bg-white/5 backdrop-blur border border-white/10 rounded-3xl p-7"
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.12, duration: 0.6, ease: EASE }}
+                  whileHover={{ backgroundColor: 'rgba(255,255,255,0.1)', y: -6 }}
+                >
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4" style={{ background: `${POINT_COLORS[i]}20`, color: POINT_COLORS[i] }}>
+                    <PointIcon size={24} />
+                  </div>
+                  <h4 className="font-display font-bold text-white text-xl mb-2">{p.title}</h4>
+                  <p className="text-white/60 text-sm leading-relaxed">{p.desc}</p>
+                </motion.div>
+              )
+            })}
           </div>
         </div>
       </section>
@@ -93,10 +75,10 @@ export default function Investors() {
       <section className="py-20 px-[5%] bg-white">
         <div className="max-w-[1280px] mx-auto">
           <motion.div className="text-center mb-12" initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <motion.span className="section-tag" variants={fadeUp} custom={0}>IDENTITÉ & STATUT</motion.span>
-            <motion.h2 className="section-title mt-3 text-center" variants={fadeUp} custom={1}>Le réel, sans détour.</motion.h2>
+            <motion.span className="section-tag" variants={fadeUp} custom={0}>{t.identity.eyebrow}</motion.span>
+            <motion.h2 className="section-title mt-3 text-center" variants={fadeUp} custom={1}>{t.identity.title}</motion.h2>
             <motion.p className="section-sub max-w-xl mx-auto text-center" variants={fadeUp} custom={2}>
-              Ce document reflète le statut réel de TOVPAY à date, et non une activité déjà engagée hors du Bénin.
+              {t.identity.sub}
             </motion.p>
           </motion.div>
           <motion.div
@@ -108,7 +90,7 @@ export default function Investors() {
           >
             <table className="w-full border-collapse min-w-[480px]">
               <tbody>
-                {identity.map((r, i) => (
+                {t.identity.rows.map((r, i) => (
                   <tr key={i} className={i % 2 === 0 ? 'bg-white' : 'bg-g50'}>
                     <td className="text-g400 text-xs font-semibold uppercase tracking-wide py-3.5 px-6 whitespace-nowrap align-top">{r.label}</td>
                     <td className="text-navy text-sm font-medium py-3.5 px-6">{r.val}</td>
@@ -128,49 +110,52 @@ export default function Investors() {
           >
             <div className="absolute -right-12 -top-12 w-48 h-48 rounded-full"
               style={{ background: 'radial-gradient(circle, rgba(159,232,112,0.15), transparent 70%)' }} />
-            <h3 className="text-white text-2xl font-display font-bold mb-4">Où en est TOVPAY aujourd'hui ?</h3>
+            <h3 className="text-white text-2xl font-display font-bold mb-4">{t.identity.statusTitle}</h3>
             <p className="text-white/70 leading-relaxed mb-5 max-w-[600px]">
-              TOVPAY est en phase pilote au Bénin depuis le 30 juin 2026, et en recherche active d'un partenaire bancaire (Orabank Bénin) pour porter les crédits distribués. Aucune levée de fonds n'est annoncée à ce jour - nous échangeons avec des investisseurs qui partagent notre vision panafricaine de l'inclusion financière.
+              {t.identity.statusParagraph}
             </p>
             <div className="flex items-center gap-2 text-white/70 text-sm">
               <MailIcon size={16} className="text-teal" />
-              Contactez : <strong className="text-teal">dg@tovpay.africa</strong>
+              {t.identity.contactLabel} <strong className="text-teal">dg@tovpay.africa</strong>
             </div>
           </motion.div>
 
           {/* Profils */}
           <div className="mt-20">
             <motion.h2 className="section-title text-center mb-11" initial="hidden" whileInView="visible" viewport={{ once: true }}>
-              Profils d'investisseurs recherchés.
+              {t.profiles.title}
             </motion.h2>
             <div className="grid md:grid-cols-3 gap-6">
-              {profiles.map((p, i) => (
-                <motion.div
-                  key={i}
-                  className="bg-g50 rounded-3xl border border-g100 p-7 text-center group hover:shadow-lg hover:border-teal/20 transition-all duration-300"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1, duration: 0.6, ease: EASE }}
-                  whileHover={{ y: -6 }}
-                >
-                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-teal/10 text-teal">
-                    <p.Icon size={24} />
-                  </div>
-                  <h4 className="font-display font-bold text-navy text-xl mb-2">{p.title}</h4>
-                  <p className="text-g600 text-sm leading-relaxed">{p.desc}</p>
-                </motion.div>
-              ))}
+              {t.profiles.items.map((p, i) => {
+                const ProfileIcon = PROFILE_ICONS[i]
+                return (
+                  <motion.div
+                    key={i}
+                    className="bg-g50 rounded-3xl border border-g100 p-7 text-center group hover:shadow-lg hover:border-teal/20 transition-all duration-300"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1, duration: 0.6, ease: EASE }}
+                    whileHover={{ y: -6 }}
+                  >
+                    <div className="w-12 h-12 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-teal/10 text-teal">
+                      <ProfileIcon size={24} />
+                    </div>
+                    <h4 className="font-display font-bold text-navy text-xl mb-2">{p.title}</h4>
+                    <p className="text-g600 text-sm leading-relaxed">{p.desc}</p>
+                  </motion.div>
+                )
+              })}
             </div>
           </div>
         </div>
       </section>
 
       <FinalCta
-        title="Investissez dans l'inclusion financière africaine."
-        desc="Discutons de notre phase pilote au Bénin et de notre vision panafricaine."
-        primary={{ label: "Contacter l'équipe", to: 'mailto:dg@tovpay.africa', mailto: true }}
-        secondary={{ label: 'Découvrir TovPay →', to: '/about' }}
+        title={t.finalCta.title}
+        desc={t.finalCta.desc}
+        primary={{ label: t.finalCta.primary, to: 'mailto:dg@tovpay.africa', mailto: true }}
+        secondary={{ label: t.finalCta.secondary, to: '/about' }}
         bgImage={IMAGES.heroInvestors}
       />
     </>

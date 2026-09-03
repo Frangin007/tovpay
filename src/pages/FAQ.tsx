@@ -3,70 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion'
 import PageHero from '../components/PageHero'
 import IMAGES from '../lib/images'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
+import { useT } from '../i18n/LanguageContext'
+import { fr, en } from '../i18n/dictionaries/faq'
 
 const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
-
-const faqs = [
-  {
-    cat: 'Crédit & Simulation',
-    items: [
-      {
-        q: "Quel est le montant minimum et maximum d'un crédit ?",
-        a: "Le montant minimum est 1 000 FCFA et le maximum est 20 000 FCFA. Le montant accordé dépend de votre score de crédit et de votre historique de remboursement."
-      },
-      {
-        q: "Combien de temps faut-il pour recevoir le crédit ?",
-        a: "Une fois votre demande validée par le Chef d'Agence, les fonds sont versés en espèces ou sur Mobile Money en moins de 15 minutes."
-      },
-      {
-        q: "Quels sont les taux d'intérêt appliqués ?",
-        a: "Cinq forfaits, chacun avec son propre taux : Express (8 % sur 1 jour), Hebdomadaire (10 % sur 7 jours), Duo Chauffeur (18 % sur 10 jours), Cycle Marchand (20 % sur 24 jours, remboursement quotidien) et Fonctionnaire (20 % sur 1 mois). Le taux et le total à rembourser sont toujours affichés avant validation, et une pénalité de retard de 2 %/jour s'applique au-delà de l'échéance."
-      },
-      {
-        q: "Puis-je rembourser avant la date limite ?",
-        a: "Oui, le remboursement anticipé est possible à tout moment sans pénalité. Les intérêts seront recalculés au prorata du temps réellement utilisé."
-      },
-      {
-        q: "Puis-je avoir plusieurs crédits simultanément ?",
-        a: "Non, un seul crédit actif à la fois. Une fois entièrement remboursé, vous pouvez en demander un nouveau immédiatement."
-      },
-    ]
-  },
-  {
-    cat: 'Scoring & Éligibilité',
-    items: [
-      {
-        q: "Qu'est-ce que le scoring TOVPAY ?",
-        a: "Notre moteur d'IA analyse votre comportement transactionnel, votre stabilité téléphonique et d'autres signaux pour évaluer votre capacité de remboursement - sans historique bancaire requis."
-      },
-      {
-        q: "Quels documents dois-je fournir ?",
-        a: "Uniquement votre pièce d'identité valide (CNI, passeport) et votre numéro de téléphone Mobile Money. Aucun bulletin de salaire ni justificatif de domicile n'est exigé."
-      },
-      {
-        q: "Mon score peut-il s'améliorer avec le temps ?",
-        a: "Oui, chaque remboursement réussi améliore votre score. Plus vous remboursez à temps, plus vous accédez à des montants élevés."
-      },
-    ]
-  },
-  {
-    cat: 'Sécurité & Conformité',
-    items: [
-      {
-        q: "TOVPAY est-elle une entreprise fiable et réglementée ?",
-        a: "TOVPAY n'est ni une banque ni une institution de microfinance : c'est une plateforme technologique de distribution, qui connecte les emprunteurs à un établissement de crédit agréé partenaire (Orabank Bénin, partenariat en cours de finalisation). TOVPAY a adressé une notification volontaire de démarrage d'activité à la BCEAO avant tout déploiement, démarche confirmée par la Direction Nationale pour le Bénin."
-      },
-      {
-        q: "Mes données personnelles sont-elles protégées ?",
-        a: "Oui. La vérification d'identité (KYC) est systématique avant toute validation de compte ou de crédit, et vos données ne sont jamais revendues à des tiers."
-      },
-      {
-        q: "Que se passe-t-il si je ne rembourse pas à temps ?",
-        a: "Une pénalité de retard de 2 %/jour s'applique au-delà de l'échéance. Un retard de plus de 30 jours affecte fortement votre score, et toute fraude détectée entraîne le blocage immédiat du compte."
-      },
-    ]
-  },
-]
 
 function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
   const [open, setOpen] = useState(false)
@@ -113,16 +53,14 @@ function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
 }
 
 export default function FAQ() {
-  useDocumentMeta(
-    'Questions fréquentes',
-    'Toutes les réponses sur le nano-crédit et le micro-crédit mobile TOVPAY : taux, délais, remboursement et conformité.'
-  )
+  const t = useT(fr, en)
+  useDocumentMeta(t.meta.title, t.meta.description)
   return (
     <>
       <PageHero
-        breadcrumb="Accueil / FAQ"
-        title="Questions fréquentes"
-        desc="Tout ce que vous devez savoir sur TOVPAY, le crédit mobile et l'inclusion financière."
+        breadcrumb={t.hero.breadcrumb}
+        title={t.hero.title}
+        desc={t.hero.desc}
         bgImage={IMAGES.heroFaq}
       />
 
@@ -134,10 +72,10 @@ export default function FAQ() {
             <div className="hidden lg:block">
               <div className="sticky top-28">
                 <motion.span className="section-tag block mb-4" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
-                  CATÉGORIES
+                  {t.sidebar.categoriesLabel}
                 </motion.span>
                 <div className="flex flex-col gap-2">
-                  {faqs.map((cat, i) => (
+                  {t.faqs.map((cat, i) => (
                     <motion.a
                       key={i}
                       href={`#cat-${i}`}
@@ -153,10 +91,10 @@ export default function FAQ() {
                 </div>
 
                 <div className="mt-10 bg-g50 rounded-2xl p-6 border border-g100">
-                  <div className="font-display font-bold text-navy text-base mb-2">Une autre question ?</div>
-                  <p className="text-g600 text-sm leading-relaxed mb-4">Notre équipe répond en moins de 24h.</p>
+                  <div className="font-display font-bold text-navy text-base mb-2">{t.sidebar.otherQuestionTitle}</div>
+                  <p className="text-g600 text-sm leading-relaxed mb-4">{t.sidebar.otherQuestionDesc}</p>
                   <a href="/contact" className="inline-flex items-center gap-1.5 text-teal text-sm font-semibold hover:gap-3 transition-all">
-                    Nous contacter
+                    {t.sidebar.contactLink}
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
                   </a>
                 </div>
@@ -165,7 +103,7 @@ export default function FAQ() {
 
             {/* Questions */}
             <div className="flex flex-col gap-14">
-              {faqs.map((cat, ci) => (
+              {t.faqs.map((cat, ci) => (
                 <div key={ci} id={`cat-${ci}`}>
                   <motion.h2
                     className="font-display font-extrabold text-2xl text-navy mb-6 pb-4 border-b-2 border-teal/20"

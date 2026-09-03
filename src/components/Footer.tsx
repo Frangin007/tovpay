@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom'
 import { AppleIcon, PlayStoreIcon, HandshakeIcon } from './Icon'
+import { useT } from '../i18n/LanguageContext'
+import { fr, en } from '../i18n/dictionaries/footer'
 
 export default function Footer() {
+  const t = useT(fr, en)
   return (
     <footer className="relative overflow-hidden bg-[#0B0F1A] px-[5%] pt-14 pb-7">
       {/* Lueur décorative en haut du footer */}
@@ -14,7 +17,7 @@ export default function Footer() {
               <img src="/brand/tovpay-logo-transparent.png" alt="TovPay" className="h-12 w-auto object-contain brightness-0 invert" />
             </div>
             <p className="text-white/55 text-sm leading-relaxed mb-5 max-w-xs">
-              L'inclusion financière pour tous. Nano-crédits mobiles, paiements digitaux et scoring intelligent en Afrique de l'Ouest.
+              {t.tagline}
             </p>
             <div className="flex gap-2.5 flex-wrap">
               <div className="inline-flex items-center gap-1.5 bg-white/[0.08] border border-white/10 rounded-lg px-3 py-1.5 text-white text-[11px] font-semibold">
@@ -26,47 +29,48 @@ export default function Footer() {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-1.5 bg-white/[0.08] border border-white/10 rounded-lg px-3 py-1.5 text-white text-[11px] font-semibold hover:bg-white/[0.14] transition-colors duration-200"
               >
-                <PlayStoreIcon size={15} /> Android (APK)
+                <PlayStoreIcon size={15} /> {t.androidLabel}
               </a>
             </div>
           </div>
 
           <div>
-            <div className="text-white font-semibold text-sm mb-4">Services</div>
+            <div className="text-white font-semibold text-sm mb-4">{t.columns.services.heading}</div>
             <div className="flex flex-col gap-2.5">
-              <Link to="/nano-credit" className="footer-link">Nano-Crédit</Link>
-              <Link to="/agents" className="footer-link">Chefs d'Agence</Link>
-              <Link to="/services" className="footer-link">Scoring intelligent</Link>
+              {t.columns.services.links.map(link => (
+                <Link key={link.to} to={link.to} className="footer-link">{link.label}</Link>
+              ))}
             </div>
           </div>
 
           <div>
-            <div className="text-white font-semibold text-sm mb-4">Entreprise</div>
+            <div className="text-white font-semibold text-sm mb-4">{t.columns.company.heading}</div>
             <div className="flex flex-col gap-2.5">
-              <Link to="/about" className="footer-link">À Propos</Link>
-              <Link to="/partners" className="footer-link">Partenaires</Link>
-              <Link to="/investors" className="footer-link">Investisseurs</Link>
+              {t.columns.company.links.map(link => (
+                <Link key={link.to} to={link.to} className="footer-link">{link.label}</Link>
+              ))}
             </div>
           </div>
 
           <div>
-            <div className="text-white font-semibold text-sm mb-4">Support</div>
+            <div className="text-white font-semibold text-sm mb-4">{t.columns.support.heading}</div>
             <div className="flex flex-col gap-2.5">
-              <Link to="/faq" className="footer-link">FAQ</Link>
-              <Link to="/contact" className="footer-link">Contact</Link>
-              <a href="https://wa.me/33763731050" className="footer-link">WhatsApp</a>
-              <a href="#" className="footer-link">CGU</a>
+              {t.columns.support.links.map(link => (
+                <Link key={link.to} to={link.to} className="footer-link">{link.label}</Link>
+              ))}
+              <a href="https://wa.me/33763731050" className="footer-link">{t.columns.support.whatsapp}</a>
+              <a href="#" className="footer-link">{t.columns.support.terms}</a>
             </div>
           </div>
         </div>
 
         <div className="flex flex-col sm:flex-row justify-between items-center gap-3 pt-7 border-t border-white/10">
           <span className="text-white/35 text-xs">
-            © 2026 TOVPAY, filiale de GROUPE TOV. Tous droits réservés. · Notifié BCEAO
+            {t.copyright}
           </span>
 
           <span className="inline-flex items-center gap-1.5 text-white/30 text-xs">
-            <HandshakeIcon size={15} /> Partenariat bancaire en cours avec <span className="text-teal">Orabank Bénin</span>
+            <HandshakeIcon size={15} /> {t.bankPartnership} <span className="text-teal">Orabank Bénin</span>
           </span>
         </div>
       </div>
