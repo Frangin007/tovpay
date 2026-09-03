@@ -125,25 +125,28 @@ export default function Nav() {
             </Link>
           </div>
 
-          {/* MOBILE BURGER */}
-          <button
-            className="lg:hidden ml-auto flex flex-col justify-center gap-[5px] p-2 rounded-lg"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label={t.menuAriaLabel}
-          >
-            <motion.span
-              className={`block h-0.5 rounded-full transition-colors ${onDark ? 'bg-white' : 'bg-navy'}`}
-              animate={{ width: mobileOpen ? 22 : 22, rotate: mobileOpen ? 45 : 0, y: mobileOpen ? 7 : 0 }}
-            />
-            <motion.span
-              className={`block w-[22px] h-0.5 rounded-full transition-colors ${onDark ? 'bg-white' : 'bg-navy'}`}
-              animate={{ opacity: mobileOpen ? 0 : 1 }}
-            />
-            <motion.span
-              className={`block h-0.5 rounded-full transition-colors ${onDark ? 'bg-white' : 'bg-navy'}`}
-              animate={{ width: mobileOpen ? 22 : 22, rotate: mobileOpen ? -45 : 0, y: mobileOpen ? -7 : 0 }}
-            />
-          </button>
+          {/* MOBILE: lang toggle + burger */}
+          <div className="lg:hidden ml-auto flex items-center gap-2">
+            <LangToggle onDark={onDark} />
+            <button
+              className="flex flex-col justify-center gap-[5px] p-2 rounded-lg"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label={t.menuAriaLabel}
+            >
+              <motion.span
+                className={`block h-0.5 rounded-full transition-colors ${onDark ? 'bg-white' : 'bg-navy'}`}
+                animate={{ width: mobileOpen ? 22 : 22, rotate: mobileOpen ? 45 : 0, y: mobileOpen ? 7 : 0 }}
+              />
+              <motion.span
+                className={`block w-[22px] h-0.5 rounded-full transition-colors ${onDark ? 'bg-white' : 'bg-navy'}`}
+                animate={{ opacity: mobileOpen ? 0 : 1 }}
+              />
+              <motion.span
+                className={`block h-0.5 rounded-full transition-colors ${onDark ? 'bg-white' : 'bg-navy'}`}
+                animate={{ width: mobileOpen ? 22 : 22, rotate: mobileOpen ? -45 : 0, y: mobileOpen ? -7 : 0 }}
+              />
+            </button>
+          </div>
         </div>
 
         {/* MOBILE MENU */}
@@ -165,7 +168,6 @@ export default function Nav() {
               {link.name}
             </Link>
           ))}
-          <LangToggle onDark={false} className="mt-1 self-start" />
           <Link
             to="/nano-credit"
             className="mt-2 bg-teal text-white font-semibold text-center py-3 rounded-xl no-underline"
