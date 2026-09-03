@@ -29,7 +29,7 @@ export default function FinalCta({ title, desc, primary, secondary, bgImage }: F
       {bgImage ? (
         <>
           <div className="absolute inset-0">
-            <img src={bgImage} alt="" className="w-full h-full object-cover" />
+            <img src={bgImage} alt="" loading="lazy" className="w-full h-full object-cover" />
           </div>
           <div className="absolute inset-0 bg-gradient-to-br from-navy-deep/97 via-navy-deep/92 to-navy/80" />
         </>

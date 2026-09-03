@@ -14,7 +14,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-11 mb-11">
           <div>
             <div className="flex items-center gap-2.5 mb-4">
-              <img src="/brand/tovpay-logo-transparent.png" alt="TovPay" className="h-12 w-auto object-contain brightness-0 invert" />
+              <img src="/brand/tovpay-logo-transparent.png" alt="TovPay" loading="lazy" className="h-12 w-auto object-contain brightness-0 invert" />
             </div>
             <p className="text-white/55 text-sm leading-relaxed mb-5 max-w-xs">
               {t.tagline}

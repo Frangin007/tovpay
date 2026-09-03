@@ -25,7 +25,7 @@ export default function PageHero({ breadcrumb, title, desc, bgImage }: PageHeroP
       {bgImage ? (
         <>
           <div className="absolute inset-0">
-            <img src={bgImage} alt="" className="w-full h-full object-cover" />
+            <img src={bgImage} alt="" fetchPriority="high" className="w-full h-full object-cover" />
           </div>
           <div className="absolute inset-0 bg-gradient-to-br from-navy-deep/96 via-navy-deep/90 to-navy/80" />
         </>
