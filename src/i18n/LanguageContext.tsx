@@ -11,12 +11,20 @@ type LanguageContextValue = {
 
 const LanguageContext = createContext<LanguageContextValue | null>(null)
 
+/** Langue posée par le middleware de détection pays -> langue (voir /middleware.ts), avant tout choix manuel. */
+function readCookieLang(): Lang | null {
+  const match = document.cookie.match(/(?:^|;\s*)tovpay-lang=(fr|en)/)
+  return match ? (match[1] as Lang) : null
+}
+
 function readStoredLang(): Lang {
   try {
-    return localStorage.getItem(STORAGE_KEY) === 'en' ? 'en' : 'fr'
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored === 'fr' || stored === 'en') return stored
   } catch {
-    return 'fr'
+    // stockage indisponible (navigation privée...)
   }
+  return readCookieLang() ?? 'fr'
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
