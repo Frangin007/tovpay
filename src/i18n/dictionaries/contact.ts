@@ -6,12 +6,11 @@ export const fr = {
   hero: {
     breadcrumb: 'Accueil / Contact',
     title: 'Parlons de votre projet',
-    desc: 'Crédit, partenariat ou investissement - notre équipe vous répond en moins de 24h.',
+    desc: 'Crédit, partenariat ou collaboration - notre équipe vous répond en moins de 24h.',
   },
   coordsTitle: 'Nos coordonnées',
   coords: [
     { label: 'Direction générale', val: 'dg@tovpay.africa', href: 'mailto:dg@tovpay.africa' },
-    { label: 'Investisseurs', val: 'dg@tovpay.africa', href: 'mailto:dg@tovpay.africa' },
     { label: 'Partenariats', val: 'dg@tovpay.africa', href: 'mailto:dg@tovpay.africa' },
     { label: 'WhatsApp', val: '+33 7 63 73 10 50', href: 'https://wa.me/33763731050' },
     { label: 'Siège opérationnel', val: 'Lomé, Togo', href: '#' },
@@ -24,7 +23,6 @@ export const fr = {
     { value: 'credit', label: 'Demande de crédit' },
     { value: 'agent', label: "Devenir Chef d'Agence" },
     { value: 'partnership', label: 'Partenariat' },
-    { value: 'investor', label: 'Investisseur' },
     { value: 'other', label: 'Autre' },
   ],
   form: {
@@ -42,7 +40,7 @@ export const fr = {
     sending: 'Envoi en cours...',
     submit: 'Envoyer le message →',
     errorGeneric: "Une erreur est survenue. Merci de réessayer ou de nous écrire directement à dg@tovpay.africa.",
-    confidentialityNote: 'Vos données sont traitées de manière confidentielle · BCEAO',
+    confidentialityNote: 'Vos données sont traitées de manière confidentielle.',
     successTitle: 'Message envoyé !',
     successDesc: 'Notre équipe vous répondra dans les 24 heures.',
     simulationMessage: (productName: string, amount: string, total: string, dueDateLabel: string) =>
@@ -58,12 +56,11 @@ export const en: typeof fr = {
   hero: {
     breadcrumb: 'Home / Contact',
     title: "Let's talk about your project",
-    desc: 'Credit, partnership, or investment - our team responds within 24h.',
+    desc: 'Credit, partnership, or collaboration - our team responds within 24h.',
   },
   coordsTitle: 'Our contact details',
   coords: [
     { label: 'General Management', val: 'dg@tovpay.africa', href: 'mailto:dg@tovpay.africa' },
-    { label: 'Investors', val: 'dg@tovpay.africa', href: 'mailto:dg@tovpay.africa' },
     { label: 'Partnerships', val: 'dg@tovpay.africa', href: 'mailto:dg@tovpay.africa' },
     { label: 'WhatsApp', val: '+33 7 63 73 10 50', href: 'https://wa.me/33763731050' },
     { label: 'Operational headquarters', val: 'Lomé, Togo', href: '#' },
@@ -76,7 +73,6 @@ export const en: typeof fr = {
     { value: 'credit', label: 'Credit request' },
     { value: 'agent', label: 'Become an Agency Manager' },
     { value: 'partnership', label: 'Partnership' },
-    { value: 'investor', label: 'Investor' },
     { value: 'other', label: 'Other' },
   ],
   form: {
@@ -94,7 +90,7 @@ export const en: typeof fr = {
     sending: 'Sending...',
     submit: 'Send message →',
     errorGeneric: 'Something went wrong. Please try again or write to us directly at dg@tovpay.africa.',
-    confidentialityNote: 'Your data is handled confidentially · BCEAO',
+    confidentialityNote: 'Your data is handled confidentially.',
     successTitle: 'Message sent!',
     successDesc: "Our team will get back to you within 24 hours.",
     simulationMessage: (productName: string, amount: string, total: string, dueDateLabel: string) =>

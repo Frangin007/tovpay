@@ -160,7 +160,7 @@ export default function About() {
         title={t.finalCta.title}
         desc={t.finalCta.desc}
         primary={{ label: t.finalCta.primary, to: '/contact' }}
-        secondary={{ label: t.finalCta.secondary, to: '/investors' }}
+        secondary={{ label: t.finalCta.secondary, to: '/partners' }}
         bgImage={IMAGES.impact3}
       />
     </>

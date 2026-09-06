@@ -43,7 +43,6 @@ const subjectLabels: Record<string, string> = {
   credit: 'Demande de crédit',
   agent: "Devenir Chef d'Agence",
   partnership: 'Partenariat',
-  investor: 'Investisseur',
   other: 'Autre',
 }
 

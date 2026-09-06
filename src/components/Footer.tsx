@@ -70,7 +70,7 @@ export default function Footer() {
           </span>
 
           <span className="inline-flex items-center gap-1.5 text-white/30 text-xs">
-            <HandshakeIcon size={15} /> {t.bankPartnership} <span className="text-teal">Orabank Bénin</span>
+            <HandshakeIcon size={15} /> {t.bankPartnership} <span className="text-teal">Orabank</span>
           </span>
         </div>
       </div>

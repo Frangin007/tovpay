@@ -8,7 +8,7 @@ import IMAGES from '../lib/images'
 import {
   CreditIcon,
   GlobeIcon, HandshakeIcon, AiSparkIcon, ShieldIcon,
-  BankIcon, SignalIcon, GavelIcon, TrendingUpIcon,
+  BankIcon, SignalIcon, TrendingUpIcon,
 } from '../components/Icon'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
 import { useT } from '../i18n/LanguageContext'
@@ -84,7 +84,6 @@ const PARTNERS_ITEMS_DATA = [
   { Icon: SignalIcon },
   { Icon: SignalIcon },
   { Icon: CreditIcon },
-  { Icon: GavelIcon },
 ]
 
 // ── Hook animé ─────────────────────────────────────────────────
@@ -238,6 +237,25 @@ export default function Home() {
               ))}
             </motion.div>
           </div>
+        </motion.div>
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════
+          JOURNAL TOVPAY - Encart actualité phase pilote
+      ═══════════════════════════════════════════════════════ */}
+      <div className="bg-teal/[0.06] border-y border-teal/15 py-3.5 px-[5%]">
+        <motion.div
+          className="max-w-[1280px] mx-auto flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-center"
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          <span className="inline-flex items-center gap-1.5 shrink-0 bg-teal text-white text-[11px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full">
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            {t.journal.badge}
+          </span>
+          <span className="text-g400 text-[11px] font-semibold uppercase tracking-wide shrink-0">{t.journal.label} ·</span>
+          <p className="text-navy text-sm">{t.journal.text}</p>
         </motion.div>
       </div>
 

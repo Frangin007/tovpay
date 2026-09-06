@@ -11,7 +11,6 @@ const Services = lazy(() => import('./pages/Services'))
 const NanoCredit = lazy(() => import('./pages/NanoCredit'))
 const Agents = lazy(() => import('./pages/Agents'))
 const Partners = lazy(() => import('./pages/Partners'))
-const Investors = lazy(() => import('./pages/Investors'))
 const FAQ = lazy(() => import('./pages/FAQ'))
 const Contact = lazy(() => import('./pages/Contact'))
 
@@ -52,7 +51,6 @@ function AnimatedRoutes() {
             <Route path="/nano-credit" element={<NanoCredit />} />
             <Route path="/agents" element={<Agents />} />
             <Route path="/partners" element={<Partners />} />
-            <Route path="/investors" element={<Investors />} />
             <Route path="/faq" element={<FAQ />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="*" element={<Navigate to="/" replace />} />

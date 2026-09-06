@@ -36,7 +36,7 @@ export const fr = {
     {
       cat: 'Sécurité & Conformité',
       items: [
-        { q: 'TOVPAY est-elle une entreprise fiable et réglementée ?', a: "TOVPAY n'est ni une banque ni une institution de microfinance : c'est une plateforme technologique de distribution, qui connecte les emprunteurs à un établissement de crédit agréé partenaire (Orabank Bénin, partenariat en cours de finalisation). TOVPAY a adressé une notification volontaire de démarrage d'activité à la BCEAO avant tout déploiement, démarche confirmée par la Direction Nationale pour le Bénin." },
+        { q: 'TOVPAY est-elle une entreprise fiable et réglementée ?', a: "TOVPAY n'est ni une banque ni une institution de microfinance : c'est une plateforme technologique de distribution, qui travaille à connecter les emprunteurs à un établissement de crédit agréé partenaire (Orabank, discussions en cours - aucun partenariat bancaire n'est encore conclu). TOVPAY construit son activité dans le respect du cadre réglementaire applicable et en toute transparence avec la BCEAO." },
         { q: 'Mes données personnelles sont-elles protégées ?', a: "Oui. La vérification d'identité (KYC) est systématique avant toute validation de compte ou de crédit, et vos données ne sont jamais revendues à des tiers." },
         { q: 'Que se passe-t-il si je ne rembourse pas à temps ?', a: "Une pénalité de retard de 2 %/jour s'applique au-delà de l'échéance. Un retard de plus de 30 jours affecte fortement votre score, et toute fraude détectée entraîne le blocage immédiat du compte." },
       ],
@@ -82,7 +82,7 @@ export const en: typeof fr = {
     {
       cat: 'Security & Compliance',
       items: [
-        { q: 'Is TOVPAY a trustworthy, regulated company?', a: 'TOVPAY is neither a bank nor a microfinance institution: it is a technology distribution platform that connects borrowers to a licensed partner credit institution (Orabank Bénin, partnership being finalized). TOVPAY sent a voluntary notification of activity to the BCEAO before any deployment, a step confirmed by the National Directorate for Benin.' },
+        { q: 'Is TOVPAY a trustworthy, regulated company?', a: 'TOVPAY is neither a bank nor a microfinance institution: it is a technology distribution platform working to connect borrowers to a licensed partner credit institution (Orabank, discussions underway - no banking partnership is concluded yet). TOVPAY builds its activity in compliance with the applicable regulatory framework and in full transparency with the BCEAO.' },
         { q: 'Is my personal data protected?', a: 'Yes. Identity verification (KYC) is systematic before any account or credit validation, and your data is never sold to third parties.' },
         { q: "What happens if I don't repay on time?", a: 'A 2%/day late penalty applies past the due date. A delay of more than 30 days significantly affects your score, and any detected fraud results in immediate account suspension.' },
       ],

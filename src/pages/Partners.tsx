@@ -17,7 +17,8 @@ const fadeUp: Variants = {
   }),
 }
 
-const PARTNER_ICONS = [BankIcon, CreditIcon, SignalIcon, SignalIcon, GavelIcon]
+// Icônes par catégorie : banque, puis mobile money / paiement pour la 2e catégorie
+const CATEGORY_ICONS = [[BankIcon], [SignalIcon, SignalIcon, CreditIcon]]
 
 export default function Partners() {
   const t = useT(fr, en)
@@ -31,7 +32,7 @@ export default function Partners() {
         bgImage={IMAGES.heroPartners}
       />
 
-      {/* Partenaires */}
+      {/* Écosystème et connexions envisagées */}
       <section className="py-20 px-[5%] bg-white">
         <div className="max-w-[1280px] mx-auto">
           <motion.div className="text-center mb-14" initial="hidden" whileInView="visible" viewport={{ once: true }}>
@@ -40,31 +41,70 @@ export default function Partners() {
               {t.partnersSection.title}
             </motion.h2>
           </motion.div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {t.partnersSection.items.map((p, i) => {
-              const PartnerIcon = PARTNER_ICONS[i]
-              return (
-                <motion.div
-                  key={i}
-                  className="bg-g50 rounded-3xl border border-g100 p-7 flex gap-5 items-start group hover:shadow-lg hover:border-teal/20 hover:bg-white transition-all duration-300"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.08, duration: 0.6, ease: EASE }}
-                  whileHover={{ y: -5 }}
+
+          {/* Catégories : bancaire recherché + canaux de paiement envisagés */}
+          <div className="flex flex-col gap-10">
+            {t.partnersSection.categories.map((cat, ci) => (
+              <div key={ci}>
+                <motion.span
+                  className="block text-g400 text-xs font-semibold uppercase tracking-wider mb-4"
+                  initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
                 >
-                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-teal/10 text-teal shrink-0">
-                    <PartnerIcon size={24} />
-                  </div>
-                  <div>
-                    <span className="text-g400 text-[10px] uppercase tracking-wider font-semibold">{p.type}</span>
-                    <div className="font-display font-bold text-navy text-lg mt-0.5">{p.name}</div>
-                    <div className="text-g600 text-sm mt-1 leading-snug">{p.desc}</div>
-                  </div>
-                </motion.div>
-              )
-            })}
+                  {cat.label}
+                </motion.span>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  {cat.items.map((p, i) => {
+                    const CategoryIcon = CATEGORY_ICONS[ci][i]
+                    return (
+                      <motion.div
+                        key={i}
+                        className="bg-g50 rounded-3xl border border-g100 p-7 flex gap-5 items-start group hover:shadow-lg hover:border-teal/20 hover:bg-white transition-all duration-300"
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: i * 0.08, duration: 0.6, ease: EASE }}
+                        whileHover={{ y: -5 }}
+                      >
+                        <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-teal/10 text-teal shrink-0">
+                          <CategoryIcon size={24} />
+                        </div>
+                        <div>
+                          <div className="font-display font-bold text-navy text-lg">{p.name}</div>
+                          <div className="text-g600 text-sm mt-1 leading-snug">{p.desc}</div>
+                        </div>
+                      </motion.div>
+                    )
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
+
+          {/* Cadre réglementaire - visuellement distinct, jamais présenté comme un partenaire */}
+          <motion.div
+            className="mt-10 rounded-3xl border border-g200 bg-g50/60 p-7 flex gap-5 items-start"
+            initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: EASE }}
+          >
+            <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-g200/50 text-g600 shrink-0">
+              <GavelIcon size={24} />
+            </div>
+            <div>
+              <span className="inline-block text-g500 text-[10px] uppercase tracking-wider font-semibold bg-g100 rounded-full px-2.5 py-1 mb-1.5">
+                {t.partnersSection.regulatory.badge}
+              </span>
+              <div className="text-g400 text-xs font-semibold uppercase tracking-wider">{t.partnersSection.regulatory.label}</div>
+              <div className="font-display font-bold text-navy text-lg mt-0.5">{t.partnersSection.regulatory.name}</div>
+              <div className="text-g600 text-sm mt-1 leading-snug max-w-2xl">{t.partnersSection.regulatory.desc}</div>
+            </div>
+          </motion.div>
+
+          <motion.p
+            className="text-g400 text-xs text-center mt-8 max-w-2xl mx-auto leading-relaxed"
+            initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
+          >
+            {t.partnersSection.disclaimer}
+          </motion.p>
         </div>
       </section>
 

@@ -1,13 +1,14 @@
-# TOVPAY — Site vitrine
+# TOVPAY - Site vitrine
 
-Site vitrine de TOVPAY, plateforme de nano-crédit mobile et de paiements digitaux pour la zone UEMOA, en partenariat avec Orabank.
+Site vitrine de TOVPAY, plateforme technologique de distribution de nano-crédit et micro-crédit mobile pour la zone UEMOA, filiale de GROUPE TOV.
 
 ## Stack technique
 
 - **React 19** + **TypeScript**
 - **Vite** pour le build et le dev server
 - **React Router** pour la navigation
-- **Tailwind CSS v4** (config CSS-first via `@theme`, pas de `tailwind.config.js`) — palette de marque navy/teal/lime, typographie Inter, animations custom (mesh gradients, reveal au scroll, floating cards)
+- **Tailwind CSS v4** (config CSS-first via `@theme`, pas de `tailwind.config.js`) - palette de marque navy/teal/lime, typographie Inter, animations custom (mesh gradients, reveal au scroll, floating cards)
+- Système multilingue FR/EN maison (`src/i18n/`) via Context + dictionnaires par page
 
 ## Démarrer en local
 
@@ -37,12 +38,15 @@ src/
 │   ├── PageHero.tsx       # En-tête réutilisable des pages secondaires (mesh gradient sombre)
 │   ├── FinalCta.tsx       # Section CTA pleine largeur réutilisable
 │   ├── Icon.tsx           # Bibliothèque d'icônes SVG ligne (remplace les emojis)
-│   └── Avatar.tsx         # Placeholders initiales pour équipe/témoignages
+│   └── Avatar.tsx         # Placeholders initiales pour équipe
 ├── pages/                 # Une page par route (Home, Services, NanoCredit, About, ...)
+├── i18n/                  # LanguageContext + dictionnaires FR/EN par page
 ├── hooks/
-│   └── useScrollReveal.ts # Animation fade+slide-up au scroll (IntersectionObserver)
+│   └── useDocumentMeta.ts # Titre + meta description par page
 ├── index.css              # @theme Tailwind (palette, fonts, keyframes) + @layer components
 └── App.tsx                # Déclaration des routes
+
+middleware.ts              # Détection automatique de la langue par pays (Vercel Routing Middleware)
 
 public/
 └── brand/
@@ -64,13 +68,12 @@ Classes composants réutilisables (`@layer components`) : `.btn-primary`, `.btn-
 
 | Route | Description |
 |---|---|
-| `/` | Accueil — hero carousel, services, simulateur de crédit, témoignages |
-| `/services` | Détail des 4 offres (Nano-Crédit, Wallet, Scoring IA, Solutions PME) |
+| `/` | Accueil - hero, journal TOVPAY, chiffres clés, simulateur de crédit |
+| `/services` | Détail des offres de crédit et du scoring intelligent |
 | `/nano-credit` | Page dédiée au nano-crédit avec simulateur |
+| `/agents` | Rôle et parcours des Chefs d'Agence |
 | `/about` | Mission, valeurs, historique, équipe |
-| `/partners` | Écosystème de partenaires et présence pays |
-| `/investors` | Données pour investisseurs (KPI, levée de fonds) |
-| `/blog` | Articles et actualités |
+| `/partners` | Écosystème et connexions envisagées (bancaire, paiement, réglementaire) |
 | `/faq` | Questions fréquentes |
 | `/contact` | Formulaire de contact et coordonnées |
 

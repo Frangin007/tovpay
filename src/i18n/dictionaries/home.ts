@@ -8,7 +8,7 @@ export const fr = {
     titleLine1: 'Le crédit mobile',
     titleLine2: 'qui change des vies',
     titleLine3: 'en Afrique.',
-    desc: "Accédez à 1 000 – 20 000 FCFA en moins de 15 minutes. Sans garantie physique, sans compte bancaire. Juste votre téléphone.",
+    desc: "Accédez à un financement de 1 000 à 20 000 FCFA, avec un parcours digital simple et rapide. Sans garantie physique. Une demande accessible depuis votre téléphone.",
     ctaPrimary: 'Demander un crédit',
     ctaSecondary: 'Comment ça marche',
     quickStats: [
@@ -37,7 +37,7 @@ export const fr = {
       { title: 'Décaissement en 15 minutes', desc: "Du dossier au virement Mobile Money - plus rapide que n'importe quelle banque." },
       { title: 'Scoring IA sans historique bancaire', desc: 'Notre algorithme évalue votre profil réel, pas votre relevé bancaire.' },
       { title: "Réseau d'agents locaux", desc: "Des chefs d'agence formés accompagnent chaque client dans leur quartier." },
-      { title: 'Démarche BCEAO transparente', desc: 'Notification volontaire de nos activités, en toute transparence avec le régulateur.' },
+      { title: 'Démarche réglementaire transparente', desc: 'TOVPAY construit son activité dans le respect du cadre réglementaire applicable et travaille à structurer ses activités avec les acteurs financiers agréés.' },
     ],
   },
   howItWorks: {
@@ -64,7 +64,7 @@ export const fr = {
     miniCards: [
       { title: "Réseau de Chefs d'Agence", desc: 'Des agents de terrain, rémunérés à la commission, qui accompagnent chaque client.' },
       { title: 'Scoring intelligent', desc: 'Score client et score agent, évolutifs et transparents, sans historique bancaire.' },
-      { title: 'Conformité & transparence', desc: 'KYC systématique, taux affiché avant validation, notification volontaire à la BCEAO.' },
+      { title: 'Conformité & transparence', desc: 'KYC systématique, taux affiché avant validation, démarche réglementaire transparente avec la BCEAO.' },
     ],
   },
   impact: {
@@ -76,20 +76,24 @@ export const fr = {
     cta: 'Notre mission',
     items: [
       { title: 'Phase pilote au Bénin', desc: 'Ambition de déploiement dans 18 pays africains' },
-      { title: 'Orabank Bénin', desc: 'Partenariat bancaire en cours de finalisation' },
+      { title: 'Orabank', desc: 'Partenaire bancaire recherché, discussions en cours' },
       { title: 'Scoring propriétaire', desc: 'Score client et agent, sans historique bancaire requis' },
-      { title: 'Conforme BCEAO', desc: 'Notification volontaire, KYC systématique' },
+      { title: 'Démarche réglementaire transparente', desc: 'KYC systématique, cadre BCEAO respecté' },
     ],
   },
   partners: {
     eyebrow: 'ÉCOSYSTÈME EN CONSTRUCTION',
     items: [
-      { name: 'Orabank Bénin', type: 'Partenaire bancaire visé' },
+      { name: 'Orabank', type: 'Partenaire bancaire recherché' },
       { name: 'MTN MoMo · Moov Money', type: 'Mobile Money envisagés' },
       { name: 'TMoney · Flooz', type: 'Mobile Money envisagés' },
       { name: 'FeexPay', type: 'Agrégateur de paiement agréé BCEAO' },
-      { name: 'BCEAO', type: 'Régulateur - notifié' },
     ],
+  },
+  journal: {
+    badge: 'Journal TOVPAY',
+    label: 'Phase pilote',
+    text: 'En moins de 3 mois, TOVPAY a enrôlé et décaissé environ 500 clients dans les marchés de Cotonou et Porto-Novo, avec un taux de remboursement de 95 %.',
   },
   finalCta: {
     imgAlt: 'Impact TovPay',
@@ -98,7 +102,7 @@ export const fr = {
     paragraph: "Rejoignez les entrepreneurs d'Afrique de l'Ouest qui font confiance à TovPay pour financer leurs activités et faire grandir leur commerce.",
     ctaPrimary: 'Demander mon crédit maintenant',
     ctaSecondary: 'Parler à un conseiller',
-    footnote: 'Notifié à la BCEAO · Phase pilote au Bénin · Données chiffrées',
+    footnote: 'Démarche réglementaire transparente · Phase pilote au Bénin · Données chiffrées',
   },
 }
 
@@ -112,7 +116,7 @@ export const en: typeof fr = {
     titleLine1: 'Mobile credit',
     titleLine2: 'that changes lives',
     titleLine3: 'across Africa.',
-    desc: 'Access 1,000 – 20,000 FCFA in under 15 minutes. No physical collateral, no bank account. Just your phone.',
+    desc: 'Access financing from 1,000 to 20,000 FCFA, with a simple and fast digital process. No physical collateral. Apply directly from your phone.',
     ctaPrimary: 'Apply for credit',
     ctaSecondary: 'How it works',
     quickStats: [
@@ -141,7 +145,7 @@ export const en: typeof fr = {
       { title: 'Disbursed in 15 minutes', desc: 'From application to Mobile Money transfer - faster than any bank.' },
       { title: 'AI scoring, no bank history needed', desc: 'Our algorithm assesses your real profile, not your bank statement.' },
       { title: 'Local agent network', desc: 'Trained Agency Managers support every client in their neighborhood.' },
-      { title: 'Transparent BCEAO approach', desc: 'Voluntary notification of our activities, in full transparency with the regulator.' },
+      { title: 'Transparent regulatory approach', desc: 'TOVPAY builds its activity in compliance with the applicable regulatory framework and works to structure its operations with licensed financial players.' },
     ],
   },
   howItWorks: {
@@ -168,7 +172,7 @@ export const en: typeof fr = {
     miniCards: [
       { title: 'Agency Manager network', desc: 'Field agents, paid on commission, who support every client.' },
       { title: 'Smart scoring', desc: 'Client and agent scores, evolving and transparent, no bank history needed.' },
-      { title: 'Compliance & transparency', desc: 'Systematic KYC, rate shown before validation, voluntary notification to the BCEAO.' },
+      { title: 'Compliance & transparency', desc: 'Systematic KYC, rate shown before validation, transparent regulatory approach with the BCEAO.' },
     ],
   },
   impact: {
@@ -180,20 +184,24 @@ export const en: typeof fr = {
     cta: 'Our mission',
     items: [
       { title: 'Pilot phase in Benin', desc: 'Ambition to expand across 18 African countries' },
-      { title: 'Orabank Benin', desc: 'Banking partnership being finalized' },
+      { title: 'Orabank', desc: 'Targeted banking partner, discussions underway' },
       { title: 'Proprietary scoring', desc: 'Client and agent scores, no bank history required' },
-      { title: 'BCEAO compliant', desc: 'Voluntary notification, systematic KYC' },
+      { title: 'Transparent regulatory approach', desc: 'Systematic KYC, BCEAO framework respected' },
     ],
   },
   partners: {
     eyebrow: 'ECOSYSTEM UNDER CONSTRUCTION',
     items: [
-      { name: 'Orabank Benin', type: 'Targeted banking partner' },
+      { name: 'Orabank', type: 'Targeted banking partner' },
       { name: 'MTN MoMo · Moov Money', type: 'Mobile Money under consideration' },
       { name: 'TMoney · Flooz', type: 'Mobile Money under consideration' },
       { name: 'FeexPay', type: 'BCEAO-licensed payment aggregator' },
-      { name: 'BCEAO', type: 'Regulator - notified' },
     ],
+  },
+  journal: {
+    badge: 'TOVPAY Journal',
+    label: 'Pilot phase',
+    text: 'In under 3 months, TOVPAY has enrolled and disbursed to around 500 clients in the markets of Cotonou and Porto-Novo, with a 95% repayment rate.',
   },
   finalCta: {
     imgAlt: 'TovPay impact',
@@ -202,6 +210,6 @@ export const en: typeof fr = {
     paragraph: 'Join entrepreneurs across West Africa who trust TovPay to finance their business and grow their trade.',
     ctaPrimary: 'Apply for my credit now',
     ctaSecondary: 'Talk to an advisor',
-    footnote: 'BCEAO notified · Pilot phase in Benin · Verified figures',
+    footnote: 'Transparent regulatory approach · Pilot phase in Benin · Verified figures',
   },
 }

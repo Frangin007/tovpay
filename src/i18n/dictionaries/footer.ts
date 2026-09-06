@@ -14,8 +14,7 @@ export const fr = {
       heading: 'Entreprise',
       links: [
         { label: 'À Propos', to: '/about' },
-        { label: 'Partenaires', to: '/partners' },
-        { label: 'Investisseurs', to: '/investors' },
+        { label: 'Écosystème', to: '/partners' },
       ],
     },
     support: {
@@ -28,8 +27,8 @@ export const fr = {
       terms: 'CGU',
     },
   },
-  copyright: '© 2026 TOVPAY, filiale de GROUPE TOV. Tous droits réservés. · Notifié BCEAO',
-  bankPartnership: 'Partenariat bancaire en cours avec',
+  copyright: '© 2026 TOVPAY, filiale de GROUPE TOV. Tous droits réservés. · Démarche réglementaire transparente',
+  bankPartnership: 'Partenaire bancaire recherché :',
 }
 
 export const en: typeof fr = {
@@ -48,8 +47,7 @@ export const en: typeof fr = {
       heading: 'Company',
       links: [
         { label: 'About', to: '/about' },
-        { label: 'Partners', to: '/partners' },
-        { label: 'Investors', to: '/investors' },
+        { label: 'Ecosystem', to: '/partners' },
       ],
     },
     support: {
@@ -62,6 +60,6 @@ export const en: typeof fr = {
       terms: 'Terms',
     },
   },
-  copyright: '© 2026 TOVPAY, a GROUPE TOV subsidiary. All rights reserved. · BCEAO notified',
-  bankPartnership: 'Banking partnership in progress with',
+  copyright: '© 2026 TOVPAY, a GROUPE TOV subsidiary. All rights reserved. · Transparent regulatory approach',
+  bankPartnership: 'Targeted banking partner:',
 }

@@ -21,7 +21,7 @@ export const fr = {
       'Accessibilité : crédit pour tous, partout',
       'Transparence : zéro frais cachés',
       "Innovation : l'IA au service de l'humain",
-      'Intégrité : conformité BCEAO totale',
+      'Intégrité : rigueur réglementaire et transparence totale',
     ],
   },
   history: {
@@ -41,9 +41,9 @@ export const fr = {
   },
   finalCta: {
     title: "Construisons ensemble l'inclusion financière.",
-    desc: 'Client, partenaire ou investisseur - il y a une place pour vous chez TOVPAY.',
+    desc: 'Client ou partenaire - il y a une place pour vous chez TOVPAY.',
     primary: 'Nous contacter',
-    secondary: 'Espace investisseurs →',
+    secondary: 'Découvrir notre écosystème →',
   },
 }
 
@@ -70,7 +70,7 @@ export const en: typeof fr = {
       'Accessibility: credit for everyone, everywhere',
       'Transparency: zero hidden fees',
       'Innovation: AI in service of people',
-      'Integrity: full BCEAO compliance',
+      'Integrity: regulatory rigor and full transparency',
     ],
   },
   history: {
@@ -90,8 +90,8 @@ export const en: typeof fr = {
   },
   finalCta: {
     title: "Let's build financial inclusion together.",
-    desc: "Client, partner, or investor - there's a place for you at TOVPAY.",
+    desc: "Client or partner - there's a place for you at TOVPAY.",
     primary: 'Contact us',
-    secondary: 'Investor area →',
+    secondary: 'Discover our ecosystem →',
   },
 }

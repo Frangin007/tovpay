@@ -20,7 +20,6 @@ export const IMAGES = {
   heroAbout:     U('1573164574511-73c773193279', HERO_PARAMS),  // équipe diverse en réunion, bureau moderne lumineux
   heroServices:  U('1775215595284-8eb97d44e761', HERO_PARAMS),  // vendeur africain de noix de coco, rue ensoleillée
   heroPartners:  U('1784202464389-de4ce60886df', HERO_PARAMS),  // hommes africains en costume, poignée de main, partenariat
-  heroInvestors: U('1611974789855-9c2a0a7236a3', HERO_PARAMS),  // écran graphiques financiers, croissance
   heroFaq:       U('1761370980657-22586ea44093', HERO_PARAMS),  // marchande africaine souriante, étal de bananes
   heroContact:   U('1739298061707-cefee19941b7', HERO_PARAMS),  // équipe diverse en réunion, bureau clair
   heroNanoCredit:U('1579621970795-87facc2f976d', HERO_PARAMS),  // pièces de monnaie et pousse verte, épargne/crédit
