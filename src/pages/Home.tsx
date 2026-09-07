@@ -211,6 +211,31 @@ export default function Home() {
       </div>
 
       {/* ═══════════════════════════════════════════════════════
+          CHIFFRES CLÉS - Bande pleine largeur
+      ═══════════════════════════════════════════════════════ */}
+      <div className="bg-navy py-16 px-[5%] relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none"
+          style={{ backgroundImage: 'radial-gradient(rgba(0,185,142,0.08) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
+        <div className="max-w-[1280px] mx-auto">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 lg:divide-x lg:divide-white/10">
+            {t.statsBar.map((s, i) => (
+              <motion.div
+                key={i}
+                className="text-center lg:px-8"
+                variants={fadeUp}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                custom={i}
+              >
+                <StatItem value={STATS_BAR_DATA[i].value} suffix={s.suffix} label={s.label} />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════
           JOURNAL TOVPAY - Encart actualité phase pilote
       ═══════════════════════════════════════════════════════ */}
       <div className="bg-g50 py-8 px-[5%]">
@@ -244,31 +269,6 @@ export default function Home() {
             ))}
           </div>
         </motion.div>
-      </div>
-
-      {/* ═══════════════════════════════════════════════════════
-          CHIFFRES CLÉS - Bande pleine largeur
-      ═══════════════════════════════════════════════════════ */}
-      <div className="bg-navy py-16 px-[5%] relative overflow-hidden">
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ backgroundImage: 'radial-gradient(rgba(0,185,142,0.08) 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
-        <div className="max-w-[1280px] mx-auto">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-0 lg:divide-x lg:divide-white/10">
-            {t.statsBar.map((s, i) => (
-              <motion.div
-                key={i}
-                className="text-center lg:px-8"
-                variants={fadeUp}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true }}
-                custom={i}
-              >
-                <StatItem value={STATS_BAR_DATA[i].value} suffix={s.suffix} label={s.label} />
-              </motion.div>
-            ))}
-          </div>
-        </div>
       </div>
 
       {/* ═══════════════════════════════════════════════════════
