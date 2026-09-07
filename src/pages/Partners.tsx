@@ -17,8 +17,8 @@ const fadeUp: Variants = {
   }),
 }
 
-// Icônes par catégorie : banque, puis mobile money / paiement pour la 2e catégorie
-const CATEGORY_ICONS = [[BankIcon], [SignalIcon, SignalIcon, CreditIcon]]
+// Icônes pour les items de la 2e catégorie (canaux de paiement)
+const PAYMENT_ICONS = [SignalIcon, SignalIcon, CreditIcon]
 
 export default function Partners() {
   const t = useT(fr, en)
@@ -42,47 +42,68 @@ export default function Partners() {
             </motion.h2>
           </motion.div>
 
-          {/* Catégories : bancaire recherché + canaux de paiement envisagés */}
-          <div className="flex flex-col gap-10">
-            {t.partnersSection.categories.map((cat, ci) => (
-              <div key={ci}>
-                <motion.span
-                  className="block text-g400 text-xs font-semibold uppercase tracking-wider mb-4"
-                  initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-                >
-                  {cat.label}
-                </motion.span>
-                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {cat.items.map((p, i) => {
-                    const CategoryIcon = CATEGORY_ICONS[ci][i]
-                    return (
-                      <motion.div
-                        key={i}
-                        className="bg-g50 rounded-3xl border border-g100 p-7 flex gap-5 items-start group hover:shadow-lg hover:border-teal/20 hover:bg-white transition-all duration-300"
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: i * 0.08, duration: 0.6, ease: EASE }}
-                        whileHover={{ y: -5 }}
-                      >
-                        <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-teal/10 text-teal shrink-0">
-                          <CategoryIcon size={24} />
-                        </div>
-                        <div>
-                          <div className="font-display font-bold text-navy text-lg">{p.name}</div>
-                          <div className="text-g600 text-sm mt-1 leading-snug">{p.desc}</div>
-                        </div>
-                      </motion.div>
-                    )
-                  })}
-                </div>
+          {/* Catégorie 1 : Partenaire bancaire recherché - feature card avec image */}
+          <motion.div
+            className="grid lg:grid-cols-2 gap-0 rounded-3xl overflow-hidden border border-g100 shadow-sm mb-8"
+            initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
+            transition={{ duration: 0.7, ease: EASE }}
+          >
+            <div className="relative h-56 lg:h-auto">
+              <img src={IMAGES.impact4} alt="" loading="lazy" className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/85 via-navy-deep/10 to-transparent lg:bg-gradient-to-r lg:from-navy-deep/85 lg:via-navy-deep/10 lg:to-transparent" />
+              <span className="absolute bottom-5 left-5 lg:top-5 lg:bottom-auto inline-block text-white text-[10px] uppercase tracking-wider font-semibold bg-white/15 backdrop-blur border border-white/25 rounded-full px-3 py-1.5">
+                {t.partnersSection.categories[0].label}
+              </span>
+            </div>
+            <div className="p-8 lg:p-10 flex flex-col justify-center bg-g50">
+              <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-teal/10 text-teal shrink-0 mb-4">
+                <BankIcon size={24} />
               </div>
-            ))}
+              <div className="font-display font-bold text-navy text-2xl">{t.partnersSection.categories[0].items[0].name}</div>
+              <div className="text-g600 text-sm mt-2 leading-relaxed">{t.partnersSection.categories[0].items[0].desc}</div>
+            </div>
+          </motion.div>
+
+          {/* Catégorie 2 : Canaux de paiement envisagés - image + grille */}
+          <div className="grid lg:grid-cols-[280px_1fr] gap-5 mb-8">
+            <motion.div
+              className="relative rounded-3xl overflow-hidden h-44 lg:h-auto"
+              initial={{ opacity: 0, scale: 0.96 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
+              transition={{ duration: 0.7, ease: EASE }}
+            >
+              <img src={IMAGES.howStep3} alt="" loading="lazy" className="w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/80 to-transparent" />
+              <span className="absolute bottom-4 left-4 right-4 text-white text-[10px] uppercase tracking-wider font-semibold">
+                {t.partnersSection.categories[1].label}
+              </span>
+            </motion.div>
+            <div className="grid sm:grid-cols-3 gap-5">
+              {t.partnersSection.categories[1].items.map((p, i) => {
+                const PaymentIcon = PAYMENT_ICONS[i]
+                return (
+                  <motion.div
+                    key={i}
+                    className="bg-g50 rounded-3xl border border-g100 p-6 flex flex-col items-start group hover:shadow-lg hover:border-teal/20 hover:bg-white transition-all duration-300"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.08, duration: 0.6, ease: EASE }}
+                    whileHover={{ y: -5 }}
+                  >
+                    <div className="w-11 h-11 rounded-2xl flex items-center justify-center bg-teal/10 text-teal shrink-0 mb-3">
+                      <PaymentIcon size={20} />
+                    </div>
+                    <div className="font-display font-bold text-navy text-[15px]">{p.name}</div>
+                    <div className="text-g600 text-xs mt-1 leading-snug">{p.desc}</div>
+                  </motion.div>
+                )
+              })}
+            </div>
           </div>
 
-          {/* Cadre réglementaire - visuellement distinct, jamais présenté comme un partenaire */}
+          {/* Cadre réglementaire - sobre, sans image, jamais présenté comme un partenaire */}
           <motion.div
-            className="mt-10 rounded-3xl border border-g200 bg-g50/60 p-7 flex gap-5 items-start"
+            className="rounded-3xl border border-g200 bg-g50/60 p-7 flex gap-5 items-start"
             initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             transition={{ duration: 0.6, ease: EASE }}
           >

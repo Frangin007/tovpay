@@ -93,7 +93,11 @@ export const fr = {
   journal: {
     badge: 'Journal TOVPAY',
     label: 'Phase pilote',
-    text: 'En moins de 3 mois, TOVPAY a enrôlé et décaissé environ 500 clients dans les marchés de Cotonou et Porto-Novo, avec un taux de remboursement de 95 %.',
+    text: 'En moins de 3 mois, TOVPAY a enrôlé et décaissé des clients dans les marchés de Cotonou et Porto-Novo.',
+    stats: [
+      { value: '500', label: 'clients enrôlés' },
+      { value: '95 %', label: 'taux de remboursement' },
+    ],
   },
   finalCta: {
     imgAlt: 'Impact TovPay',
@@ -201,7 +205,11 @@ export const en: typeof fr = {
   journal: {
     badge: 'TOVPAY Journal',
     label: 'Pilot phase',
-    text: 'In under 3 months, TOVPAY has enrolled and disbursed to around 500 clients in the markets of Cotonou and Porto-Novo, with a 95% repayment rate.',
+    text: 'In under 3 months, TOVPAY has enrolled and disbursed to clients in the markets of Cotonou and Porto-Novo.',
+    stats: [
+      { value: '500', label: 'clients enrolled' },
+      { value: '95%', label: 'repayment rate' },
+    ],
   },
   finalCta: {
     imgAlt: 'TovPay impact',

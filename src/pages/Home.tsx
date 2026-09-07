@@ -243,19 +243,36 @@ export default function Home() {
       {/* ═══════════════════════════════════════════════════════
           JOURNAL TOVPAY - Encart actualité phase pilote
       ═══════════════════════════════════════════════════════ */}
-      <div className="bg-teal/[0.06] border-y border-teal/15 py-3.5 px-[5%]">
+      <div className="bg-g50 py-8 px-[5%]">
         <motion.div
-          className="max-w-[1280px] mx-auto flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 text-center"
-          initial={{ opacity: 0, y: -8 }}
+          className="max-w-[1280px] mx-auto bg-white rounded-3xl border border-g100 shadow-sm px-6 py-5 sm:px-8 flex flex-col sm:flex-row sm:items-center gap-5"
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
-          <span className="inline-flex items-center gap-1.5 shrink-0 bg-teal text-white text-[11px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full">
-            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-            {t.journal.badge}
-          </span>
-          <span className="text-g400 text-[11px] font-semibold uppercase tracking-wide shrink-0">{t.journal.label} ·</span>
-          <p className="text-navy text-sm">{t.journal.text}</p>
+          <div className="w-11 h-11 rounded-2xl flex items-center justify-center bg-teal/10 text-teal shrink-0">
+            <TrendingUpIcon size={22} />
+          </div>
+
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-1.5">
+              <span className="inline-flex items-center gap-1.5 bg-teal text-white text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                {t.journal.badge}
+              </span>
+              <span className="text-g400 text-[10px] font-semibold uppercase tracking-wide">{t.journal.label}</span>
+            </div>
+            <p className="text-navy text-sm leading-relaxed max-w-2xl">{t.journal.text}</p>
+          </div>
+
+          <div className="flex gap-6 sm:gap-8 sm:pl-6 sm:border-l sm:border-g100 shrink-0">
+            {t.journal.stats.map((s, i) => (
+              <div key={i} className="text-center sm:text-left">
+                <div className="font-display font-extrabold text-navy text-2xl leading-none">{s.value}</div>
+                <div className="text-g400 text-[11px] mt-1 whitespace-nowrap">{s.label}</div>
+              </div>
+            ))}
+          </div>
         </motion.div>
       </div>
 

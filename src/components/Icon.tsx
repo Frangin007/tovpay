@@ -25,16 +25,6 @@ export function CreditIcon({ size = 24, strokeWidth = 1.8, className }: IconProp
   )
 }
 
-export function BuildingIcon({ size = 24, strokeWidth = 1.8, className }: IconProps) {
-  return (
-    <svg {...base(size)} className={className}>
-      <rect x="4" y="3.5" width="11" height="17" rx="1.2" stroke="currentColor" strokeWidth={strokeWidth} />
-      <rect x="15" y="9.5" width="5" height="11" rx="1" stroke="currentColor" strokeWidth={strokeWidth} />
-      <path d="M7 7.5h1.4M10.6 7.5H12M7 11h1.4M10.6 11H12M7 14.5h1.4M10.6 14.5H12" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" />
-    </svg>
-  )
-}
-
 export function PhoneDownloadIcon({ size = 24, strokeWidth = 1.8, className }: IconProps) {
   return (
     <svg {...base(size)} className={className}>
@@ -154,17 +144,6 @@ export function CoinsIcon({ size = 24, strokeWidth = 1.8, className }: IconProps
       <path d="M3 12v5c0 1.66 2.69 3 6 3 2.4 0 4.5-.7 5.4-1.8" stroke="currentColor" strokeWidth={strokeWidth} />
       <ellipse cx="17" cy="14" rx="4.2" ry="2.1" stroke="currentColor" strokeWidth={strokeWidth} />
       <path d="M12.8 14v3.6c0 1.16 1.88 2.1 4.2 2.1s4.2-.94 4.2-2.1V14" stroke="currentColor" strokeWidth={strokeWidth} />
-    </svg>
-  )
-}
-
-export function NetworkIcon({ size = 24, strokeWidth = 1.8, className }: IconProps) {
-  return (
-    <svg {...base(size)} className={className}>
-      <circle cx="6" cy="6" r="2.3" stroke="currentColor" strokeWidth={strokeWidth} />
-      <circle cx="18" cy="6" r="2.3" stroke="currentColor" strokeWidth={strokeWidth} />
-      <circle cx="12" cy="18" r="2.3" stroke="currentColor" strokeWidth={strokeWidth} />
-      <path d="M8 7.2 10.2 16M16 7.2 13.8 16M8.3 6h7.4" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" />
     </svg>
   )
 }

@@ -50,8 +50,7 @@ middleware.ts              # Détection automatique de la langue par pays (Verce
 
 public/
 └── brand/
-    ├── tovpay-icon.png                # Logo carré source (haute résolution)
-    ├── tovpay-logo.png                # Logo complet source (haute résolution)
+    ├── tovpay-logo.png                # Logo complet source (haute résolution, og:image/schema)
     └── tovpay-logo-transparent.png    # Logo utilisé (nav, footer)
 ```
 
