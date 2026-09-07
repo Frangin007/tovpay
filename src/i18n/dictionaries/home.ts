@@ -92,7 +92,7 @@ export const fr = {
   },
   journal: {
     badge: 'Journal TOVPAY',
-    label: 'Phase pilote',
+    label: 'Phase pilote · Septembre 2026',
     text: 'En moins de 3 mois, TOVPAY a enrôlé et décaissé des clients dans les marchés de Cotonou et Porto-Novo.',
     stats: [
       { value: 'Environ 500', label: 'clients enrôlés' },
@@ -204,7 +204,7 @@ export const en: typeof fr = {
   },
   journal: {
     badge: 'TOVPAY Journal',
-    label: 'Pilot phase',
+    label: 'Pilot phase · September 2026',
     text: 'In under 3 months, TOVPAY has enrolled and disbursed to clients in the markets of Cotonou and Porto-Novo.',
     stats: [
       { value: 'About 500', label: 'clients enrolled' },

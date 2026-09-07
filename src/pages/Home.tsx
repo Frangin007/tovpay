@@ -8,7 +8,7 @@ import IMAGES from '../lib/images'
 import {
   CreditIcon,
   GlobeIcon, HandshakeIcon, AiSparkIcon, ShieldIcon,
-  BankIcon, SignalIcon, TrendingUpIcon,
+  BankIcon, SignalIcon, TrendingUpIcon, CalendarIcon,
 } from '../components/Icon'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
 import { useT } from '../i18n/LanguageContext'
@@ -257,7 +257,7 @@ export default function Home() {
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1.5">
               <span className="inline-flex items-center gap-1.5 bg-teal text-white text-[10px] font-bold uppercase tracking-wide px-2.5 py-1 rounded-full">
-                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                <CalendarIcon size={11} strokeWidth={2.2} />
                 {t.journal.badge}
               </span>
               <span className="text-g400 text-[10px] font-semibold uppercase tracking-wide">{t.journal.label}</span>
