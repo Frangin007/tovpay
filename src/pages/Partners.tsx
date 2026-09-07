@@ -49,7 +49,7 @@ export default function Partners() {
             transition={{ duration: 0.7, ease: EASE }}
           >
             <div className="relative h-56 lg:h-auto">
-              <img src={IMAGES.impact4} alt="" loading="lazy" className="w-full h-full object-cover" />
+              <img src={IMAGES.impact3} alt="" loading="lazy" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/85 via-navy-deep/10 to-transparent lg:bg-gradient-to-r lg:from-navy-deep/85 lg:via-navy-deep/10 lg:to-transparent" />
               <span className="absolute bottom-5 left-5 lg:top-5 lg:bottom-auto inline-block text-white text-[10px] uppercase tracking-wider font-semibold bg-white/15 backdrop-blur border border-white/25 rounded-full px-3 py-1.5">
                 {t.partnersSection.categories[0].label}
@@ -71,7 +71,7 @@ export default function Partners() {
               initial={{ opacity: 0, scale: 0.96 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }}
               transition={{ duration: 0.7, ease: EASE }}
             >
-              <img src={IMAGES.howStep3} alt="" loading="lazy" className="w-full h-full object-cover" />
+              <img src={IMAGES.howStep1} alt="" loading="lazy" className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/80 to-transparent" />
               <span className="absolute bottom-4 left-4 right-4 text-white text-[10px] uppercase tracking-wider font-semibold">
                 {t.partnersSection.categories[1].label}

@@ -95,7 +95,7 @@ export const fr = {
     label: 'Phase pilote',
     text: 'En moins de 3 mois, TOVPAY a enrôlé et décaissé des clients dans les marchés de Cotonou et Porto-Novo.',
     stats: [
-      { value: '500', label: 'clients enrôlés' },
+      { value: 'Environ 500', label: 'clients enrôlés' },
       { value: '95 %', label: 'taux de remboursement' },
     ],
   },
@@ -207,7 +207,7 @@ export const en: typeof fr = {
     label: 'Pilot phase',
     text: 'In under 3 months, TOVPAY has enrolled and disbursed to clients in the markets of Cotonou and Porto-Novo.',
     stats: [
-      { value: '500', label: 'clients enrolled' },
+      { value: 'About 500', label: 'clients enrolled' },
       { value: '95%', label: 'repayment rate' },
     ],
   },

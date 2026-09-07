@@ -268,7 +268,7 @@ export default function Home() {
           <div className="flex gap-6 sm:gap-8 sm:pl-6 sm:border-l sm:border-g100 shrink-0">
             {t.journal.stats.map((s, i) => (
               <div key={i} className="text-center sm:text-left">
-                <div className="font-display font-extrabold text-navy text-2xl leading-none">{s.value}</div>
+                <div className="font-display font-extrabold text-navy text-xl leading-none whitespace-nowrap">{s.value}</div>
                 <div className="text-g400 text-[11px] mt-1 whitespace-nowrap">{s.label}</div>
               </div>
             ))}
