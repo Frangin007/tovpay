@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import type { Variants } from 'framer-motion'
 import { CheckCircleIcon } from '../components/Icon'
 import Avatar from '../components/Avatar'
 import PageHero from '../components/PageHero'
@@ -8,16 +7,7 @@ import IMAGES from '../lib/images'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
 import { useT } from '../i18n/LanguageContext'
 import { fr, en } from '../i18n/dictionaries/about'
-
-const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number = 0) => ({
-    opacity: 1, y: 0,
-    transition: { duration: 0.7, delay: i * 0.12, ease: EASE },
-  }),
-}
+import { EASE_OUT as EASE, fadeUp } from '../lib/motion'
 
 export default function About() {
   const t = useT(fr, en)

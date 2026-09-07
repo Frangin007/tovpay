@@ -1,3 +1,13 @@
+// Les deux catégories ont des items de forme différente (partenaire bancaire détaillé
+// vs. canaux de paiement sobres) : on type le tuple explicitement pour que TypeScript
+// distingue categories[0] de categories[1] au lieu de fusionner leurs types en union.
+type BankPartnerItem = { name: string; tagline: string; desc: string; qualities: string[] }
+type ChannelItem = { name: string; desc: string }
+type PartnerCategories = [
+  { label: string; items: [BankPartnerItem] },
+  { label: string; items: ChannelItem[] },
+]
+
 export const fr = {
   meta: {
     title: 'Écosystème et connexions envisagées',
@@ -15,7 +25,17 @@ export const fr = {
       {
         label: 'Partenaire bancaire recherché',
         items: [
-          { name: 'Orabank', desc: 'Discussions en cours pour une convention de portage de fonds, via la Plateforme Interopérable du Système de Paiement Instantané (PI-SPI). Groupe bancaire présent dans 12 pays africains.' },
+          {
+            name: 'Orabank',
+            tagline: 'Le partenaire bancaire que nous voulons',
+            desc: 'Discussions en cours pour une convention de portage de fonds, via la Plateforme Interopérable du Système de Paiement Instantané (PI-SPI).',
+            qualities: [
+              'Groupe bancaire panafricain solide, implanté dans 12 pays africains',
+              'Infrastructure interopérable (PI-SPI) pour des décaissements et remboursements instantanés',
+              'Acteur régulé, aligné avec les exigences de la BCEAO',
+              "Culture du financement de proximité, proche des réalités des marchés ouest-africains",
+            ],
+          },
         ],
       },
       {
@@ -26,7 +46,7 @@ export const fr = {
           { name: 'FeexPay SA', desc: 'Agrégateur de paiement, établissement agréé BCEAO (août 2025), certifié PCI DSS niveau 1' },
         ],
       },
-    ],
+    ] as PartnerCategories,
     regulatory: {
       badge: 'Régulateur - pas un partenaire',
       label: 'Cadre réglementaire',
@@ -67,7 +87,17 @@ export const en: typeof fr = {
       {
         label: 'Targeted banking partner',
         items: [
-          { name: 'Orabank', desc: 'Discussions underway for a fund custody agreement, via the Interoperable Instant Payment System Platform (PI-SPI). Banking group present in 12 African countries.' },
+          {
+            name: 'Orabank',
+            tagline: 'The banking partner we want',
+            desc: 'Discussions underway for a fund custody agreement, via the Interoperable Instant Payment System Platform (PI-SPI).',
+            qualities: [
+              'Solid pan-African banking group, present in 12 African countries',
+              'Interoperable infrastructure (PI-SPI) for instant disbursements and repayments',
+              'Regulated player, aligned with BCEAO requirements',
+              'A culture of close-to-the-ground financing, attuned to West African markets',
+            ],
+          },
         ],
       },
       {

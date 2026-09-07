@@ -5,8 +5,7 @@ import IMAGES from '../lib/images'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
 import { useT } from '../i18n/LanguageContext'
 import { fr, en } from '../i18n/dictionaries/faq'
-
-const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
+import { EASE_OUT as EASE } from '../lib/motion'
 
 function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
   const [open, setOpen] = useState(false)

@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import type { Variants } from 'framer-motion'
 import { useLocation } from 'react-router-dom'
 import { MailIcon, BriefcaseIcon, HandshakeIcon, BroadcastIcon, MapPinIcon, CheckCircleIcon } from '../components/Icon'
 import PageHero from '../components/PageHero'
@@ -9,17 +8,11 @@ import type { SimulationTransfer } from '../lib/simulator'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
 import { useT } from '../i18n/LanguageContext'
 import { fr, en } from '../i18n/dictionaries/contact'
+import { EASE_OUT as EASE, makeFadeUp } from '../lib/motion'
 
 const fmt = (n: number) => n.toLocaleString('fr-FR')
 
-const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number = 0) => ({
-    opacity: 1, y: 0,
-    transition: { duration: 0.7, delay: i * 0.1, ease: EASE },
-  }),
-}
+const fadeUp = makeFadeUp({ delayStep: 0.1 })
 
 function SocialIcon({ href, label, children }: { href: string; label: string; children: React.ReactNode }) {
   return (

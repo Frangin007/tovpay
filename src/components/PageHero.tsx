@@ -1,19 +1,11 @@
 import { motion } from 'framer-motion'
-import type { Variants } from 'framer-motion'
+import { fadeUp } from '../lib/motion'
 
 type PageHeroProps = {
   breadcrumb: string
   title: string
   desc: string
   bgImage?: string
-}
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number = 0) => ({
-    opacity: 1, y: 0,
-    transition: { duration: 0.7, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] as [number,number,number,number] },
-  }),
 }
 
 export default function PageHero({ breadcrumb, title, desc, bgImage }: PageHeroProps) {

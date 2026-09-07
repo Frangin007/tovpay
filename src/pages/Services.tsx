@@ -1,5 +1,4 @@
 import { motion } from 'framer-motion'
-import type { Variants } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import {
   CreditIcon, AiSparkIcon, HandshakeIcon,
@@ -11,16 +10,7 @@ import IMAGES from '../lib/images'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
 import { useT } from '../i18n/LanguageContext'
 import { fr, en } from '../i18n/dictionaries/services'
-
-const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
-
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number = 0) => ({
-    opacity: 1, y: 0,
-    transition: { duration: 0.7, delay: i * 0.12, ease: EASE },
-  }),
-}
+import { EASE_OUT as EASE, fadeUp } from '../lib/motion'
 
 const SERVICES_DATA = [
   { icon: CreditIcon, color: '#00B98E', link: '/nano-credit', img: IMAGES.howStep3 },

@@ -5,6 +5,7 @@ import { LanguageProvider } from './i18n/LanguageContext'
 import Nav from './components/Nav'
 import Footer from './components/Footer'
 import Home from './pages/Home'
+import { EASE_OUT, EASE_IN } from './lib/motion'
 
 const About = lazy(() => import('./pages/About'))
 const Services = lazy(() => import('./pages/Services'))
@@ -22,9 +23,6 @@ function ScrollToTop() {
   }, [pathname])
   return null
 }
-
-const EASE_OUT = [0.16, 1, 0.3, 1] as [number, number, number, number]
-const EASE_IN  = [0.4, 0, 1, 1]   as [number, number, number, number]
 
 const pageVariants = {
   initial: { opacity: 0, y: 16 },

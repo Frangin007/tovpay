@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import type { Variants } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { CreditIcon, CalendarIcon, ChevronDownIcon } from './Icon'
 import { PRODUCTS, CREDIT_MIN, CREDIT_MAX } from '../lib/simulatorConfig'
@@ -8,15 +7,7 @@ import { simulate, getSimulationHistory, pushSimulationHistory } from '../lib/si
 import type { SimulationHistoryEntry } from '../lib/simulator'
 import { useLanguage, useT } from '../i18n/LanguageContext'
 import { fr, en, productLabels } from '../i18n/dictionaries/simulator'
-
-const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number = 0) => ({
-    opacity: 1, y: 0,
-    transition: { duration: 0.7, delay: i * 0.12, ease: EASE },
-  }),
-}
+import { EASE_OUT as EASE, fadeUp } from '../lib/motion'
 
 const AMOUNT_STEP = 500
 

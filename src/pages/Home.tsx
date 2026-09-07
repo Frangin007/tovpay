@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom'
 import {
   motion, useScroll, useTransform, useInView,
 } from 'framer-motion'
-import type { Variants, Transition } from 'framer-motion'
 import IMAGES from '../lib/images'
 import {
   CreditIcon,
@@ -13,41 +12,12 @@ import {
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
 import { useT } from '../i18n/LanguageContext'
 import { fr, en } from '../i18n/dictionaries/home'
+import { makeFadeUp, fadeIn, makeSlide } from '../lib/motion'
 
-// ── Ease cubic bezier (tuple as const pour Framer Motion v12) ────
-const EASE_OUT = [0.16, 1, 0.3, 1] as const
-
-// ── Helper transition typée ──────────────────────────────────────
-const tr = (duration: number, delay = 0): Transition => ({
-  duration, delay, ease: [...EASE_OUT] as [number, number, number, number],
-})
-
-// ── Variants Framer Motion ────────────────────────────────────────
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i: number = 0) => ({
-    opacity: 1, y: 0,
-    transition: tr(0.7, i * 0.12),
-  }),
-}
-
-const fadeIn: Variants = {
-  hidden: { opacity: 0 },
-  visible: (i: number = 0) => ({
-    opacity: 1,
-    transition: { duration: 0.8, delay: i * 0.1 },
-  }),
-}
-
-const slideLeft: Variants = {
-  hidden: { opacity: 0, x: -50 },
-  visible: { opacity: 1, x: 0, transition: tr(0.8) },
-}
-
-const slideRight: Variants = {
-  hidden: { opacity: 0, x: 50 },
-  visible: { opacity: 1, x: 0, transition: tr(0.8) },
-}
+// ── Variants Framer Motion (Home a des offsets plus prononcés que les autres pages) ──
+const fadeUp = makeFadeUp({ y: 40 })
+const slideLeft = makeSlide('left')
+const slideRight = makeSlide('right')
 
 // ── Données indépendantes de la langue (icônes, couleurs, valeurs chiffrées) ──
 const STATS_BAR_DATA = [

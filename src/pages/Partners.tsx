@@ -1,21 +1,14 @@
 import { motion } from 'framer-motion'
-import type { Variants } from 'framer-motion'
-import { BankIcon, CreditIcon, SignalIcon, GavelIcon } from '../components/Icon'
+import { BankIcon, CreditIcon, SignalIcon, GavelIcon, CheckCircleIcon } from '../components/Icon'
 import PageHero from '../components/PageHero'
 import FinalCta from '../components/FinalCta'
 import IMAGES from '../lib/images'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
 import { useT } from '../i18n/LanguageContext'
 import { fr, en } from '../i18n/dictionaries/partners'
+import { EASE_OUT as EASE, makeFadeUp } from '../lib/motion'
 
-const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number]
-const fadeUp: Variants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (i: number = 0) => ({
-    opacity: 1, y: 0,
-    transition: { duration: 0.7, delay: i * 0.1, ease: EASE },
-  }),
-}
+const fadeUp = makeFadeUp({ delayStep: 0.1 })
 
 // Icônes pour les items de la 2e catégorie (canaux de paiement)
 const PAYMENT_ICONS = [SignalIcon, SignalIcon, CreditIcon]
@@ -59,8 +52,19 @@ export default function Partners() {
               <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-teal/10 text-teal shrink-0 mb-4">
                 <BankIcon size={24} />
               </div>
+              <span className="inline-block text-teal text-[11px] uppercase tracking-wider font-bold mb-1.5">
+                {t.partnersSection.categories[0].items[0].tagline}
+              </span>
               <div className="font-display font-bold text-navy text-2xl">{t.partnersSection.categories[0].items[0].name}</div>
               <div className="text-g600 text-sm mt-2 leading-relaxed">{t.partnersSection.categories[0].items[0].desc}</div>
+              <ul className="mt-5 space-y-2.5">
+                {t.partnersSection.categories[0].items[0].qualities.map((q, i) => (
+                  <li key={i} className="flex items-start gap-2.5 text-navy text-sm leading-snug">
+                    <CheckCircleIcon size={18} className="text-teal shrink-0 mt-0.5" />
+                    <span>{q}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
           </motion.div>
 
