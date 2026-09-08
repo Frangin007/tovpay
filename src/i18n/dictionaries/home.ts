@@ -1,7 +1,7 @@
 export const fr = {
   meta: {
     title: "Nano-crédit & micro-crédit mobile en Afrique de l'Ouest",
-    description: "TOVPAY : nano-crédit et micro-crédit mobile de 1 000 à 20 000 FCFA en 15 minutes, sans garantie. Phase pilote au Bénin, ambition panafricaine.",
+    description: "TOVPAY : nano-crédit et micro-crédit mobile de 1 000 à 20 000 FCFA, décaissés sous 15 minutes après validation du dossier, sans garantie. Phase pilote au Bénin, ambition panafricaine.",
   },
   hero: {
     imgAlt: 'Entrepreneur africain avec téléphone',
@@ -12,7 +12,7 @@ export const fr = {
     ctaPrimary: 'Demander un crédit',
     ctaSecondary: 'Comment ça marche',
     quickStats: [
-      { n: '< 15', label: 'minutes pour recevoir' },
+      { n: '< 15', label: 'min après validation' },
       { n: 'Bénin', label: 'phase pilote active' },
       { n: '20K', label: 'FCFA maximum' },
     ],
@@ -20,7 +20,7 @@ export const fr = {
   statsBar: [
     { suffix: ' pays', label: 'En phase pilote actuellement (Bénin)' },
     { suffix: '', label: 'Produits de crédit court terme' },
-    { suffix: ' min', label: 'Pour recevoir son argent' },
+    { suffix: ' min', label: 'Après validation du dossier' },
     { suffix: ' pays', label: 'Notre ambition de déploiement panafricain' },
   ],
   why: {
@@ -32,9 +32,9 @@ export const fr = {
     img1Caption: 'Marché de Cotonou, Bénin',
     img1Title: 'Commerce textile',
     img2Alt: 'Jeune entrepreneur tech',
-    floatingBadge: { title: 'Décaissement', value: 'Moins de 15 minutes' },
+    floatingBadge: { title: 'Décaissement', value: 'Sous 15 min après validation' },
     points: [
-      { title: 'Décaissement en 15 minutes', desc: "Du dossier au virement Mobile Money - plus rapide que n'importe quelle banque." },
+      { title: 'Décaissement rapide après validation', desc: "Une fois votre dossier validé, les fonds arrivent sur votre Mobile Money en moins de 15 minutes - plus rapide que n'importe quelle banque." },
       { title: 'Scoring IA sans historique bancaire', desc: 'Notre algorithme évalue votre profil réel, pas votre relevé bancaire.' },
       { title: "Réseau d'agents locaux", desc: "Des chefs d'agence formés accompagnent chaque client dans leur quartier." },
       { title: 'Démarche réglementaire transparente', desc: 'TOVPAY construit son activité dans le respect du cadre réglementaire applicable et travaille à structurer ses activités avec les acteurs financiers agréés.' },
@@ -42,7 +42,7 @@ export const fr = {
   },
   howItWorks: {
     eyebrow: 'PROCESSUS',
-    title: '4 étapes, 15 minutes.',
+    title: '4 étapes vers votre crédit.',
     sub: 'Le parcours le plus rapide vers un crédit mobile en Afrique.',
     steps: [
       { title: 'Téléchargez', desc: 'App Store ou Google Play. Gratuit et sécurisé.' },
@@ -58,7 +58,7 @@ export const fr = {
     mainCard: {
       imgAlt: 'Nano-crédit mobile',
       title: 'Nano-Crédit Mobile',
-      desc: '1 000 à 20 000 FCFA décaissés en 15 min, en espèces ou via Mobile Money.',
+      desc: '1 000 à 20 000 FCFA, décaissés sous 15 min après validation, en espèces ou via Mobile Money.',
       link: 'En savoir plus',
     },
     miniCards: [
@@ -113,7 +113,7 @@ export const fr = {
 export const en: typeof fr = {
   meta: {
     title: 'Nano-credit & mobile micro-credit in West Africa',
-    description: 'TOVPAY: mobile nano-credit and micro-credit from 1,000 to 20,000 FCFA in 15 minutes, no collateral. Pilot phase in Benin, pan-African ambition.',
+    description: 'TOVPAY: mobile nano-credit and micro-credit from 1,000 to 20,000 FCFA, disbursed within 15 minutes after approval, no collateral. Pilot phase in Benin, pan-African ambition.',
   },
   hero: {
     imgAlt: 'African entrepreneur with a phone',
@@ -124,7 +124,7 @@ export const en: typeof fr = {
     ctaPrimary: 'Apply for credit',
     ctaSecondary: 'How it works',
     quickStats: [
-      { n: '< 15', label: 'minutes to receive' },
+      { n: '< 15', label: 'min after approval' },
       { n: 'Benin', label: 'active pilot phase' },
       { n: '20K', label: 'FCFA maximum' },
     ],
@@ -132,7 +132,7 @@ export const en: typeof fr = {
   statsBar: [
     { suffix: ' country', label: 'Currently in pilot phase (Benin)' },
     { suffix: '', label: 'Short-term credit products' },
-    { suffix: ' min', label: 'To receive your money' },
+    { suffix: ' min', label: 'After your file is approved' },
     { suffix: ' countries', label: 'Our pan-African expansion ambition' },
   ],
   why: {
@@ -144,9 +144,9 @@ export const en: typeof fr = {
     img1Caption: 'Cotonou Market, Benin',
     img1Title: 'Textile trade',
     img2Alt: 'Young tech entrepreneur',
-    floatingBadge: { title: 'Disbursement', value: 'Under 15 minutes' },
+    floatingBadge: { title: 'Disbursement', value: 'Within 15 min of approval' },
     points: [
-      { title: 'Disbursed in 15 minutes', desc: 'From application to Mobile Money transfer - faster than any bank.' },
+      { title: 'Fast disbursement after approval', desc: 'Once your file is approved, funds arrive on your Mobile Money in under 15 minutes - faster than any bank.' },
       { title: 'AI scoring, no bank history needed', desc: 'Our algorithm assesses your real profile, not your bank statement.' },
       { title: 'Local agent network', desc: 'Trained Agency Managers support every client in their neighborhood.' },
       { title: 'Transparent regulatory approach', desc: 'TOVPAY builds its activity in compliance with the applicable regulatory framework and works to structure its operations with licensed financial players.' },
@@ -154,7 +154,7 @@ export const en: typeof fr = {
   },
   howItWorks: {
     eyebrow: 'PROCESS',
-    title: '4 steps, 15 minutes.',
+    title: '4 steps to your credit.',
     sub: 'The fastest path to mobile credit in Africa.',
     steps: [
       { title: 'Download', desc: 'App Store or Google Play. Free and secure.' },
@@ -170,7 +170,7 @@ export const en: typeof fr = {
     mainCard: {
       imgAlt: 'Mobile nano-credit',
       title: 'Mobile Nano-Credit',
-      desc: '1,000 to 20,000 FCFA disbursed in 15 min, in cash or via Mobile Money.',
+      desc: '1,000 to 20,000 FCFA, disbursed within 15 min after approval, in cash or via Mobile Money.',
       link: 'Learn more',
     },
     miniCards: [

@@ -12,8 +12,8 @@ export const fr = {
   services: [
     {
       title: 'Nano-Crédit Mobile',
-      desc: 'Cinq forfaits de crédit court terme - Express, Hebdomadaire, Duo Chauffeur, Cycle Marchand, Fonctionnaire - chacun adapté à un profil et un cycle de revenus. Décaissement en moins de 15 minutes, en espèces ou via Mobile Money.',
-      features: ['Décaissement en 15 min', 'Sans garantie physique', 'Taux et total affichés avant validation', '5 forfaits selon votre profil'],
+      desc: 'Cinq forfaits de crédit court terme - Express, Hebdomadaire, Duo Chauffeur, Cycle Marchand, Fonctionnaire - chacun adapté à un profil et un cycle de revenus. Décaissement sous 15 minutes après validation du dossier, en espèces ou via Mobile Money.',
+      features: ['Décaissement sous 15 min après accord', 'Sans garantie physique', 'Taux et total affichés avant validation', '5 forfaits selon votre profil'],
     },
     {
       title: "Réseau de Chefs d'Agence",
@@ -33,7 +33,7 @@ export const fr = {
       { title: "Rencontrez un agent ou téléchargez l'app", desc: "Un Chef d'Agence près de chez vous, ou l'application mobile." },
       { title: 'Inscrivez-vous', desc: 'Pièce ID + téléphone. Vérification (KYC) en quelques minutes.' },
       { title: 'Choisissez votre forfait', desc: 'Taux et total à rembourser affichés avant validation.' },
-      { title: 'Crédit décaissé', desc: 'Fonds reçus en 15 minutes max, espèces ou Mobile Money.' },
+      { title: 'Crédit décaissé', desc: 'Fonds reçus en 15 minutes max après validation, espèces ou Mobile Money.' },
     ],
     closing: "Et ensuite : remboursement selon l'échéancier choisi. Chaque remboursement à temps améliore votre score et augmente progressivement votre plafond de crédit.",
   },
@@ -59,8 +59,8 @@ export const en: typeof fr = {
   services: [
     {
       title: 'Mobile Nano-Credit',
-      desc: 'Five short-term credit plans - Express, Weekly, Driver Duo, Merchant Cycle, Civil Servant - each tailored to a profile and income cycle. Disbursed in under 15 minutes, in cash or via Mobile Money.',
-      features: ['Disbursed in 15 min', 'No physical collateral', 'Rate and total shown before validation', '5 plans based on your profile'],
+      desc: 'Five short-term credit plans - Express, Weekly, Driver Duo, Merchant Cycle, Civil Servant - each tailored to a profile and income cycle. Disbursed within 15 minutes after approval, in cash or via Mobile Money.',
+      features: ['Disbursed within 15 min of approval', 'No physical collateral', 'Rate and total shown before validation', '5 plans based on your profile'],
     },
     {
       title: 'Agency Manager Network',
@@ -80,7 +80,7 @@ export const en: typeof fr = {
       { title: 'Meet an agent or download the app', desc: 'An Agency Manager near you, or the mobile app.' },
       { title: 'Sign up', desc: 'ID document + phone. Verification (KYC) in a few minutes.' },
       { title: 'Choose your plan', desc: 'Rate and total repayment shown before validation.' },
-      { title: 'Credit disbursed', desc: 'Funds received in 15 minutes max, cash or Mobile Money.' },
+      { title: 'Credit disbursed', desc: 'Funds received in 15 minutes max after approval, cash or Mobile Money.' },
     ],
     closing: 'And after that: repayment according to your chosen schedule. Every on-time repayment improves your score and gradually increases your credit limit.',
   },

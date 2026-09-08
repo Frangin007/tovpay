@@ -1,12 +1,12 @@
 export const fr = {
   meta: {
     title: 'Simulateur de Nano-Crédit Mobile',
-    description: 'Simulez votre nano-crédit ou micro-crédit mobile TOVPAY : de 1 000 à 20 000 FCFA, décaissé en moins de 15 minutes, sans garantie.',
+    description: 'Simulez votre nano-crédit ou micro-crédit mobile TOVPAY : de 1 000 à 20 000 FCFA, décaissé sous 15 minutes après validation du dossier, sans garantie.',
   },
   hero: {
     breadcrumb: 'Accueil / Nano-Crédit',
     title: 'Nano-Crédit Mobile',
-    desc: "Crédit instantané sans garantie - de 1 000 à 20 000 FCFA en 15 minutes. Aujourd'hui au Bénin, avec l'ambition de s'étendre à 18 pays africains.",
+    desc: "Crédit sans garantie, évalué instantanément - de 1 000 à 20 000 FCFA, sous 15 minutes après validation. Aujourd'hui au Bénin, avec l'ambition de s'étendre à 18 pays africains.",
   },
   conditions: {
     eyebrow: 'CONDITIONS',
@@ -26,7 +26,7 @@ export const fr = {
       'Sans garantie physique',
       "Sans justificatif d'emploi",
       'Scoring instantané',
-      'Décaissement 15 min',
+      'Décaissement sous 15 min après accord',
       'Taux et coût total affichés avant validation',
     ],
     steps: [
@@ -39,7 +39,7 @@ export const fr = {
   },
   finalCta: {
     title: 'Votre crédit vous attend.',
-    desc: "Téléchargez l'app, vérifiez votre identité, recevez vos fonds en 15 minutes.",
+    desc: "Téléchargez l'app, vérifiez votre identité, recevez vos fonds sous 15 minutes après validation.",
     primary: 'Demander maintenant',
     secondary: 'Voir la FAQ →',
   },
@@ -48,12 +48,12 @@ export const fr = {
 export const en: typeof fr = {
   meta: {
     title: 'Mobile Nano-Credit Simulator',
-    description: 'Simulate your TOVPAY mobile nano-credit or micro-credit: 1,000 to 20,000 FCFA, disbursed in under 15 minutes, no collateral.',
+    description: 'Simulate your TOVPAY mobile nano-credit or micro-credit: 1,000 to 20,000 FCFA, disbursed within 15 minutes after approval, no collateral.',
   },
   hero: {
     breadcrumb: 'Home / Nano-Credit',
     title: 'Mobile Nano-Credit',
-    desc: 'Instant credit with no collateral - 1,000 to 20,000 FCFA in 15 minutes. Available in Benin today, with the ambition to expand across 18 African countries.',
+    desc: 'Credit with no collateral, evaluated instantly - 1,000 to 20,000 FCFA, within 15 minutes after approval. Available in Benin today, with the ambition to expand across 18 African countries.',
   },
   conditions: {
     eyebrow: 'CONDITIONS',
@@ -73,7 +73,7 @@ export const en: typeof fr = {
       'No physical collateral',
       'No proof of employment',
       'Instant scoring',
-      '15-min disbursement',
+      'Disbursed within 15 min of approval',
       'Rate and total cost shown before validation',
     ],
     steps: [
@@ -86,7 +86,7 @@ export const en: typeof fr = {
   },
   finalCta: {
     title: 'Your credit is waiting.',
-    desc: 'Download the app, verify your identity, receive your funds in 15 minutes.',
+    desc: 'Download the app, verify your identity, receive your funds within 15 minutes after approval.',
     primary: 'Apply now',
     secondary: 'See the FAQ →',
   },
