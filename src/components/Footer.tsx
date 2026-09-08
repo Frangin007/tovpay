@@ -58,7 +58,7 @@ export default function Footer() {
               {t.columns.support.links.map(link => (
                 <Link key={link.to} to={link.to} className="footer-link">{link.label}</Link>
               ))}
-              <a href="https://wa.me/33763731050" className="footer-link">{t.columns.support.whatsapp}</a>
+              <a href="https://wa.me/33767962634" className="footer-link">{t.columns.support.whatsapp}</a>
               <a href="#" className="footer-link">{t.columns.support.terms}</a>
             </div>
           </div>

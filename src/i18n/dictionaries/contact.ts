@@ -12,7 +12,7 @@ export const fr = {
   coords: [
     { label: 'Direction générale', val: 'dg@tovpay.africa', href: 'mailto:dg@tovpay.africa' },
     { label: 'Partenariats', val: 'dg@tovpay.africa', href: 'mailto:dg@tovpay.africa' },
-    { label: 'WhatsApp', val: '+33 7 63 73 10 50', href: 'https://wa.me/33763731050' },
+    { label: 'WhatsApp', val: '+33 7 67 96 26 34', href: 'https://wa.me/33767962634' },
     { label: 'Siège opérationnel', val: 'Lomé, Togo', href: '#' },
   ],
   socialTitle: 'Réseaux sociaux',
@@ -62,7 +62,7 @@ export const en: typeof fr = {
   coords: [
     { label: 'General Management', val: 'dg@tovpay.africa', href: 'mailto:dg@tovpay.africa' },
     { label: 'Partnerships', val: 'dg@tovpay.africa', href: 'mailto:dg@tovpay.africa' },
-    { label: 'WhatsApp', val: '+33 7 63 73 10 50', href: 'https://wa.me/33763731050' },
+    { label: 'WhatsApp', val: '+33 7 67 96 26 34', href: 'https://wa.me/33767962634' },
     { label: 'Operational headquarters', val: 'Lomé, Togo', href: '#' },
   ],
   socialTitle: 'Social media',
