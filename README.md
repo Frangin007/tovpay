@@ -27,6 +27,19 @@ Le site est accessible sur `http://localhost:5173`.
 | `npm run build` | Vérifie les types puis génère le build de production dans `dist/` |
 | `npm run preview` | Prévisualise le build de production en local |
 | `npm run lint` | Lance ESLint sur le projet |
+| `npm run indexnow` | Signale les pages aux moteurs IndexNow (voir ci-dessous) |
+
+## Indexation (IndexNow)
+
+Le site implémente le protocole [IndexNow](https://www.indexnow.org/documentation), qui notifie instantanément Bing, Yandex, Naver, Seznam et Yep (les soumissions sont partagées entre moteurs participants) quand une page change.
+
+- Clé : `public/3ef77f3c7e76abf39f2868b62b9fd819.txt`, servie à la racine du site (ne pas renommer ni modifier sans mettre à jour `scripts/indexnow.mjs`).
+- Après un déploiement en production qui modifie du contenu :
+  1. mettre à jour `<lastmod>` des pages concernées dans `public/sitemap.xml` ;
+  2. lancer `npm run indexnow -- faq contact` (uniquement les pages modifiées, chemins sans `/` initial pour éviter la conversion de chemins de Git Bash), ou `npm run indexnow` pour tout le sitemap ;
+  3. `npm run indexnow -- --dry-run` affiche la requête sans l'envoyer.
+- Ne pas resoumettre des pages inchangées : IndexNow peut répondre 429 (attendre alors au moins 10 minutes).
+- Le sitemap reste indispensable : IndexNow sert aux notifications rapides, le sitemap à l'inventaire complet.
 
 ## Structure du projet
 
