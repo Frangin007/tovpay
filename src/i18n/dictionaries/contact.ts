@@ -68,7 +68,7 @@ export const fr = {
 export const en: typeof fr = {
   meta: {
     title: 'Contact',
-    description: 'Contact TOVPAY: launch updates, partnership, press or former service.',
+    description: 'Contact TOVPAY: information about the launch, partnerships, press or the former service.',
   },
   hero: {
     breadcrumb: 'Home / Contact',

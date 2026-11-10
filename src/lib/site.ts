@@ -2,6 +2,13 @@
 // Un seul endroit à modifier si une coordonnée ou une condition change.
 
 export const SITE_URL = 'https://tovpay.website'
+export const SITE_NAME = 'TOVPAY'
+
+/** Titre complet d'une page (onglet, résultats de recherche, aperçus de liens). */
+export const pageTitle = (title: string) => `${title} | ${SITE_NAME}`
+
+/** Adresse canonique d'un chemin : sans barre finale, sauf pour l'accueil (« https://tovpay.website/ »). */
+export const canonicalUrl = (pathname: string) => `${SITE_URL}${pathname.replace(/(.)\/+$/, '$1')}`
 
 export const CONTACT_EMAIL = 'dg@tovpay.africa'
 export const CONTACT_EMAIL_HREF = `mailto:${CONTACT_EMAIL}`

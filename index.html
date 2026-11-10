@@ -5,7 +5,9 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="index, follow" />
-    <meta name="description" content="TOVPAY prépare une avance sur salaire pour les agents publics du Bénin et du Togo : frais annoncés en FCFA avant signature, remboursement possible à tout moment. Lancement en préparation." />
+    <!-- Titre, description, canonique, og:title/description/url et twitter:title/description : valeurs de l'accueil,
+         remplacées à la compilation par celles de chaque page (src/lib/indexablePages.ts, plugin de vite.config.ts). -->
+    <meta name="description" content="TOVPAY prépare une avance sur salaire pour les agents publics du Bénin et du Togo : frais annoncés en FCFA avant signature, remboursement anticipé possible." />
     <meta name="keywords" content="TOVPAY, avance sur salaire, agents publics, Bénin, Togo, GROUPE TOV" />
     <meta name="theme-color" content="#0D2251" />
     <meta name="google-site-verification" content="rgpNPMDQTiyl22qCh52q40tEsvH5CxPGDtvkpErXGlw" />
@@ -13,16 +15,16 @@
     <link rel="canonical" href="https://tovpay.website/" />
 
     <meta property="og:site_name" content="TOVPAY" />
-    <meta property="og:title" content="L'avance sur salaire des agents publics | TOVPAY" />
-    <meta property="og:description" content="TOVPAY prépare une avance sur salaire pour les agents publics du Bénin et du Togo, avec des frais annoncés en FCFA avant signature. Lancement en préparation." />
+    <meta property="og:title" content="Avance sur salaire des agents publics, Bénin et Togo | TOVPAY" />
+    <meta property="og:description" content="TOVPAY prépare une avance sur salaire pour les agents publics du Bénin et du Togo : frais annoncés en FCFA avant signature, remboursement anticipé possible." />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:url" content="https://tovpay.website/" />
     <meta property="og:image" content="https://tovpay.website/brand/tovpay-logo.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="L'avance sur salaire des agents publics | TOVPAY" />
-    <meta name="twitter:description" content="TOVPAY prépare une avance sur salaire pour les agents publics du Bénin et du Togo. Lancement en préparation." />
+    <meta name="twitter:title" content="Avance sur salaire des agents publics, Bénin et Togo | TOVPAY" />
+    <meta name="twitter:description" content="TOVPAY prépare une avance sur salaire pour les agents publics du Bénin et du Togo : frais annoncés en FCFA avant signature, remboursement anticipé possible." />
     <meta name="twitter:image" content="https://tovpay.website/brand/tovpay-logo.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -37,31 +39,44 @@
       }
     </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
-    <title>L'avance sur salaire des agents publics | TOVPAY</title>
+    <title>Avance sur salaire des agents publics, Bénin et Togo | TOVPAY</title>
 
-    <!-- Organization et non FinancialService : le service d'avances n'est pas encore ouvert au public. -->
+    <!-- Organization et non FinancialService : le service d'avances n'est pas encore ouvert au public.
+         WebSite : nom du site affiché par Google au-dessus des résultats (« TOVPAY » plutôt que « tovpay.website »). -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "TOVPAY",
-      "url": "https://tovpay.website/",
-      "logo": "https://tovpay.website/brand/tovpay-logo.png",
-      "description": "TOVPAY, filiale de GROUPE TOV, prépare un service d'avance sur salaire pour les agents publics du Bénin et du Togo. Le service n'est pas encore ouvert.",
-      "areaServed": [
-        { "@type": "Country", "name": "Bénin" },
-        { "@type": "Country", "name": "Togo" }
-      ],
-      "parentOrganization": {
-        "@type": "Organization",
-        "name": "GROUPE TOV"
-      },
-      "email": "dg@tovpay.africa",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Lomé",
-        "addressCountry": "TG"
-      }
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://tovpay.website/#organization",
+          "name": "TOVPAY",
+          "url": "https://tovpay.website/",
+          "logo": "https://tovpay.website/brand/tovpay-logo.png",
+          "description": "TOVPAY, filiale de GROUPE TOV, prépare un service d'avance sur salaire pour les agents publics du Bénin et du Togo. Le service n'est pas encore ouvert.",
+          "areaServed": [
+            { "@type": "Country", "name": "Bénin" },
+            { "@type": "Country", "name": "Togo" }
+          ],
+          "parentOrganization": {
+            "@type": "Organization",
+            "name": "GROUPE TOV"
+          },
+          "email": "dg@tovpay.africa",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Lomé",
+            "addressCountry": "TG"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://tovpay.website/#website",
+          "name": "TOVPAY",
+          "url": "https://tovpay.website/",
+          "publisher": { "@id": "https://tovpay.website/#organization" }
+        }
+      ]
     }
     </script>
   </head>

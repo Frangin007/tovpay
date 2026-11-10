@@ -5,6 +5,13 @@
     { "source": "/agents", "destination": "/faq", "permanent": true }
   ],
   "rewrites": [
+    { "source": "/avance-sur-salaire", "destination": "/avance-sur-salaire/index.html" },
+    { "source": "/partners", "destination": "/partners/index.html" },
+    { "source": "/about", "destination": "/about/index.html" },
+    { "source": "/faq", "destination": "/faq/index.html" },
+    { "source": "/contact", "destination": "/contact/index.html" },
+    { "source": "/mentions-legales", "destination": "/mentions-legales/index.html" },
+    { "source": "/confidentialite", "destination": "/confidentialite/index.html" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

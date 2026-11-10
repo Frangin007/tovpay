@@ -1,6 +1,6 @@
 export const fr = {
   meta: {
-    title: 'À propos de TOVPAY',
+    title: 'À propos : mission, valeurs et équipe',
     description: "TOVPAY, filiale de GROUPE TOV, prépare un service d'avance sur salaire pour les agents publics du Bénin et du Togo. Mission, valeurs, histoire et équipe.",
   },
   hero: {
@@ -50,7 +50,7 @@ export const fr = {
 
 export const en: typeof fr = {
   meta: {
-    title: 'About TOVPAY',
+    title: 'About us: mission, values and team',
     description: 'TOVPAY, a GROUPE TOV subsidiary, is preparing a salary advance service for public servants in Benin and Togo. Mission, values, history and team.',
   },
   hero: {
