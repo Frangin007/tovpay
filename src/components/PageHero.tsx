@@ -1,3 +1,6 @@
+import { motion } from 'framer-motion'
+import { fadeUp } from '../lib/motion'
+
 type PageHeroProps = {
   breadcrumb: string
   title: string
@@ -20,25 +23,30 @@ export default function PageHero({ breadcrumb, title, desc, bgImage }: PageHeroP
         </>
       )}
 
-      <div className="relative w-full max-w-[1280px] mx-auto">
+      {/* Fil d'Ariane, titre puis description apparaissent l'un après l'autre */}
+      <motion.div className="relative w-full max-w-[1280px] mx-auto" initial="hidden" animate="visible">
         {/* Fil d'Ariane */}
-        <div className="flex items-center gap-2 mb-5 text-sm text-white/55">
+        <motion.div className="flex items-center gap-2 mb-5 text-sm text-white/55" variants={fadeUp} custom={0}>
           {parts.map((part, i) => (
             <span key={i} className="flex items-center gap-2">
               {i > 0 && <span aria-hidden="true">/</span>}
               <span className={i === parts.length - 1 ? 'text-white/85' : undefined}>{part}</span>
             </span>
           ))}
-        </div>
+        </motion.div>
 
-        <h1 className="font-display font-bold text-[2.2rem] sm:text-[2.8rem] lg:text-[3.25rem] text-white leading-tight tracking-tight max-w-[760px] mb-5">
+        <motion.h1
+          className="font-display font-bold text-[2.2rem] sm:text-[2.8rem] lg:text-[3.25rem] text-white leading-tight tracking-tight max-w-[760px] mb-5"
+          variants={fadeUp}
+          custom={1}
+        >
           {title}
-        </h1>
+        </motion.h1>
 
-        <p className="text-white/70 text-base sm:text-lg leading-relaxed max-w-[560px]">
+        <motion.p className="text-white/70 text-base sm:text-lg leading-relaxed max-w-[560px]" variants={fadeUp} custom={2}>
           {desc}
-        </p>
-      </div>
+        </motion.p>
+      </motion.div>
     </section>
   )
 }

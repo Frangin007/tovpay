@@ -7,7 +7,8 @@ Site vitrine de TOVPAY, filiale de GROUPE TOV, qui prépare un service d'avance 
 - **React 19** + **TypeScript**
 - **Vite** pour le build et le dev server
 - **React Router** pour la navigation
-- **Tailwind CSS v4** (config CSS-first via `@theme`, pas de `tailwind.config.js`) - palette de marque navy/teal, typographie Inter ; animations limitées à des transitions CSS (menu mobile, FAQ)
+- **Tailwind CSS v4** (config CSS-first via `@theme`, pas de `tailwind.config.js`) - palette de marque navy/teal, typographie Inter
+- **Framer Motion** pour les animations : transitions entre pages, apparitions au défilement, en-têtes, compteurs, barre de lecture, point de la page active ; les survols, le menu mobile et la FAQ sont en transitions CSS
 - Système multilingue FR/EN maison (`src/i18n/`) via Context + dictionnaires par page
 
 ## Démarrer en local
@@ -83,6 +84,7 @@ src/
 ├── lib/
 │   ├── site.ts              # Coordonnées, liens des textes de l'application, frais proposés, titre et canonique
 │   ├── indexablePages.ts    # Pages indexables et leurs balises (lu à la compilation, voir « Référencement »)
+│   ├── motion.ts            # Animations communes : courbes, fondus, apparitions au défilement (inView, reveal)
 │   └── images.ts            # Photos du site (fichiers WebP de public/images/)
 ├── hooks/
 │   └── useDocumentMeta.ts   # Met à jour titre, description, Open Graph et canonique dans la langue du visiteur
@@ -130,4 +132,5 @@ Anciennes pages redirigées (308) : `/nano-credit` et `/services` vers `/avance-
 - Le pourcentage des frais proposé (`PROPOSED_FEE_PERCENT` dans `src/lib/site.ts`) est une condition proposée : toujours l'afficher avec la mention « susceptibles d'évoluer avant le lancement ».
 - Les textes de l'application (conditions d'utilisation, politique de confidentialité) ne sont pas recopiés : le site renvoie vers les pages publiées par le serveur de l'application (`src/lib/site.ts`).
 - Les avatars de l'équipe sont des monogrammes (`Avatar.tsx`).
+- Animations : le réglage système « réduire les animations » est respecté (`MotionConfig reducedMotion="user"` dans `App.tsx`, règle CSS dans `index.css`). Pour couper un débordement horizontal, utiliser `overflow-x-clip` et non `overflow-x-hidden` : ce dernier crée un conteneur de défilement qui bloque l'effacement du hero au défilement et la colonne collante de la FAQ.
 

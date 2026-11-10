@@ -1,5 +1,6 @@
 import { useId, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { ArrowRightIcon } from '../components/Icon'
 import PageHero from '../components/PageHero'
 import RichText from '../components/RichText'
@@ -9,16 +10,21 @@ import { useDocumentMeta } from '../hooks/useDocumentMeta'
 import { useT } from '../i18n/language'
 import { fr, en } from '../i18n/dictionaries/faq'
 import type { FaqEntry } from '../i18n/dictionaries/faq'
+import { EASE_OUT as EASE, reveal } from '../lib/motion'
 
-const LINK_CLS = 'inline-flex items-center gap-1.5 w-fit text-teal-ink text-sm font-semibold underline-offset-4 hover:underline'
+// Lien avec flèche : la flèche s'écarte du texte au survol
+const LINK_CLS = 'inline-flex items-center gap-1.5 w-fit text-teal-ink text-sm font-semibold underline-offset-4 transition-[gap] duration-200 hover:gap-3 hover:underline'
 
-function FaqItem({ item }: { item: FaqEntry }) {
+function FaqItem({ item, index }: { item: FaqEntry; index: number }) {
   const [open, setOpen] = useState(false)
   const panelId = useId()
   // Une réponse peut compter plusieurs paragraphes, séparés par une ligne vide.
   const paragraphs = item.a.split('\n\n')
   return (
-    <div className="border-b border-g200 last:border-0">
+    <motion.div
+      className="border-b border-g200 last:border-0"
+      {...reveal({ y: 20 }, { delay: index * 0.06, duration: 0.5, ease: EASE })}
+    >
       <h3>
         <button
           className="w-full flex justify-between items-center text-left py-5 gap-4 group"
@@ -31,7 +37,7 @@ function FaqItem({ item }: { item: FaqEntry }) {
           </span>
           <svg
             width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"
-            className={`shrink-0 text-g500 transition-transform duration-200 ${open ? 'rotate-45' : ''}`}
+            className={`shrink-0 text-g500 transition-transform duration-250 ${open ? 'rotate-45' : ''}`}
           >
             <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
           </svg>
@@ -42,7 +48,7 @@ function FaqItem({ item }: { item: FaqEntry }) {
         id={panelId}
         role="region"
         inert={!open}
-        className={`grid transition-[grid-template-rows,opacity] duration-250 ease-in-out ${open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+        className={`grid transition-[grid-template-rows,opacity] duration-300 ease-in-out ${open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
       >
         <div className="overflow-hidden">
           <div className="pb-5 flex flex-col gap-3">
@@ -58,7 +64,7 @@ function FaqItem({ item }: { item: FaqEntry }) {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
@@ -81,18 +87,19 @@ export default function FAQ() {
             {/* Sidebar catégories */}
             <div className="hidden lg:block">
               <div className="sticky top-28">
-                <span className="section-tag block mb-4">
+                <motion.span className="section-tag block mb-4" {...reveal({})}>
                   {t.sidebar.categoriesLabel}
-                </span>
+                </motion.span>
                 <div className="flex flex-col gap-1 -mx-3">
                   {t.faqs.map((cat, i) => (
-                    <a
+                    <motion.a
                       key={i}
                       href={`#cat-${i}`}
                       className="text-g600 text-sm py-2 px-3 rounded-md hover:bg-g100 hover:text-navy transition-colors duration-200"
+                      {...reveal({ x: -20 }, { delay: i * 0.1 })}
                     >
                       {cat.cat}
-                    </a>
+                    </motion.a>
                   ))}
                 </div>
 
@@ -111,12 +118,15 @@ export default function FAQ() {
             <div className="flex flex-col gap-14">
               {t.faqs.map((cat, ci) => (
                 <div key={ci} id={`cat-${ci}`} className="scroll-mt-28">
-                  <h2 className="font-display font-bold text-2xl text-navy mb-1 pb-4 border-b border-g200">
+                  <motion.h2
+                    className="font-display font-bold text-2xl text-navy mb-1 pb-4 border-b border-g200"
+                    {...reveal({ y: 20 }, { duration: 0.5, ease: EASE })}
+                  >
                     {cat.cat}
-                  </h2>
+                  </motion.h2>
                   <div>
                     {cat.items.map((item, qi) => (
-                      <FaqItem key={qi} item={item} />
+                      <FaqItem key={qi} item={item} index={qi} />
                     ))}
                   </div>
                 </div>

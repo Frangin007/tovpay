@@ -82,10 +82,11 @@
   }
 
   /* Boutons : principal (vert) et contour clair (sur fond sombre).
-     Variante de couleur ponctuelle : ajouter les utilitaires (ex. bg-navy hover:bg-navy-deep). */
+     Variante de couleur ponctuelle : ajouter les utilitaires (ex. bg-navy hover:bg-navy-deep).
+     Au survol, le bouton grossit légèrement en montant ; il s'enfonce quand on clique. */
   .btn-primary,
   .btn-outline-light {
-    @apply inline-flex items-center gap-2 font-semibold text-[15px] px-6 py-3.5 rounded-lg transition-colors duration-200;
+    @apply inline-flex items-center gap-2 font-semibold text-[15px] px-6 py-3.5 rounded-lg transition-[color,background-color,border-color,translate,scale] duration-200 hover:-translate-y-0.5 hover:scale-[1.04] active:scale-[0.97];
   }
   .btn-primary {
     @apply bg-teal text-white hover:bg-teal-dk;
@@ -99,8 +100,16 @@
     @apply font-semibold text-teal-ink underline underline-offset-2 hover:text-navy;
   }
 
+  /* Liens du pied de page : un trait vert se dessine sous le lien au survol */
   .footer-link {
-    @apply w-fit text-white/60 text-sm no-underline underline-offset-4 transition-colors duration-200 hover:text-white hover:underline;
+    @apply relative w-fit text-white/60 text-sm no-underline transition-colors duration-200 hover:text-white;
+  }
+  .footer-link::after {
+    content: '';
+    @apply absolute left-0 -bottom-px w-0 h-px bg-teal transition-[width] duration-300;
+  }
+  .footer-link:hover::after {
+    @apply w-full;
   }
 }
 

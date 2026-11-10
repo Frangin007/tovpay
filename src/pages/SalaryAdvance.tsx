@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { ArrowRightIcon, CheckCircleIcon } from '../components/Icon'
 import PageHero from '../components/PageHero'
 import FinalCta from '../components/FinalCta'
@@ -6,6 +7,7 @@ import IMAGES from '../lib/images'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
 import { useT } from '../i18n/language'
 import { fr, en } from '../i18n/dictionaries/advance'
+import { EASE_OUT as EASE, fadeUp, inView, reveal } from '../lib/motion'
 
 // Photos des rangées texte + image, dans l'ordre d'affichage
 const ROW_IMAGES = [IMAGES.officeSmile, IMAGES.teacher, IMAGES.readingFile]
@@ -28,9 +30,10 @@ export default function SalaryAdvance() {
           {t.services.map((row, i) => {
             const { cta } = row
             return (
-              <div
+              <motion.div
                 key={i}
                 className={`grid lg:grid-cols-2 gap-10 lg:gap-14 items-center ${i % 2 === 1 ? 'lg:[&>:first-child]:order-2' : ''}`}
+                {...reveal({ y: 40 }, { duration: 0.7, ease: EASE }, '-80px')}
               >
                 {/* Texte */}
                 <div>
@@ -56,14 +59,16 @@ export default function SalaryAdvance() {
                   )}
                 </div>
 
-                {/* Image */}
-                <img
-                  src={ROW_IMAGES[i]}
-                  alt={row.title}
-                  loading="lazy"
-                  className="w-full h-[300px] sm:h-[340px] object-cover rounded-xl"
-                />
-              </div>
+                {/* Image : grossit légèrement au survol, la photo zoome à l'intérieur */}
+                <div className="group overflow-hidden rounded-xl transition-[scale] duration-400 hover:scale-[1.02]">
+                  <img
+                    src={ROW_IMAGES[i]}
+                    alt={row.title}
+                    loading="lazy"
+                    className="w-full h-[300px] sm:h-[340px] object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                </div>
+              </motion.div>
             )
           })}
         </div>
@@ -72,19 +77,23 @@ export default function SalaryAdvance() {
       {/* PARCOURS EN 7 ÉTAPES */}
       <section id="parcours" className="py-20 px-[5%] bg-g50">
         <div className="max-w-[1280px] mx-auto">
-          <div className="text-center mb-14">
-            <span className="section-tag">{t.journey.eyebrow}</span>
-            <h2 className="section-title mt-3 text-center">
+          <motion.div className="text-center mb-14" {...inView}>
+            <motion.span className="section-tag" variants={fadeUp} custom={0}>{t.journey.eyebrow}</motion.span>
+            <motion.h2 className="section-title mt-3 text-center" variants={fadeUp} custom={1}>
               {t.journey.title}
-            </h2>
-          </div>
+            </motion.h2>
+          </motion.div>
           <ol className="grid sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-10">
             {t.journey.steps.map((s, i) => (
-              <li key={i} className="border-t border-g200 pt-5">
+              <motion.li
+                key={i}
+                className="border-t border-g200 pt-5"
+                {...reveal({ y: 30 }, { delay: (i % 4) * 0.1, duration: 0.5, ease: EASE })}
+              >
                 <div className="text-teal-ink text-sm font-semibold mb-2" aria-hidden="true">{String(i + 1).padStart(2, '0')}</div>
                 <h3 className="font-display font-bold text-navy text-base mb-1.5">{s.title}</h3>
                 <p className="text-g600 text-sm leading-relaxed">{s.desc}</p>
-              </li>
+              </motion.li>
             ))}
           </ol>
           <p className="text-g600 text-sm text-center max-w-xl mx-auto mt-12">
@@ -96,19 +105,22 @@ export default function SalaryAdvance() {
       {/* FRAIS (sans calcul ni montant) */}
       <section className="py-20 px-[5%] bg-white">
         <div className="max-w-[1280px] mx-auto">
-          <div className="text-center mb-14">
-            <span className="section-tag">{t.fees.eyebrow}</span>
-            <h2 className="section-title mt-3 text-center">
+          <motion.div className="text-center mb-14" {...inView}>
+            <motion.span className="section-tag" variants={fadeUp} custom={0}>{t.fees.eyebrow}</motion.span>
+            <motion.h2 className="section-title mt-3 text-center" variants={fadeUp} custom={1}>
               {t.fees.title}
-            </h2>
-            <p className="section-sub max-w-xl mx-auto">
+            </motion.h2>
+            <motion.p className="section-sub max-w-xl mx-auto" variants={fadeUp} custom={2}>
               {t.fees.sub}
-            </p>
-          </div>
+            </motion.p>
+          </motion.div>
 
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
             {/* Pourcentage proposé */}
-            <div className="bg-g50 rounded-xl p-8 border border-g200">
+            <motion.div
+              className="bg-g50 rounded-xl p-8 border border-g200"
+              {...reveal({ x: -40 }, { duration: 0.7, ease: EASE })}
+            >
               <div className="text-navy text-xs font-semibold mb-3 uppercase tracking-wide">{t.fees.rateLabel}</div>
               <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-3">
                 <span className="font-display font-bold text-[3rem] text-navy leading-none">{t.fees.rateValue}</span>
@@ -124,10 +136,13 @@ export default function SalaryAdvance() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
 
             {/* Calcul, en mots */}
-            <div className="flex flex-col gap-4">
+            <motion.div
+              className="flex flex-col gap-4"
+              {...reveal({ x: 40 }, { duration: 0.7, ease: EASE })}
+            >
               <div className="bg-navy rounded-xl p-8 text-white">
                 <div className="text-white/60 text-xs mb-1">{t.fees.result.amountLabel}</div>
                 <div className="font-display font-bold text-2xl mb-5">{t.fees.result.amountValue}</div>
@@ -154,7 +169,7 @@ export default function SalaryAdvance() {
               <p className="text-center text-g500 text-xs leading-relaxed">
                 {t.fees.disclaimer}
               </p>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -162,16 +177,19 @@ export default function SalaryAdvance() {
       {/* REMBOURSEMENT */}
       <section className="py-20 px-[5%] bg-g50">
         <div className="max-w-[1280px] mx-auto">
-          <div className="text-center mb-14">
-            <span className="section-tag">{t.repayment.eyebrow}</span>
-            <h2 className="section-title mt-3 text-center">
+          <motion.div className="text-center mb-14" {...inView}>
+            <motion.span className="section-tag" variants={fadeUp} custom={0}>{t.repayment.eyebrow}</motion.span>
+            <motion.h2 className="section-title mt-3 text-center" variants={fadeUp} custom={1}>
               {t.repayment.title}
-            </h2>
-          </div>
+            </motion.h2>
+          </motion.div>
 
           <div className="grid md:grid-cols-2 gap-6">
             {/* Deux façons de rembourser */}
-            <div className="bg-white rounded-xl border border-g200 p-7 sm:p-8">
+            <motion.div
+              className="bg-white rounded-xl border border-g200 p-7 sm:p-8"
+              {...reveal({ x: -30 }, { duration: 0.6, ease: EASE })}
+            >
               <h3 className="font-display font-bold text-navy text-xl mb-5">{t.repayment.repayTitle}</h3>
               <ul className="flex flex-col gap-3">
                 {t.repayment.repay.map((c, i) => (
@@ -181,10 +199,13 @@ export default function SalaryAdvance() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
 
             {/* En cas de difficulté */}
-            <div className="bg-navy rounded-xl p-7 sm:p-8">
+            <motion.div
+              className="bg-navy rounded-xl p-7 sm:p-8"
+              {...reveal({ x: 30 }, { duration: 0.6, ease: EASE })}
+            >
               <h3 className="font-display font-bold text-white text-xl mb-5">{t.repayment.difficultyTitle}</h3>
               <ul className="flex flex-col gap-3">
                 {t.repayment.difficulty.map((a, i) => (
@@ -194,7 +215,7 @@ export default function SalaryAdvance() {
                   </li>
                 ))}
               </ul>
-            </div>
+            </motion.div>
           </div>
           <p className="text-g600 text-sm text-center max-w-xl mx-auto mt-10">
             {t.repayment.closing}

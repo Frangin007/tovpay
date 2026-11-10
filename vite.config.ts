@@ -121,6 +121,9 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (!id.includes('node_modules')) return
+          // Bibliothèque d'animation (framer-motion et ses deux dépendances) dans son propre fichier,
+          // gardé en cache par le navigateur d'une mise en ligne à l'autre.
+          if (/[\\/]node_modules[\\/](framer-motion|motion-dom|motion-utils)[\\/]/.test(id)) return 'motion-vendor'
           if (id.includes('react-router-dom') || id.includes('react-dom') || id.includes('/react/')) return 'react-vendor'
         },
       },
