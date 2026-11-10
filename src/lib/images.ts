@@ -1,47 +1,37 @@
 // ── Bibliothèque d'images libres de droits (Unsplash)
-// Licence Unsplash : usage commercial gratuit, attribution non requise
-// Format CDN: https://images.unsplash.com/photo-{ID}?w=...
-// Sélection 2026 : écosystème africain (marchés, équipes, mobile money),
-// chaque image vérifiée manuellement (contenu + disponibilité) avant intégration.
+// Licence Unsplash : usage commercial gratuit, attribution non requise.
+// Les photos sont téléchargées au format WebP et hébergées dans public/images/ :
+// le site ne charge plus rien depuis Unsplash.
+// Sélection novembre 2026 : agents publics au travail (enseignement, santé, administration),
+// sans uniforme, insigne, drapeau ni bâtiment officiel. Aucune photo ne représente un client
+// réel ni l'équipe TOVPAY.
+// Source de chaque fichier : https://unsplash.com/photos/{identifiant indiqué en commentaire}.
 
-// Défaut pensé pour les images de contenu (cartes ~340-620px de large) : pas besoin
-// des 1600px/q80 d'origine, qui téléchargeaient bien plus de pixels que ce qui est
-// jamais affiché. Les heroes plein écran ci-dessous reçoivent un override plus large.
-const U = (id: string, params = 'w=960&q=70&auto=format&fit=crop') =>
-  `https://images.unsplash.com/photo-${id}?${params}`
-
-const HERO_PARAMS = 'w=1920&q=72&auto=format&fit=crop'
+const img = (name: string) => `/images/${name}.webp`
 
 export const IMAGES = {
-  // ── Hero principal
-  hero: U('1687422809654-579d81c29d32', HERO_PARAMS),          // commerçante africaine souriante, téléphone en main, étal de marché
+  // ── Hero de l'accueil (préchargé dans index.html : garder le même fichier aux deux endroits)
+  hero: img('accueil-enseignante'),                 // 1761604478724 : enseignante guidant des élèves en classe
 
-  // ── Heroes pages secondaires - images immersives uniques
-  heroAbout:     U('1573164574511-73c773193279', HERO_PARAMS),  // équipe diverse en réunion, bureau moderne lumineux
-  heroServices:  U('1775215595284-8eb97d44e761', HERO_PARAMS),  // vendeur africain de noix de coco, rue ensoleillée
-  heroPartners:  U('1784202464389-de4ce60886df', HERO_PARAMS),  // hommes africains en costume, poignée de main, partenariat
-  heroFaq:       U('1761370980657-22586ea44093', HERO_PARAMS),  // marchande africaine souriante, étal de bananes
-  heroContact:   U('1739298061707-cefee19941b7', HERO_PARAMS),  // équipe diverse en réunion, bureau clair
-  heroNanoCredit:U('1579621970795-87facc2f976d', HERO_PARAMS),  // pièces de monnaie et pousse verte, épargne/crédit
+  // ── Heroes des pages secondaires
+  heroAdvance:  img('bureau-administration'),       // 1604783125462 : agent en costume à son bureau
+  heroPartners: img('equipe-ordinateurs'),          // 1573167101669 : équipe au travail autour d'une table
+  heroAbout:    img('reunion-bureau'),              // 1573164574511 : réunion dans un bureau lumineux
+  heroFaq:      img('bureau-telephone'),            // 1758876202167 : agente au téléphone dans un bureau
+  heroContact:  img('reunion-vue-dessus'),          // 1739298061707 : réunion de travail vue de dessus
 
-  // ── Section Pourquoi TovPay
-  whyImg1: U('1746171114403-f4c4877b1f04'),       // marché africain animé, étals colorés, minibus
-  whyImg2: U('1687422809617-a7d97879b3b0'),       // vendeur africain devant son étal de fruits
-
-  // ── Steps - processus d'obtention crédit
-  howStep1: U('1512941937669-90a1b58e7e9c'),      // smartphone dans les mains, apps
-  howStep2: U('1761370980776-93f2110a99a7'),      // jeune homme africain au marché, regard direct, vérification terrain
-  howStep3: U('1678693362793-e2fffac536d0'),      // mains africaines comptant des billets, transaction
-  howStep4: U('1633504214759-e1013f422ed7'),      // femme africaine, billets et téléphone, réaction joyeuse
-
-  // ── Impact / Features
-  impact1: U('1602516818688-715dfc1b77d5'),       // champs agricoles verdoyants, Afrique
-  impact2: U('1765584829997-12ab011bb5b3'),       // femme africaine préparant des produits à son étal, marché
-  impact3: U('1573167101669-476636b96cea'),       // équipe africaine au travail, ordinateurs portables
-  impact4: U('1573165706511-3ffde6ef1fe3'),       // jeune équipe diverse, bureau, fintech
-
-  // ── Backgrounds texturés
-  bgCity: U('1636706519609-988babca3dd5'),        // skyline de Johannesburg au coucher du soleil
+  // ── Images de contenu
+  classroom:     img('classe-enseignante'),         // 1698827623362 : enseignante devant sa classe
+  teacher:       img('enseignant-classe'),          // 1744809482817 : enseignant face à ses élèves
+  doctor:        img('medecin'),                    // 1643297654416 : médecin souriante, stéthoscope en main
+  officeLaptop:  img('bureau-ordinateur'),          // 1674916972909 : agent prenant des notes devant son ordinateur
+  readingFile:   img('lecture-dossier'),            // 1622295023876 : agent lisant un document à son bureau
+  officeWoman:   img('bureau-agente'),              // 1642929456654 : agente souriante devant son ordinateur
+  officeSmile:   img('bureau-agente-souriante'),    // 1758876202610 : agente à son bureau
+  phoneAgent:    img('telephone-agent'),            // 1758519291531 : agent en chemise et cravate, téléphone en main
+  smartphone:    img('smartphone'),                 // 1512941937669 : smartphone en main
+  meeting:       img('reunion-equipe'),             // 1573165706511 : réunion d'équipe dans un bureau
+  team:          img('equipe-ordinateurs'),         // 1573167101669 : même fichier que heroPartners, pour les appels de fin de page
 } as const
 
 export default IMAGES

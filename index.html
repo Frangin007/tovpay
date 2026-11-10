@@ -5,45 +5,53 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="index, follow" />
-    <meta name="description" content="TOVPAY : nano-crédit et micro-crédit mobile en Afrique de l'Ouest. Crédit de 1 000 à 20 000 FCFA en 15 minutes, sans garantie. Phase pilote au Bénin, ambition panafricaine." />
-    <meta name="keywords" content="TOVPAY, nano-crédit, micro-crédit Afrique, crédit mobile, crédit mobile Bénin, inclusion financière Afrique de l'Ouest" />
-    <meta name="theme-color" content="#163300" />
+    <meta name="description" content="TOVPAY prépare une avance sur salaire pour les agents publics du Bénin et du Togo : frais annoncés en FCFA avant signature, remboursement possible à tout moment. Lancement en préparation." />
+    <meta name="keywords" content="TOVPAY, avance sur salaire, agents publics, Bénin, Togo, GROUPE TOV" />
+    <meta name="theme-color" content="#0D2251" />
     <meta name="google-site-verification" content="rgpNPMDQTiyl22qCh52q40tEsvH5CxPGDtvkpErXGlw" />
     <meta name="msvalidate.01" content="FDCD0367EA66E48F985988DFE90BBBF3" />
     <link rel="canonical" href="https://tovpay.website/" />
 
     <meta property="og:site_name" content="TOVPAY" />
-    <meta property="og:title" content="TOVPAY - Le crédit mobile accessible à tous" />
-    <meta property="og:description" content="Nano-crédit et micro-crédit mobile pour l'inclusion financière en Afrique de l'Ouest. Phase pilote au Bénin, ambition de déploiement dans 18 pays." />
+    <meta property="og:title" content="L'avance sur salaire des agents publics | TOVPAY" />
+    <meta property="og:description" content="TOVPAY prépare une avance sur salaire pour les agents publics du Bénin et du Togo, avec des frais annoncés en FCFA avant signature. Lancement en préparation." />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="fr_FR" />
     <meta property="og:url" content="https://tovpay.website/" />
     <meta property="og:image" content="https://tovpay.website/brand/tovpay-logo.png" />
 
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="TOVPAY - Le crédit mobile accessible à tous" />
-    <meta name="twitter:description" content="Nano-crédit et micro-crédit mobile pour l'inclusion financière en Afrique de l'Ouest." />
+    <meta name="twitter:title" content="L'avance sur salaire des agents publics | TOVPAY" />
+    <meta name="twitter:description" content="TOVPAY prépare une avance sur salaire pour les agents publics du Bénin et du Togo. Lancement en préparation." />
     <meta name="twitter:image" content="https://tovpay.website/brand/tovpay-logo.png" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://images.unsplash.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
-    <link rel="preload" as="image" fetchpriority="high" href="https://images.unsplash.com/photo-1687422809654-579d81c29d32?w=1920&q=72&auto=format&fit=crop" />
-    <title>TOVPAY - Nano-crédit & micro-crédit mobile en Afrique de l'Ouest</title>
+    <!-- Photo du hero de l'accueil (balise img rendue par React, même fichier que IMAGES.hero) : préchargée seulement sur l'accueil -->
+    <script>
+      if (location.pathname === '/') {
+        var l = document.createElement('link');
+        l.rel = 'preload'; l.as = 'image'; l.type = 'image/webp'; l.href = '/images/accueil-enseignante.webp';
+        l.setAttribute('fetchpriority', 'high');
+        document.head.appendChild(l);
+      }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
+    <title>L'avance sur salaire des agents publics | TOVPAY</title>
 
+    <!-- Organization et non FinancialService : le service d'avances n'est pas encore ouvert au public. -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "FinancialService",
+      "@type": "Organization",
       "name": "TOVPAY",
       "url": "https://tovpay.website/",
       "logo": "https://tovpay.website/brand/tovpay-logo.png",
-      "description": "TOVPAY est une plateforme technologique panafricaine de distribution de nano-crédit et micro-crédit mobile, filiale de GROUPE TOV, en phase pilote au Bénin.",
-      "areaServed": {
-        "@type": "Country",
-        "name": "Bénin"
-      },
+      "description": "TOVPAY, filiale de GROUPE TOV, prépare un service d'avance sur salaire pour les agents publics du Bénin et du Togo. Le service n'est pas encore ouvert.",
+      "areaServed": [
+        { "@type": "Country", "name": "Bénin" },
+        { "@type": "Country", "name": "Togo" }
+      ],
       "parentOrganization": {
         "@type": "Organization",
         "name": "GROUPE TOV"
@@ -53,8 +61,7 @@
         "@type": "PostalAddress",
         "addressLocality": "Lomé",
         "addressCountry": "TG"
-      },
-      "sameAs": []
+      }
     }
     </script>
   </head>

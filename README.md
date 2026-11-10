@@ -1,13 +1,13 @@
 # TOVPAY - Site vitrine
 
-Site vitrine de TOVPAY, plateforme technologique de distribution de nano-crédit et micro-crédit mobile pour la zone UEMOA, filiale de GROUPE TOV.
+Site vitrine de TOVPAY, filiale de GROUPE TOV, qui prépare un service d'avance sur salaire pour les agents publics du Bénin et du Togo. Le service n'est pas encore ouvert : le site le présente au futur, sans partenaire nommé ni chiffre d'activité.
 
 ## Stack technique
 
 - **React 19** + **TypeScript**
 - **Vite** pour le build et le dev server
 - **React Router** pour la navigation
-- **Tailwind CSS v4** (config CSS-first via `@theme`, pas de `tailwind.config.js`) - palette de marque navy/teal/lime, typographie Inter, animations custom (mesh gradients, reveal au scroll, floating cards)
+- **Tailwind CSS v4** (config CSS-first via `@theme`, pas de `tailwind.config.js`) - palette de marque navy/teal, typographie Inter ; animations limitées à des transitions CSS (menu mobile, FAQ)
 - Système multilingue FR/EN maison (`src/i18n/`) via Context + dictionnaires par page
 
 ## Démarrer en local
@@ -46,52 +46,66 @@ Le site implémente le protocole [IndexNow](https://www.indexnow.org/documentati
 ```
 src/
 ├── components/
-│   ├── Nav.tsx          # Navigation (transparente sur hero sombre, opaque au scroll)
-│   ├── Footer.tsx        # Footer avec logo officiel
-│   ├── PageHero.tsx       # En-tête réutilisable des pages secondaires (mesh gradient sombre)
-│   ├── FinalCta.tsx       # Section CTA pleine largeur réutilisable
-│   ├── Icon.tsx           # Bibliothèque d'icônes SVG ligne (remplace les emojis)
-│   └── Avatar.tsx         # Placeholders initiales pour équipe
-├── pages/                 # Une page par route (Home, Services, NanoCredit, About, ...)
-├── i18n/                  # LanguageContext + dictionnaires FR/EN par page
+│   ├── Nav.tsx              # Navigation (liens complets à partir de 1024 px, menu burger en dessous)
+│   ├── Footer.tsx           # Pied de page (liens légaux, textes de l'application)
+│   ├── PageHero.tsx         # En-tête des pages secondaires (photo sous voile bleu nuit)
+│   ├── FinalCta.tsx         # Bande d'appel à l'action de fin de page (photo sous voile)
+│   ├── DocumentLayout.tsx   # Mise en page des pages juridiques
+│   ├── DocumentSections.tsx # Blocs de contenu de ces pages (paragraphes, listes, tableaux, liens)
+│   ├── RichText.tsx         # Texte dont les adresses e-mail deviennent des liens
+│   ├── SmartLink.tsx        # Lien interne, externe (nouvel onglet, signalé aux lecteurs d'écran) ou mailto
+│   ├── Icon.tsx             # Icônes SVG ligne
+│   └── Avatar.tsx           # Monogrammes de l'équipe
+├── pages/                   # Une page par route
+├── i18n/
+│   ├── language.ts          # Contexte et hooks useLanguage / useT
+│   ├── LanguageContext.tsx  # LanguageProvider
+│   └── dictionaries/        # Textes FR/EN par page (en: typeof fr) ; common.ts pour les textes partagés
+├── lib/
+│   ├── site.ts              # Coordonnées, liens des textes de l'application, frais proposés
+│   └── images.ts            # Photos du site (fichiers WebP de public/images/)
 ├── hooks/
-│   └── useDocumentMeta.ts # Titre + meta description par page
-├── index.css              # @theme Tailwind (palette, fonts, keyframes) + @layer components
-└── App.tsx                # Déclaration des routes
+│   └── useDocumentMeta.ts   # Titre, description, Open Graph et adresse canonique par page
+├── index.css                # @theme Tailwind (palette, fonts) + @layer components
+└── App.tsx                  # Routes et redirections des anciennes pages
 
-middleware.ts              # Détection automatique de la langue par pays (Vercel Routing Middleware)
+middleware.ts                # Détection automatique de la langue par pays (Vercel Routing Middleware)
+vercel.json                  # Redirections permanentes des anciennes pages + réécriture SPA
 
 public/
+├── images/                            # Photos libres de droits (Unsplash), en WebP, hébergées sur le site
 └── brand/
-    ├── tovpay-logo.png                # Logo complet source (haute résolution, og:image/schema)
+    ├── tovpay-logo.png                # Logo complet source (og:image, données structurées)
     └── tovpay-logo-transparent.png    # Logo utilisé (nav, footer)
 ```
 
 ## Système de design
 
-Toute la palette et les animations sont centralisées dans `src/index.css` via la directive `@theme` de Tailwind v4 :
-- Couleurs : `navy`, `navy-deep`, `blue`, `teal`, `teal-dk`, `teal-light`, `lime`, `lime-dk`, `gold`, `g50`→`g900`
+Toute la palette est centralisée dans `src/index.css` via la directive `@theme` de Tailwind v4 :
+- Couleurs : `navy`, `navy-deep`, `teal`, `teal-dk`, `teal-ink` (texte vert sur fond clair), `gold`, `gold-ink`, `g50`→`g900`
 - Fonts : `font-sans` et `font-display` (Inter)
-- Animations : `animate-float`, `animate-float-card`, `animate-mesh`, `animate-pulse-dot`, `animate-fade-up`, `animate-shine`
+- Photos : agents publics au travail (enseignement, santé, administration), sans uniforme, insigne, drapeau ni bâtiment officiel. Aucune ne représente un client réel ni l'équipe. Liste et source de chaque photo dans `src/lib/images.ts`.
 
-Classes composants réutilisables (`@layer components`) : `.btn-primary`, `.btn-ghost`, `.btn-outline`, `.btn-cta`, `.floating-card`, `.mesh-orb`, `.footer-link`, `.section-title`, `.section-tag`, `.section-sub`, `.container-tp`.
+Classes composants réutilisables (`@layer components`) : `.section-tag`, `.section-title`, `.section-sub`, `.btn-primary`, `.btn-outline-light`, `.text-link`, `.footer-link`. Les utilitaires Tailwind priment sur ces classes : sur fond sombre, `section-title text-white` ; bouton bleu nuit, `btn-primary bg-navy hover:bg-navy-deep`.
 
 ## Pages
 
 | Route | Description |
 |---|---|
-| `/` | Accueil - hero, journal TOVPAY, chiffres clés, simulateur de crédit |
-| `/services` | Détail des offres de crédit et du scoring intelligent |
-| `/nano-credit` | Page dédiée au nano-crédit avec simulateur |
-| `/agents` | Rôle et parcours des Chefs d'Agence |
-| `/about` | Mission, valeurs, historique, équipe |
-| `/partners` | Écosystème et connexions envisagées (bancaire, paiement, réglementaire) |
-| `/faq` | Questions fréquentes |
-| `/contact` | Formulaire de contact et coordonnées |
+| `/` | Accueil : point d'étape, engagements, parcours en 4 étapes, prévention des arnaques, partenaires recherchés |
+| `/avance-sur-salaire` | Principe, conditions, documents, parcours en 7 étapes, frais proposés, remboursement |
+| `/partners` | Espace partenaires : statut des discussions, besoins, plateforme, principes |
+| `/about` | Mission, valeurs, histoire, équipe |
+| `/faq` | Questions fréquentes, dont l'ancien service |
+| `/contact` | Formulaire (`?sujet=lancement` ou `?sujet=partenariat` présélectionne le sujet) et coordonnées |
+| `/mentions-legales` | Éditeur, immatriculations, hébergeur |
+| `/confidentialite` | Données du site : formulaire, WhatsApp, cookie de langue, droits |
+
+Anciennes pages redirigées (308) : `/nano-credit` et `/services` vers `/avance-sur-salaire`, `/agents` vers `/faq`.
 
 ## Notes pour la suite
 
-- Les avatars d'équipe et de témoignages utilisent actuellement des monogrammes générés (composant `Avatar.tsx`). Pour passer à de vraies photos, ajoutez l'image dans `public/team/` et passez la prop `src="/team/nom.jpg"` au composant.
-- Les liens vers les réseaux sociaux (`Contact.tsx`, footer) sont des placeholders (`href="#"`) en attendant les comptes officiels.
-- Le logo officiel (`public/brand/`) a été recadré/compressé à partir du fichier source fourni ; régénérer depuis l'original si une version haute résolution est nécessaire.
+- Le pourcentage des frais proposé (`PROPOSED_FEE_PERCENT` dans `src/lib/site.ts`) est une condition proposée : toujours l'afficher avec la mention « susceptibles d'évoluer avant le lancement ».
+- Les textes de l'application (conditions d'utilisation, politique de confidentialité) ne sont pas recopiés : le site renvoie vers les pages publiées par le serveur de l'application (`src/lib/site.ts`).
+- Les avatars de l'équipe sont des monogrammes (`Avatar.tsx`).
 

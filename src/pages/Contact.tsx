@@ -1,99 +1,200 @@
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { useLocation } from 'react-router-dom'
-import { MailIcon, BriefcaseIcon, HandshakeIcon, BroadcastIcon, MapPinIcon, CheckCircleIcon } from '../components/Icon'
+import { useId, useState } from 'react'
+import { Link, useSearchParams } from 'react-router-dom'
+import { MailIcon, ChatIcon, MapPinIcon, CheckCircleIcon, ShieldIcon } from '../components/Icon'
 import PageHero from '../components/PageHero'
+import RichText from '../components/RichText'
+import SmartLink from '../components/SmartLink'
 import IMAGES from '../lib/images'
-import type { SimulationTransfer } from '../lib/simulator'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
-import { useT } from '../i18n/LanguageContext'
+import { useLanguage, useT } from '../i18n/language'
 import { fr, en } from '../i18n/dictionaries/contact'
-import { EASE_OUT as EASE, makeFadeUp } from '../lib/motion'
+import { CONTACT_EMAIL, CONTACT_EMAIL_HREF, WHATSAPP_DISPLAY, WHATSAPP_URL } from '../lib/site'
 
-const fmt = (n: number) => n.toLocaleString('fr-FR')
+// Sujet passé dans l'adresse (?sujet=partenariat...) : présélectionné s'il fait partie du menu « Sujet ».
+const subjectFromParam = (param: string | null) =>
+  fr.subjectOptions.find(o => o.value === param)?.value ?? ''
 
-const fadeUp = makeFadeUp({ delayStep: 0.1 })
+const inputCls = 'w-full px-4 py-3 rounded-lg border border-g200 bg-white text-sm text-navy outline-none transition-colors duration-200 focus:border-teal focus:ring-2 focus:ring-teal/20 placeholder:text-g400'
+const labelCls = 'block text-navy text-sm font-medium mb-1.5'
 
-function SocialIcon({ href, label, children }: { href: string; label: string; children: React.ReactNode }) {
+function FieldLabel({ htmlFor, text, required, optionalText }: { htmlFor: string; text: string; required: boolean; optionalText: string }) {
   return (
-    <motion.a
-      href={href}
-      aria-label={label}
-      className="w-10 h-10 rounded-xl bg-g50 border border-g100 flex items-center justify-center text-g600 hover:bg-teal hover:border-teal hover:text-white transition-colors duration-200"
-      whileHover={{ scale: 1.1, y: -2 }}
-      whileTap={{ scale: 0.95 }}
-    >
-      {children}
-    </motion.a>
+    <label htmlFor={htmlFor} className={labelCls}>
+      {text}{required ? ' *' : <span className="font-normal text-g500"> {optionalText}</span>}
+    </label>
   )
 }
 
-const COORD_ICONS = [MailIcon, BriefcaseIcon, HandshakeIcon, BroadcastIcon, MapPinIcon]
-
-// Champs internes envoyés à l'équipe TOVPAY par e-mail (web3forms) - toujours en
-// français, indépendamment de la langue d'affichage du site (contenu métier interne).
-const subjectLabels: Record<string, string> = {
-  credit: 'Demande de crédit',
-  agent: "Devenir Chef d'Agence",
-  partnership: 'Partenariat',
-  other: 'Autre',
-}
-
-const inputCls = 'w-full px-4 py-3.5 rounded-xl border border-g100 bg-g50 text-sm text-navy outline-none transition-all duration-200 focus:border-teal focus:bg-white focus:ring-2 focus:ring-teal/10 placeholder:text-g400'
-
-export default function Contact() {
+function ContactForm({ initialSubject }: { initialSubject: string }) {
   const t = useT(fr, en)
-  useDocumentMeta(t.meta.title, t.meta.description)
-  const location = useLocation()
-  const simulation = (location.state as { simulation?: SimulationTransfer } | null)?.simulation
-
-  const [submitted, setSubmitted] = useState(false)
+  const { lang } = useLanguage()
+  const id = useId()
+  const emptyForm = { subject: initialSubject, name: '', email: '', phone: '', country: '', message: '', consent: false }
+  const [form, setForm] = useState(emptyForm)
+  const [submitted, setSubmitted] = useState<string | null>(null)
   const [sending, setSending] = useState(false)
   const [error, setError] = useState('')
-  const [formData, setFormData] = useState(() => ({
-    name: '', email: '', phone: '',
-    subject: 'credit',
-    message: simulation
-      ? t.form.simulationMessage(simulation.productName, fmt(simulation.amount), fmt(simulation.total), simulation.dueDateLabel)
-      : '',
-  }))
+
+  // Pour « Être informé du lancement », l'e-mail et le pays suffisent.
+  const isLaunch = form.subject === 'lancement'
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value })
+    const { name, value } = e.target
+    setForm(f => ({ ...f, [name]: value }))
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     setSending(true)
+    // Champs internes envoyés à l'équipe TOVPAY par e-mail (Web3Forms) : toujours en
+    // français, indépendamment de la langue d'affichage du site.
+    const subjectLabel = fr.subjectOptions.find(o => o.value === form.subject)?.label ?? form.subject
+    const countryLabel = fr.countryOptions.find(o => o.value === form.country)?.label ?? form.country
     try {
       const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
           access_key: import.meta.env.VITE_WEB3FORMS_ACCESS_KEY,
-          subject: `TOVPAY - ${subjectLabels[formData.subject] ?? formData.subject}`,
+          subject: `TOVPAY - ${subjectLabel}`,
           from_name: 'Site Web TOVPAY',
-          replyto: formData.email,
-          'Nom complet': formData.name,
-          Email: formData.email,
-          'Téléphone / WhatsApp': formData.phone || 'Non renseigné',
-          Sujet: subjectLabels[formData.subject] ?? formData.subject,
-          Message: formData.message,
+          replyto: form.email,
+          Sujet: subjectLabel,
+          'Nom complet': form.name || 'Non renseigné',
+          'E-mail': form.email,
+          'Téléphone': form.phone || 'Non renseigné',
+          Pays: countryLabel,
+          Message: form.message || 'Aucun message',
+          'Langue du site': lang.toUpperCase(),
+          // Texte exact accepté par le visiteur, dans la langue où il l'a lu.
+          Consentement: `Oui, le ${new Date().toISOString()} : « ${t.form.consentText} »`,
         }),
       })
       const data = await res.json()
       if (!data.success) throw new Error(data.message || "Échec de l'envoi")
-
-      setSubmitted(true)
-      setTimeout(() => setSubmitted(false), 5000)
-      setFormData({ name: '', email: '', phone: '', subject: 'credit', message: '' })
+      setSubmitted(form.subject)
+      setForm({ ...emptyForm, subject: form.subject })
     } catch {
       setError(t.form.errorGeneric)
     } finally {
       setSending(false)
     }
   }
+
+  if (submitted !== null) {
+    const launch = submitted === 'lancement'
+    return (
+      <div
+        role="status"
+        className="rounded-xl border border-g200 p-10 sm:p-16 text-center flex flex-col items-center justify-center h-full"
+      >
+        <CheckCircleIcon size={44} strokeWidth={1.5} className="text-teal mb-5" />
+        <h3 className="font-display font-bold text-navy text-2xl mb-3">{launch ? t.form.successLaunchTitle : t.form.successTitle}</h3>
+        <p className="text-g600 mb-6">{launch ? t.form.successLaunchDesc : t.form.successDesc}</p>
+        <button type="button" onClick={() => setSubmitted(null)} className="text-link text-sm">
+          {t.form.sendAnother}
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <form
+      className="rounded-xl border border-g200 p-6 sm:p-8 flex flex-col gap-5"
+      onSubmit={handleSubmit}
+    >
+      <div>
+        <h3 className="font-display font-bold text-xl text-navy mb-1">{t.form.title}</h3>
+        <p className="text-g500 text-xs">{t.form.requiredHint}</p>
+      </div>
+      <div className="grid sm:grid-cols-2 gap-5">
+        <div>
+          <FieldLabel htmlFor={`${id}-name`} text={t.form.nameLabel} required={!isLaunch} optionalText={t.form.optional} />
+          <input id={`${id}-name`} className={inputCls} type="text" name="name" autoComplete="name" value={form.name} onChange={handleChange} placeholder={t.form.namePlaceholder} required={!isLaunch} />
+        </div>
+        <div>
+          <FieldLabel htmlFor={`${id}-email`} text={t.form.emailLabel} required optionalText={t.form.optional} />
+          <input id={`${id}-email`} className={inputCls} type="email" name="email" autoComplete="email" value={form.email} onChange={handleChange} placeholder={t.form.emailPlaceholder} required />
+        </div>
+      </div>
+      <div className="grid sm:grid-cols-2 gap-5">
+        <div>
+          <FieldLabel htmlFor={`${id}-phone`} text={t.form.phoneLabel} required={false} optionalText={t.form.optional} />
+          <input id={`${id}-phone`} className={inputCls} type="tel" name="phone" autoComplete="tel" value={form.phone} onChange={handleChange} placeholder={t.form.phonePlaceholder} />
+        </div>
+        <div>
+          <FieldLabel htmlFor={`${id}-country`} text={t.form.countryLabel} required optionalText={t.form.optional} />
+          <select id={`${id}-country`} className={inputCls} name="country" value={form.country} onChange={handleChange} required>
+            <option value="" disabled>{t.form.countryPlaceholder}</option>
+            {t.countryOptions.map(opt => (
+              <option key={opt.value} value={opt.value}>{opt.label}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+      <div>
+        <FieldLabel htmlFor={`${id}-subject`} text={t.form.subjectLabel} required optionalText={t.form.optional} />
+        <select id={`${id}-subject`} className={inputCls} name="subject" value={form.subject} onChange={handleChange} required>
+          <option value="" disabled>{t.form.subjectPlaceholder}</option>
+          {t.subjectOptions.map(opt => (
+            <option key={opt.value} value={opt.value}>{opt.label}</option>
+          ))}
+        </select>
+        {isLaunch && (
+          <p className="bg-g50 border border-g200 text-g600 text-xs leading-relaxed rounded-lg px-4 py-3 mt-2.5">
+            <RichText text={t.form.launchNote} />
+          </p>
+        )}
+      </div>
+      <div>
+        <FieldLabel htmlFor={`${id}-message`} text={t.form.messageLabel} required={!isLaunch} optionalText={t.form.optional} />
+        <textarea id={`${id}-message`} className={`${inputCls} resize-none`} name="message" rows={5} value={form.message} onChange={handleChange} placeholder={t.form.messagePlaceholder} required={!isLaunch} />
+      </div>
+      <div className="flex items-start gap-3">
+        <input
+          id={`${id}-consent`}
+          type="checkbox"
+          name="consent"
+          checked={form.consent}
+          onChange={e => setForm(f => ({ ...f, consent: e.target.checked }))}
+          required
+          className="mt-0.5 w-4 h-4 shrink-0 accent-teal"
+        />
+        <label htmlFor={`${id}-consent`} className="text-g600 text-xs leading-relaxed">
+          {t.form.consentText} *{' '}
+          <Link to="/confidentialite" className="text-link">{t.form.consentLink}</Link>
+        </label>
+      </div>
+      {error && (
+        <div role="alert" className="bg-red-50 text-red-700 text-xs font-semibold rounded-lg px-4 py-3 -mb-1">
+          <RichText text={error} linkClassName="underline" />
+        </div>
+      )}
+      <button
+        type="submit"
+        disabled={sending}
+        className="w-full bg-teal text-white font-semibold py-3.5 rounded-lg text-[15px] transition-colors duration-200 hover:bg-teal-dk disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-teal"
+      >
+        {sending ? t.form.sending : t.form.submit}
+      </button>
+      <p className="text-g500 text-xs text-center">{t.form.confidentialityNote}</p>
+    </form>
+  )
+}
+
+export default function Contact() {
+  const t = useT(fr, en)
+  useDocumentMeta(t.meta.title, t.meta.description)
+  const [searchParams] = useSearchParams()
+  // Le sujet passé dans l'adresse est présélectionné ; la clé réinitialise le formulaire
+  // si l'on change de sujet depuis la navigation sans quitter la page.
+  const initialSubject = subjectFromParam(searchParams.get('sujet'))
+
+  const coords = [
+    { Icon: MailIcon, label: t.coords.emailLabel, val: CONTACT_EMAIL, href: CONTACT_EMAIL_HREF, external: false },
+    { Icon: ChatIcon, label: t.coords.whatsappLabel, val: WHATSAPP_DISPLAY, href: WHATSAPP_URL, external: true },
+  ]
 
   return (
     <>
@@ -109,155 +210,50 @@ export default function Contact() {
           <div className="grid lg:grid-cols-[1fr_1.5fr] gap-14">
 
             {/* Infos de contact */}
-            <motion.div
-              initial="hidden" whileInView="visible" viewport={{ once: true }}
-            >
-              <motion.h3 className="font-display font-bold text-2xl text-navy mb-8" variants={fadeUp} custom={0}>
-                {t.coordsTitle}
-              </motion.h3>
+            <div>
+              <h2 className="font-display font-bold text-2xl text-navy mb-6">
+                {t.coords.title}
+              </h2>
 
-              <div className="flex flex-col gap-1 mb-10">
-                {t.coords.map((c, i) => {
-                  const CoordIcon = COORD_ICONS[i]
-                  return (
-                    <motion.a
-                      key={i}
-                      href={c.href}
-                      className="flex items-center gap-4 p-4 rounded-2xl hover:bg-g50 transition-colors duration-200 group"
-                      variants={fadeUp}
-                      custom={i + 1}
-                    >
-                      <div className="w-11 h-11 rounded-xl bg-teal/10 text-teal flex items-center justify-center shrink-0 group-hover:bg-teal group-hover:text-white transition-colors duration-200">
-                        <CoordIcon size={20} />
-                      </div>
-                      <div>
-                        <div className="text-g400 text-xs mb-0.5">{c.label}</div>
-                        <div className="text-navy font-semibold text-sm">{c.val}</div>
-                      </div>
-                    </motion.a>
-                  )
-                })}
+              <div className="flex flex-col gap-1 mb-4">
+                {coords.map(c => (
+                  <SmartLink
+                    key={c.label}
+                    href={c.href}
+                    external={c.external}
+                    className="flex items-center gap-4 p-4 -mx-4 rounded-lg hover:bg-g50 transition-colors duration-200"
+                  >
+                    <c.Icon size={20} className="text-teal-ink shrink-0" />
+                    <div>
+                      <div className="text-g500 text-xs mb-0.5">{c.label}</div>
+                      <div className="text-navy font-semibold text-sm">{c.val}</div>
+                    </div>
+                  </SmartLink>
+                ))}
+                <div className="flex items-center gap-4 p-4 -mx-4">
+                  <MapPinIcon size={20} className="text-teal-ink shrink-0" />
+                  <div>
+                    <div className="text-g500 text-xs mb-0.5">{t.coords.seatLabel}</div>
+                    <div className="text-navy font-semibold text-sm">{t.coords.seatValue}</div>
+                  </div>
+                </div>
               </div>
+              <p className="text-g600 text-sm mb-8">{t.coords.responseNote}</p>
 
-              <motion.div variants={fadeUp} custom={6}>
-                <div className="text-g400 text-xs font-semibold uppercase tracking-wider mb-3">{t.socialTitle}</div>
-                <div className="flex gap-2.5">
-                  <SocialIcon href="#" label="Facebook">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M22 12.06C22 6.5 17.5 2 12 2S2 6.5 2 12.06c0 5 3.66 9.15 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.89 3.78-3.89 1.1 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.91h-2.33V22c4.78-.79 8.44-4.94 8.44-9.94Z"/></svg>
-                  </SocialIcon>
-                  <SocialIcon href="#" label="X">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.6 8.7L23.3 22H16.7l-5.2-6.8L5.5 22H2.4l8.1-9.3L1.7 2h6.8l4.7 6.2Zm-1.2 18h1.7L7.4 4H5.6Z"/></svg>
-                  </SocialIcon>
-                  <SocialIcon href="#" label="LinkedIn">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM3 9h4v12H3ZM9.5 9H13v1.7c.5-.9 1.8-1.9 3.7-1.9 4 0 4.8 2.6 4.8 6V21h-4v-5.3c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21h-4Z"/></svg>
-                  </SocialIcon>
-                  <SocialIcon href="#" label="Instagram">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="2.5" y="2.5" width="19" height="19" rx="5" stroke="currentColor" strokeWidth="1.8"/><circle cx="12" cy="12" r="4.3" stroke="currentColor" strokeWidth="1.8"/><circle cx="17.6" cy="6.4" r="1.1" fill="currentColor"/></svg>
-                  </SocialIcon>
+              {/* Sécurité */}
+              <div className="rounded-xl border border-g200 bg-g50 p-6">
+                <div className="flex items-center gap-2.5 font-display font-bold text-navy text-base mb-2">
+                  <ShieldIcon size={20} className="text-teal-ink shrink-0" />
+                  {t.safety.title}
                 </div>
-              </motion.div>
-
-              {/* Image */}
-              <motion.div
-                className="mt-10 rounded-3xl overflow-hidden h-48 relative group"
-                variants={fadeUp}
-                custom={7}
-              >
-                <img
-                  src={IMAGES.heroAbout}
-                  alt={t.imageAlt}
-                  loading="lazy"
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/70 to-transparent" />
-                <div className="absolute bottom-4 left-4 text-white">
-                  <div className="text-xs text-white/70">{t.imageCaption}</div>
-                  <div className="font-display font-bold text-base">{t.imageTeam}</div>
-                </div>
-              </motion.div>
-            </motion.div>
+                <p className="text-g600 text-sm leading-relaxed">{t.safety.text}</p>
+              </div>
+            </div>
 
             {/* Formulaire */}
-            <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, ease: EASE }}
-            >
-              {submitted ? (
-                <motion.div
-                  className="bg-g50 rounded-3xl border border-g100 p-16 text-center flex flex-col items-center justify-center h-full"
-                  initial={{ scale: 0.9, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-                    className="text-teal mb-5"
-                  >
-                    <CheckCircleIcon size={52} strokeWidth={1.5} />
-                  </motion.div>
-                  <h4 className="font-display font-bold text-navy text-2xl mb-3">{t.form.successTitle}</h4>
-                  <p className="text-g600">{t.form.successDesc}</p>
-                </motion.div>
-              ) : (
-                <form
-                  className="bg-g50 rounded-3xl border border-g100 p-8 flex flex-col gap-5"
-                  onSubmit={handleSubmit}
-                >
-                  {simulation && (
-                    <div className="flex items-center gap-2 bg-teal/10 text-teal text-xs font-semibold rounded-xl px-4 py-3 -mt-1">
-                      <CheckCircleIcon size={16} className="shrink-0" />
-                      {t.form.simulationTransferred(simulation.productName, fmt(simulation.amount))}
-                    </div>
-                  )}
-                  <h3 className="font-display font-bold text-xl text-navy mb-1">{t.form.formTitle}</h3>
-                  <div className="grid sm:grid-cols-2 gap-5">
-                    <div>
-                      <label className="block text-navy text-xs font-semibold mb-1.5 uppercase tracking-wide">{t.form.nameLabel}</label>
-                      <input className={inputCls} type="text" name="name" value={formData.name} onChange={handleChange} placeholder={t.form.namePlaceholder} required />
-                    </div>
-                    <div>
-                      <label className="block text-navy text-xs font-semibold mb-1.5 uppercase tracking-wide">{t.form.emailLabel}</label>
-                      <input className={inputCls} type="email" name="email" value={formData.email} onChange={handleChange} placeholder={t.form.emailPlaceholder} required />
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-navy text-xs font-semibold mb-1.5 uppercase tracking-wide">{t.form.phoneLabel}</label>
-                    <input className={inputCls} type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder={t.form.phonePlaceholder} />
-                  </div>
-                  <div>
-                    <label className="block text-navy text-xs font-semibold mb-1.5 uppercase tracking-wide">{t.form.subjectLabel}</label>
-                    <select className={inputCls} name="subject" value={formData.subject} onChange={handleChange}>
-                      {t.subjectOptions.map(opt => (
-                        <option key={opt.value} value={opt.value}>{opt.label}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-navy text-xs font-semibold mb-1.5 uppercase tracking-wide">{t.form.messageLabel}</label>
-                    <textarea className={`${inputCls} resize-none`} name="message" rows={5} value={formData.message} onChange={handleChange} placeholder={t.form.messagePlaceholder} required />
-                  </div>
-                  {error && (
-                    <div className="bg-red-50 text-red-600 text-xs font-semibold rounded-xl px-4 py-3 -mb-1">
-                      {error}
-                    </div>
-                  )}
-                  <motion.button
-                    type="submit"
-                    disabled={sending}
-                    className="w-full bg-teal text-white font-semibold py-4 rounded-xl shadow-[0_8px_32px_rgba(0,185,142,0.3)] text-[15px] disabled:opacity-60 disabled:cursor-not-allowed"
-                    whileHover={sending ? {} : { scale: 1.02, y: -2 }}
-                    whileTap={sending ? {} : { scale: 0.98 }}
-                  >
-                    {sending ? t.form.sending : t.form.submit}
-                  </motion.button>
-                  <p className="text-g400 text-xs text-center">{t.form.confidentialityNote}</p>
-                </form>
-              )}
-            </motion.div>
+            <div>
+              <ContactForm key={initialSubject} initialSubject={initialSubject} />
+            </div>
           </div>
         </div>
       </section>
