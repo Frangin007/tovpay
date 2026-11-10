@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { CheckCircleIcon } from '../components/Icon'
 import PageHero from '../components/PageHero'
 import FinalCta from '../components/FinalCta'
+import Photo from '../components/Photo'
 import IMAGES from '../lib/images'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
 import { useT } from '../i18n/language'
@@ -39,7 +40,7 @@ export default function Partners() {
             className="grid lg:grid-cols-2 rounded-xl overflow-hidden border border-g200"
             {...reveal({ y: 30 }, { duration: 0.7, ease: EASE })}
           >
-            <img src={IMAGES.heroAdvance} alt={s.feature.imgAlt} loading="lazy" className="w-full h-56 lg:h-full object-cover" />
+            <Photo src={IMAGES.heroAdvance} alt={s.feature.imgAlt} sizes="(min-width: 1024px) 640px, 90vw" className="w-full h-56 lg:h-full object-cover" />
             <div className="p-8 lg:p-10 flex flex-col justify-center bg-g50">
               <p className="text-g600 text-sm mb-1.5">{s.feature.tagline}</p>
               <h3 className="font-display font-bold text-navy text-2xl">{s.feature.name}</h3>
@@ -117,7 +118,8 @@ export default function Partners() {
           </motion.div>
 
           <motion.div {...reveal({ scale: 0.96 }, { duration: 0.8, ease: EASE })}>
-            <img src={IMAGES.officeLaptop} alt={t.platform.imgAlt} loading="lazy" className="w-full h-[360px] lg:h-[460px] object-cover rounded-xl" />
+            {/* Cadre de 360 à 460 px de haut, plus étroit que la photo : 540 à 690 px affichés */}
+            <Photo src={IMAGES.officeLaptop} alt={t.platform.imgAlt} sizes="(min-width: 1024px) 690px, (min-width: 640px) 90vw, 540px" className="w-full h-[360px] lg:h-[460px] object-cover rounded-xl" />
             <div className="mt-4 rounded-lg border border-g200 bg-white px-5 py-4">
               <div className="font-display font-semibold text-navy text-sm mb-1">{t.platform.cardTitle}</div>
               <div className="text-g600 text-sm">{t.platform.cardDesc}</div>

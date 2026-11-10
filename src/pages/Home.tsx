@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useInView, useReducedMotion, useScroll, useTransform } from 'framer-motion'
-import IMAGES from '../lib/images'
+import IMAGES, { HOME_HERO } from '../lib/images'
 import { ArrowRightIcon } from '../components/Icon'
+import Photo from '../components/Photo'
+import { useMediaQuery } from '../hooks/useMediaQuery'
 import RichText from '../components/RichText'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
 import { useT } from '../i18n/language'
@@ -113,6 +115,9 @@ export default function Home() {
   // Point final explicite (1 -> 0) : sans lui, l'animation native du navigateur fait réapparaître
   // le texte entre 70 % et 100 % du défilement du hero.
   const heroOpacity = useTransform(scrollYProgress, [0, 0.7, 1], [1, 0, 0])
+  // Photo du hero : recadrage vertical sur écran en portrait, photo entière sinon. Même requête
+  // média que les préchargements du HTML (heroPreloads) : une seule photo est téléchargée.
+  const heroBackground = useMediaQuery(HOME_HERO.portraitQuery) ? HOME_HERO.portrait : HOME_HERO.landscape
 
   return (
     // overflow-x-clip et non overflow-x-hidden : hidden ferait de ce bloc un conteneur de
@@ -124,12 +129,13 @@ export default function Home() {
       ═══════════════════════════════════════════════════════ */}
       <section ref={heroRef} className="relative min-h-dvh flex items-center overflow-hidden px-[5%] bg-navy-deep">
         {/* Photo en image de fond : fixe sur grand écran (elle reste en place pendant que la page
-            défile), normale sur mobile où le fond fixe fonctionne mal. Préchargée par index.html. */}
+            défile), normale sur mobile où le fond fixe fonctionne mal. Préchargée par le HTML de
+            l'accueil (heroPreloads, src/lib/images.ts). */}
         <div
           role="img"
           aria-label={t.hero.imgAlt}
           className="absolute inset-0 bg-cover bg-center bg-scroll lg:bg-fixed"
-          style={{ backgroundImage: `url(${IMAGES.hero})` }}
+          style={{ backgroundImage: `url(${heroBackground})` }}
         />
         {/* Voile sombre : lisibilité du texte sur la photo */}
         <div className="absolute inset-0 bg-gradient-to-r from-navy-deep/95 via-navy-deep/75 to-navy-deep/30" />
@@ -257,10 +263,10 @@ export default function Home() {
             whileInView="visible"
             viewport={{ once: true, margin: '-100px' }}
           >
-            <img
+            <Photo
               src={IMAGES.doctor}
               alt={t.why.imgAlt}
-              loading="lazy"
+              sizes="(min-width: 1024px) 610px, 90vw"
               className="w-full h-[320px] sm:h-[420px] lg:h-[520px] object-cover rounded-xl"
             />
             <figcaption className="mt-3 text-sm text-g500">
@@ -322,10 +328,11 @@ export default function Home() {
                 {...reveal({ y: 40 }, { duration: 0.6, delay: i * 0.15, ease: EASE_OUT })}
               >
                 <div className="overflow-hidden rounded-lg mb-5">
-                  <img
+                  {/* Sur 4 colonnes, le cadre (176 px de haut) est plus étroit que la photo : 320px */}
+                  <Photo
                     src={HOW_STEPS_IMAGES[i]}
                     alt={step.title}
-                    loading="lazy"
+                    sizes="(min-width: 1024px) 320px, (min-width: 640px) 45vw, 90vw"
                     className="w-full h-44 object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                 </div>
@@ -359,10 +366,11 @@ export default function Home() {
               className="group relative rounded-xl overflow-hidden min-h-[380px] transition-[scale] duration-300 hover:scale-[1.01]"
               {...reveal({ scale: 0.95 }, { duration: 0.6 })}
             >
-              <img
+              {/* Carte d'au moins 380 px de haut : jusqu'à 1280 px d'écran, la photo y dépasse en largeur (600px) */}
+              <Photo
                 src={IMAGES.classroom}
                 alt={t.solutions.mainCard.imgAlt}
-                loading="lazy"
+                sizes="(min-width: 1280px) 640px, 600px"
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/95 via-navy-deep/60 to-navy-deep/10" />
@@ -467,10 +475,11 @@ export default function Home() {
           APPEL FINAL
       ═══════════════════════════════════════════════════════ */}
       <section className="relative py-24 px-[5%] overflow-hidden bg-navy-deep">
-        <img
+        {/* Sous un voile à 90 % : une variante deux fois moins large que l'écran suffit (sizes 50vw) */}
+        <Photo
           src={IMAGES.team}
           alt={t.finalCta.imgAlt}
-          loading="lazy"
+          sizes="50vw"
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-navy-deep/90" />

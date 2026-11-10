@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion'
 import { fadeUp } from '../lib/motion'
+import { HERO_SIZES } from '../lib/images'
+import Photo from './Photo'
 
 type PageHeroProps = {
   breadcrumb: string
@@ -17,7 +19,8 @@ export default function PageHero({ breadcrumb, title, desc, bgImage }: PageHeroP
     <section className="relative overflow-hidden min-h-[440px] py-24 flex items-center px-[5%] bg-navy-deep">
       {bgImage && (
         <>
-          <img src={bgImage} alt="" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover" />
+          {/* Préchargée par le HTML de la page (PAGE_HEROES, src/lib/images.ts) : même srcset, même sizes */}
+          <Photo src={bgImage} sizes={HERO_SIZES} priority className="absolute inset-0 w-full h-full object-cover" />
           {/* Voile sombre : lisibilité du texte sur la photo */}
           <div className="absolute inset-0 bg-gradient-to-r from-navy-deep/95 via-navy-deep/85 to-navy-deep/60" />
         </>

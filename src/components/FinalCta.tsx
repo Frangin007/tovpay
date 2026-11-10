@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { fadeUp } from '../lib/motion'
+import Photo from './Photo'
 
 type CtaAction = { label: string; to: string }
 
@@ -15,7 +16,8 @@ type FinalCtaProps = {
 export default function FinalCta({ title, desc, primary, secondary, bgImage }: FinalCtaProps) {
   return (
     <section className="relative overflow-hidden py-20 px-[5%] bg-navy-deep">
-      <img src={bgImage} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+      {/* Sous un voile à 90 % : une variante deux fois moins large que l'écran suffit (sizes 50vw) */}
+      <Photo src={bgImage} sizes="50vw" className="absolute inset-0 w-full h-full object-cover" />
       <div className="absolute inset-0 bg-navy-deep/90" />
 
       <motion.div

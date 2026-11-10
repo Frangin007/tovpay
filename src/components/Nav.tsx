@@ -4,6 +4,7 @@ import { motion, useScroll, useSpring } from 'framer-motion'
 import { useLanguage, useT } from '../i18n/language'
 import { fr, en } from '../i18n/dictionaries/nav'
 import { EASE_OUT } from '../lib/motion'
+import { LOGO_NAV } from '../lib/images'
 
 function LangToggle({ onDark }: { onDark: boolean }) {
   const { lang, setLang } = useLanguage()
@@ -76,7 +77,9 @@ export default function Nav() {
           {/* LOGO */}
           <Link to="/" className="flex items-center shrink-0 mr-5 no-underline" onClick={() => setMobileOpen(false)}>
             <img
-              src="/brand/tovpay-logo-transparent.png"
+              src={LOGO_NAV.src}
+              width={LOGO_NAV.width}
+              height={LOGO_NAV.height}
               alt="TOVPAY"
               className={`h-11 w-auto object-contain transition-[filter] duration-300 ${
                 onDark ? 'brightness-0 invert' : ''

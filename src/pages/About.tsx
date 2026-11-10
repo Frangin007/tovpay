@@ -3,6 +3,7 @@ import { CheckCircleIcon } from '../components/Icon'
 import Avatar from '../components/Avatar'
 import PageHero from '../components/PageHero'
 import FinalCta from '../components/FinalCta'
+import Photo from '../components/Photo'
 import IMAGES from '../lib/images'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
 import { useT } from '../i18n/language'
@@ -47,10 +48,10 @@ export default function About() {
               className="group overflow-hidden rounded-xl"
               {...reveal({ scale: 0.96 }, { duration: 0.8, ease: EASE })}
             >
-              <img
+              <Photo
                 src={IMAGES.officeWoman}
                 alt={t.mission.imgAlt}
-                loading="lazy"
+                sizes="(min-width: 1024px) 610px, 90vw"
                 className="w-full h-56 object-cover transition-transform duration-700 group-hover:scale-105"
               />
             </motion.div>

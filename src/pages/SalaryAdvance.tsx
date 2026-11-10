@@ -3,6 +3,7 @@ import { ArrowRightIcon, CheckCircleIcon } from '../components/Icon'
 import PageHero from '../components/PageHero'
 import FinalCta from '../components/FinalCta'
 import SmartLink from '../components/SmartLink'
+import Photo from '../components/Photo'
 import IMAGES from '../lib/images'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
 import { useT } from '../i18n/language'
@@ -61,10 +62,11 @@ export default function SalaryAdvance() {
 
                 {/* Image : grossit légèrement au survol, la photo zoome à l'intérieur */}
                 <div className="group overflow-hidden rounded-xl transition-[scale] duration-400 hover:scale-[1.02]">
-                  <img
+                  {/* Cadre de 300 à 340 px de haut : sur mobile, la photo y dépasse en largeur (540px) */}
+                  <Photo
                     src={ROW_IMAGES[i]}
                     alt={row.title}
-                    loading="lazy"
+                    sizes="(min-width: 1024px) 620px, (min-width: 640px) 90vw, 540px"
                     className="w-full h-[300px] sm:h-[340px] object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
