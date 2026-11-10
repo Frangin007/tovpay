@@ -4,8 +4,8 @@ type RowCta = { label: string; to: string; external?: boolean }
 
 export const fr = {
   meta: {
-    title: 'Avance sur salaire pour les agents publics',
-    description: "Comment fonctionnera l'avance sur salaire TOVPAY : conditions, documents à prévoir, parcours en 7 étapes, frais et remboursement. Service en préparation au Bénin et au Togo.",
+    title: 'Avance sur salaire : conditions, frais et remboursement',
+    description: "Comment fonctionnera l'avance sur salaire au Bénin et au Togo : conditions, documents, parcours en 7 étapes, frais et remboursement. Service en préparation.",
   },
   hero: {
     breadcrumb: 'Accueil / Avance sur salaire',
@@ -141,8 +141,8 @@ export const fr = {
 
 export const en: typeof fr = {
   meta: {
-    title: 'Salary advance for public servants',
-    description: 'How the TOVPAY salary advance will work: eligibility, documents to prepare, the 7-step process, fees and repayment. Service in preparation in Benin and Togo.',
+    title: 'Salary advance: eligibility, fees and repayment',
+    description: 'How the TOVPAY salary advance will work in Benin and Togo: eligibility, documents, the 7-step process, fees and repayment. Service in preparation.',
   },
   hero: {
     breadcrumb: 'Home / Salary advance',

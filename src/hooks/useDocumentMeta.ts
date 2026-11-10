@@ -1,8 +1,6 @@
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { SITE_URL } from '../lib/site'
-
-const SITE_NAME = 'TOVPAY'
+import { canonicalUrl, pageTitle } from '../lib/site'
 
 /** Trouve la balise <meta>/<link> identifiée par keyAttr="key" (ou la crée), puis fixe sa valeur. */
 function upsertHeadTag(tag: 'meta' | 'link', keyAttr: string, key: string, valueAttr: string, value: string) {
@@ -20,15 +18,17 @@ const setMeta = (attr: 'name' | 'property', key: string, content: string) =>
 
 /**
  * Met à jour le <title>, la description, les balises Open Graph / Twitter et
- * l'adresse canonique à chaque changement de page. Sans adresse canonique propre,
- * toutes les pages se déclareraient comme des copies de l'accueil.
+ * l'adresse canonique à chaque changement de page, dans la langue du visiteur.
+ * La compilation écrit déjà ces balises en français dans la page HTML de chaque
+ * adresse (voir src/lib/indexablePages.ts) : ce hook modifie les mêmes balises,
+ * sans jamais en ajouter une seconde.
  */
 export function useDocumentMeta(title: string, description: string) {
   const { pathname } = useLocation()
   useEffect(() => {
-    const fullTitle = `${title} | ${SITE_NAME}`
-    // SITE_URL n'a pas de barre finale : l'accueil donne bien « https://tovpay.website/ ».
-    const url = `${SITE_URL}${pathname}`
+    const fullTitle = pageTitle(title)
+    // Même adresse que la page HTML compilée : « /faq/ » se déclare comme « /faq ».
+    const url = canonicalUrl(pathname)
     document.title = fullTitle
     setMeta('name', 'description', description)
     setMeta('property', 'og:title', fullTitle)

@@ -1,7 +1,7 @@
 export const fr = {
   meta: {
-    title: 'Partenaires : administrations, établissements financiers, opérateurs de paiement',
-    description: "TOVPAY prépare un dispositif d'avances sur salaire pour les agents publics, avec un remboursement institutionnel. Les accords nécessaires au lancement sont en cours de discussion.",
+    title: 'Partenaires institutionnels et financiers',
+    description: "TOVPAY prépare un dispositif d'avances sur salaire pour les agents publics, avec un remboursement institutionnel. Les accords sont en cours de discussion.",
   },
   hero: {
     breadcrumb: 'Accueil / Partenaires',
@@ -78,7 +78,7 @@ export const fr = {
 
 export const en: typeof fr = {
   meta: {
-    title: 'Partners: administrations, financial institutions, payment operators',
+    title: 'Institutional and financial partners',
     description: 'TOVPAY is preparing a salary advance scheme for public servants, with institutional repayment. The agreements needed for the launch are under discussion.',
   },
   hero: {

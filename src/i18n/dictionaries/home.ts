@@ -2,8 +2,8 @@ import { CONTACT_EMAIL, NBSP } from '../../lib/site'
 
 export const fr = {
   meta: {
-    title: "L'avance sur salaire des agents publics",
-    description: "TOVPAY prépare une avance sur salaire pour les agents publics du Bénin et du Togo : frais annoncés en FCFA avant signature, remboursement possible à tout moment. Lancement en préparation.",
+    title: 'Avance sur salaire des agents publics, Bénin et Togo',
+    description: 'TOVPAY prépare une avance sur salaire pour les agents publics du Bénin et du Togo : frais annoncés en FCFA avant signature, remboursement anticipé possible.',
   },
   hero: {
     imgAlt: 'Enseignante accompagnant des élèves en classe',
@@ -108,8 +108,8 @@ export const fr = {
 
 export const en: typeof fr = {
   meta: {
-    title: 'Salary advances for public servants',
-    description: 'TOVPAY is preparing a salary advance for public servants in Benin and Togo: fees shown in FCFA before you sign, repayment possible at any time. Launch in preparation.',
+    title: 'Salary advances for public servants in Benin and Togo',
+    description: 'TOVPAY is preparing a salary advance for public servants in Benin and Togo: fees shown in FCFA before you sign, early repayment possible.',
   },
   hero: {
     imgAlt: 'A teacher helping pupils in class',
