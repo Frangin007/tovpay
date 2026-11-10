@@ -1,4 +1,9 @@
 {
+  "redirects": [
+    { "source": "/nano-credit", "destination": "/avance-sur-salaire", "permanent": true },
+    { "source": "/services", "destination": "/avance-sur-salaire", "permanent": true },
+    { "source": "/agents", "destination": "/faq", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]

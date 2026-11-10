@@ -1,20 +1,19 @@
 export const fr = {
-  tagline: "L'inclusion financière pour tous. Nano-crédits mobiles, paiements digitaux et scoring intelligent en Afrique de l'Ouest.",
-  androidLabel: 'Android (APK)',
+  tagline: "L'avance sur salaire des agents publics du Bénin et du Togo, depuis une application mobile. Service en préparation.",
   columns: {
     services: {
       heading: 'Services',
       links: [
-        { label: 'Nano-Crédit', to: '/nano-credit' },
-        { label: "Chefs d'Agence", to: '/agents' },
-        { label: 'Scoring intelligent', to: '/services' },
+        { label: 'Avance sur salaire', to: '/avance-sur-salaire' },
       ],
     },
     company: {
       heading: 'Entreprise',
       links: [
         { label: 'À Propos', to: '/about' },
-        { label: 'Écosystème', to: '/partners' },
+        { label: 'Partenaires', to: '/partners' },
+        { label: 'Mentions légales', to: '/mentions-legales' },
+        { label: 'Confidentialité du site', to: '/confidentialite' },
       ],
     },
     support: {
@@ -24,30 +23,30 @@ export const fr = {
         { label: 'Contact', to: '/contact' },
       ],
       whatsapp: 'WhatsApp',
-      terms: 'CGU',
+      terms: "CGU de l'application",
+      privacy: "Confidentialité de l'application",
     },
   },
-  copyright: '© 2026 TOVPAY, filiale de GROUPE TOV. Tous droits réservés. · Démarche réglementaire transparente',
-  bankPartnership: 'Partenaire bancaire recherché :',
+  copyright: '© 2026 TOVPAY AFRICA / GROUPE TOV. Tous droits réservés.',
+  privateCompany: 'TOVPAY est une entreprise privée, distincte de toute administration.',
 }
 
 export const en: typeof fr = {
-  tagline: 'Financial inclusion for all. Mobile nano-credit, digital payments and smart scoring across West Africa.',
-  androidLabel: 'Android (APK)',
+  tagline: 'Salary advances for public servants in Benin and Togo, from a mobile app. Service in preparation.',
   columns: {
     services: {
       heading: 'Services',
       links: [
-        { label: 'Nano-Credit', to: '/nano-credit' },
-        { label: 'Agency Managers', to: '/agents' },
-        { label: 'Smart Scoring', to: '/services' },
+        { label: 'Salary advance', to: '/avance-sur-salaire' },
       ],
     },
     company: {
       heading: 'Company',
       links: [
         { label: 'About', to: '/about' },
-        { label: 'Ecosystem', to: '/partners' },
+        { label: 'Partners', to: '/partners' },
+        { label: 'Legal notice', to: '/mentions-legales' },
+        { label: 'Website privacy', to: '/confidentialite' },
       ],
     },
     support: {
@@ -57,9 +56,10 @@ export const en: typeof fr = {
         { label: 'Contact', to: '/contact' },
       ],
       whatsapp: 'WhatsApp',
-      terms: 'Terms',
+      terms: 'App terms of use',
+      privacy: 'App privacy policy',
     },
   },
-  copyright: '© 2026 TOVPAY, a GROUPE TOV subsidiary. All rights reserved. · Transparent regulatory approach',
-  bankPartnership: 'Targeted banking partner:',
+  copyright: '© 2026 TOVPAY AFRICA / GROUPE TOV. All rights reserved.',
+  privateCompany: 'TOVPAY is a private company, separate from any government administration.',
 }

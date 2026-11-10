@@ -1,13 +1,12 @@
 export const fr = {
   links: [
     { name: 'Accueil', path: '/' },
-    { name: 'Services', path: '/services' },
-    { name: "Chefs d'Agence", path: '/agents' },
+    { name: 'Avance sur salaire', path: '/avance-sur-salaire' },
+    { name: 'Partenaires', path: '/partners' },
     { name: 'À Propos', path: '/about' },
-    { name: 'Écosystème', path: '/partners' },
+    { name: 'FAQ', path: '/faq' },
     { name: 'Contact', path: '/contact' },
   ],
-  cta: 'Demander un crédit',
   menuAriaLabel: 'Menu de navigation',
   langToggleAriaLabel: 'Changer de langue',
 }
@@ -15,13 +14,12 @@ export const fr = {
 export const en: typeof fr = {
   links: [
     { name: 'Home', path: '/' },
-    { name: 'Services', path: '/services' },
-    { name: 'Agency Managers', path: '/agents' },
+    { name: 'Salary advance', path: '/avance-sur-salaire' },
+    { name: 'Partners', path: '/partners' },
     { name: 'About', path: '/about' },
-    { name: 'Ecosystem', path: '/partners' },
+    { name: 'FAQ', path: '/faq' },
     { name: 'Contact', path: '/contact' },
   ],
-  cta: 'Apply for credit',
   menuAriaLabel: 'Navigation menu',
   langToggleAriaLabel: 'Switch language',
 }

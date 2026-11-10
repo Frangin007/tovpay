@@ -1,53 +1,64 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useId, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { ArrowRightIcon } from '../components/Icon'
 import PageHero from '../components/PageHero'
+import RichText from '../components/RichText'
+import SmartLink from '../components/SmartLink'
 import IMAGES from '../lib/images'
 import { useDocumentMeta } from '../hooks/useDocumentMeta'
-import { useT } from '../i18n/LanguageContext'
+import { useT } from '../i18n/language'
 import { fr, en } from '../i18n/dictionaries/faq'
-import { EASE_OUT as EASE } from '../lib/motion'
+import type { FaqEntry } from '../i18n/dictionaries/faq'
 
-function FaqItem({ q, a, index }: { q: string; a: string; index: number }) {
+const LINK_CLS = 'inline-flex items-center gap-1.5 w-fit text-teal-ink text-sm font-semibold underline-offset-4 hover:underline'
+
+function FaqItem({ item }: { item: FaqEntry }) {
   const [open, setOpen] = useState(false)
+  const panelId = useId()
+  // Une réponse peut compter plusieurs paragraphes, séparés par une ligne vide.
+  const paragraphs = item.a.split('\n\n')
   return (
-    <motion.div
-      className={`border-b border-g100 last:border-0 ${open ? 'bg-g50 -mx-5 px-5 rounded-xl' : ''} transition-colors duration-200`}
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.06, duration: 0.5, ease: EASE }}
-    >
-      <button
-        className="w-full flex justify-between items-center text-left py-5 gap-4 group"
-        onClick={() => setOpen(!open)}
-      >
-        <span className={`font-display font-semibold text-[15px] transition-colors duration-200 ${open ? 'text-teal' : 'text-navy group-hover:text-teal'}`}>
-          {q}
-        </span>
-        <motion.div
-          animate={{ rotate: open ? 45 : 0 }}
-          transition={{ duration: 0.25 }}
-          className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 border-2 transition-colors duration-200 ${open ? 'bg-teal border-teal text-white' : 'border-g100 text-g400'}`}
+    <div className="border-b border-g200 last:border-0">
+      <h3>
+        <button
+          className="w-full flex justify-between items-center text-left py-5 gap-4 group"
+          onClick={() => setOpen(!open)}
+          aria-expanded={open}
+          aria-controls={panelId}
         >
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-            <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"/>
-          </svg>
-        </motion.div>
-      </button>
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="overflow-hidden"
+          <span className={`font-display font-semibold text-[15px] transition-colors duration-200 ${open ? 'text-teal-ink' : 'text-navy group-hover:text-teal-ink'}`}>
+            {item.q}
+          </span>
+          <svg
+            width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"
+            className={`shrink-0 text-g500 transition-transform duration-200 ${open ? 'rotate-45' : ''}`}
           >
-            <p className="text-g600 text-[15px] leading-relaxed pb-5">{a}</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+            <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+          </svg>
+        </button>
+      </h3>
+      {/* Panneau : sa hauteur passe de 0 à celle du contenu (grid-template-rows 0fr -> 1fr). */}
+      <div
+        id={panelId}
+        role="region"
+        inert={!open}
+        className={`grid transition-[grid-template-rows,opacity] duration-250 ease-in-out ${open ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}
+      >
+        <div className="overflow-hidden">
+          <div className="pb-5 flex flex-col gap-3">
+            {paragraphs.map((p, i) => (
+              <p key={i} className="text-g600 text-[15px] leading-relaxed"><RichText text={p} /></p>
+            ))}
+            {item.link && (
+              <SmartLink href={item.link.to} external={item.link.external} className={LINK_CLS}>
+                {item.link.label}
+                <ArrowRightIcon size={14} />
+              </SmartLink>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -70,32 +81,28 @@ export default function FAQ() {
             {/* Sidebar catégories */}
             <div className="hidden lg:block">
               <div className="sticky top-28">
-                <motion.span className="section-tag block mb-4" initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+                <span className="section-tag block mb-4">
                   {t.sidebar.categoriesLabel}
-                </motion.span>
-                <div className="flex flex-col gap-2">
+                </span>
+                <div className="flex flex-col gap-1 -mx-3">
                   {t.faqs.map((cat, i) => (
-                    <motion.a
+                    <a
                       key={i}
                       href={`#cat-${i}`}
-                      className="text-g600 text-sm py-2 px-3 rounded-lg hover:bg-g50 hover:text-navy transition-colors duration-200"
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: i * 0.1 }}
+                      className="text-g600 text-sm py-2 px-3 rounded-md hover:bg-g100 hover:text-navy transition-colors duration-200"
                     >
                       {cat.cat}
-                    </motion.a>
+                    </a>
                   ))}
                 </div>
 
-                <div className="mt-10 bg-g50 rounded-2xl p-6 border border-g100">
+                <div className="mt-10 rounded-xl border border-g200 bg-g50 p-6">
                   <div className="font-display font-bold text-navy text-base mb-2">{t.sidebar.otherQuestionTitle}</div>
                   <p className="text-g600 text-sm leading-relaxed mb-4">{t.sidebar.otherQuestionDesc}</p>
-                  <a href="/contact" className="inline-flex items-center gap-1.5 text-teal text-sm font-semibold hover:gap-3 transition-all">
+                  <Link to="/contact" className={LINK_CLS}>
                     {t.sidebar.contactLink}
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
-                  </a>
+                    <ArrowRightIcon size={14} />
+                  </Link>
                 </div>
               </div>
             </div>
@@ -103,19 +110,13 @@ export default function FAQ() {
             {/* Questions */}
             <div className="flex flex-col gap-14">
               {t.faqs.map((cat, ci) => (
-                <div key={ci} id={`cat-${ci}`}>
-                  <motion.h2
-                    className="font-display font-extrabold text-2xl text-navy mb-6 pb-4 border-b-2 border-teal/20"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, ease: EASE }}
-                  >
+                <div key={ci} id={`cat-${ci}`} className="scroll-mt-28">
+                  <h2 className="font-display font-bold text-2xl text-navy mb-1 pb-4 border-b border-g200">
                     {cat.cat}
-                  </motion.h2>
+                  </h2>
                   <div>
                     {cat.items.map((item, qi) => (
-                      <FaqItem key={qi} q={item.q} a={item.a} index={qi} />
+                      <FaqItem key={qi} item={item} />
                     ))}
                   </div>
                 </div>

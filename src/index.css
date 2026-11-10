@@ -7,18 +7,20 @@
   /* Couleurs de marque */
   --color-navy: #0D2251;
   --color-navy-deep: #071428;
-  --color-blue: #1A3FA8;
   --color-teal: #00B98E;
   --color-teal-dk: #009E79;
-  --color-teal-light: #00E5B8;
-  --color-lime: #9fe870;
-  --color-lime-dk: #163300;
+  /* Vert plus soutenu pour le texte sur fond clair : le teal de marque y est trop pâle pour être lisible */
+  --color-teal-ink: #007A5E;
   --color-gold: #F5A623;
+  /* Texte sur fond doré clair (étape « en cours ») */
+  --color-gold-ink: #8A5300;
 
   /* Nuances de gris */
   --color-g50: #F8FAFF;
   --color-g100: #EDF1FB;
+  --color-g200: #E2E8F0;
   --color-g400: #94A3B8;
+  --color-g500: #64748B;
   --color-g600: #475569;
   --color-g900: #0F172A;
 
@@ -59,52 +61,46 @@
     outline: 3px solid var(--color-teal);
     outline-offset: 2px;
   }
-
-  ::-webkit-scrollbar {
-    width: 5px;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: var(--color-teal);
-    border-radius: 3px;
-  }
 }
 
 /* ==========================================================================
    COMPOSANTS RÉUTILISABLES - classes utilitaires custom (Tailwind @layer)
    ========================================================================== */
 @layer components {
+  /* Sur fond sombre, ajouter text-teal (les utilitaires priment sur cette classe). */
   .section-tag {
-    @apply text-teal font-semibold text-[11px] tracking-[3px] uppercase;
+    @apply text-teal-ink font-semibold text-xs tracking-[0.08em] uppercase;
   }
 
   .section-title {
     font-family: var(--font-display);
-    @apply text-[1.9rem] sm:text-[2.4rem] lg:text-[3rem] font-extrabold text-navy leading-[1.1] tracking-tight my-2.5;
+    @apply text-[1.75rem] sm:text-[2.2rem] lg:text-[2.6rem] font-bold text-navy leading-[1.15] tracking-tight my-2.5;
   }
 
   .section-sub {
     @apply text-g600 text-base leading-relaxed;
   }
 
-  /* Boutons */
-  .btn-primary {
-    @apply relative overflow-hidden inline-block bg-teal text-white font-bold text-[15px] px-7 py-3.5 rounded-xl shadow-[0_8px_28px_rgba(0,185,142,0.38)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_32px_rgba(0,185,142,0.5)] no-underline;
+  /* Boutons : principal (vert) et contour clair (sur fond sombre).
+     Variante de couleur ponctuelle : ajouter les utilitaires (ex. bg-navy hover:bg-navy-deep). */
+  .btn-primary,
+  .btn-outline-light {
+    @apply inline-flex items-center gap-2 font-semibold text-[15px] px-6 py-3.5 rounded-lg transition-colors duration-200;
   }
-  .btn-primary::before {
-    content: '';
-    @apply absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-200;
+  .btn-primary {
+    @apply bg-teal text-white hover:bg-teal-dk;
+  }
+  .btn-outline-light {
+    @apply border border-white/30 text-white hover:bg-white/10;
   }
 
-  /* Footer links avec underline animée */
+  /* Lien dans un texte, sur fond clair */
+  .text-link {
+    @apply font-semibold text-teal-ink underline underline-offset-2 hover:text-navy;
+  }
+
   .footer-link {
-    @apply relative w-fit text-white/55 text-sm no-underline transition-colors duration-200 hover:text-white;
-  }
-  .footer-link::after {
-    content: '';
-    @apply absolute left-0 -bottom-px w-0 h-px bg-teal transition-all duration-300;
-  }
-  .footer-link:hover::after {
-    @apply w-full;
+    @apply w-fit text-white/60 text-sm no-underline underline-offset-4 transition-colors duration-200 hover:text-white hover:underline;
   }
 }
 

@@ -1,6 +1,3 @@
-import { motion } from 'framer-motion'
-import { fadeUp } from '../lib/motion'
-
 type PageHeroProps = {
   breadcrumb: string
   title: string
@@ -12,73 +9,35 @@ export default function PageHero({ breadcrumb, title, desc, bgImage }: PageHeroP
   const parts = breadcrumb.split(' / ')
 
   return (
-    <section className="relative overflow-hidden h-[440px] flex items-center px-[5%]">
-      {/* Background */}
-      {bgImage ? (
+    // Hauteur minimale de 440 px ; la section s'allonge si le texte est long sur
+    // petit écran, au lieu de couper le titre ou la description.
+    <section className="relative overflow-hidden min-h-[440px] py-24 flex items-center px-[5%] bg-navy-deep">
+      {bgImage && (
         <>
-          <div className="absolute inset-0">
-            <img src={bgImage} alt="" fetchPriority="high" className="w-full h-full object-cover" />
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-br from-navy-deep/96 via-navy-deep/90 to-navy/80" />
+          <img src={bgImage} alt="" fetchPriority="high" className="absolute inset-0 w-full h-full object-cover" />
+          {/* Voile sombre : lisibilité du texte sur la photo */}
+          <div className="absolute inset-0 bg-gradient-to-r from-navy-deep/95 via-navy-deep/85 to-navy-deep/60" />
         </>
-      ) : (
-        <div className="absolute inset-0 bg-[linear-gradient(160deg,#071428_0%,#0D2251_60%,#0B4A3F_100%)]" />
       )}
 
-      {/* Déco mesh */}
-      <div
-        className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(0,185,142,0.22) 0%, transparent 70%)', filter: 'blur(80px)' }}
-      />
-      <div
-        className="absolute bottom-0 left-1/4 w-[350px] h-[350px] rounded-full pointer-events-none"
-        style={{ background: 'radial-gradient(circle, rgba(159,232,112,0.1) 0%, transparent 70%)', filter: 'blur(60px)' }}
-      />
+      <div className="relative w-full max-w-[1280px] mx-auto">
+        {/* Fil d'Ariane */}
+        <div className="flex items-center gap-2 mb-5 text-sm text-white/55">
+          {parts.map((part, i) => (
+            <span key={i} className="flex items-center gap-2">
+              {i > 0 && <span aria-hidden="true">/</span>}
+              <span className={i === parts.length - 1 ? 'text-white/85' : undefined}>{part}</span>
+            </span>
+          ))}
+        </div>
 
-      {/* Grille subtile */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-30"
-        style={{
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px)',
-          backgroundSize: '48px 48px',
-        }}
-      />
+        <h1 className="font-display font-bold text-[2.2rem] sm:text-[2.8rem] lg:text-[3.25rem] text-white leading-tight tracking-tight max-w-[760px] mb-5">
+          {title}
+        </h1>
 
-      <div className="relative z-10 max-w-[1280px] mx-auto">
-        <motion.div
-          initial="hidden"
-          animate="visible"
-        >
-          {/* Breadcrumb */}
-          <motion.div className="flex items-center gap-2 mb-6 text-sm" variants={fadeUp} custom={0}>
-            {parts.map((part, i) => (
-              <span key={i} className="flex items-center gap-2">
-                {i > 0 && <span className="text-white/25">/</span>}
-                <span className={i === parts.length - 1 ? 'text-teal font-medium' : 'text-white/45'}>
-                  {part}
-                </span>
-              </span>
-            ))}
-          </motion.div>
-
-          {/* Titre */}
-          <motion.h1
-            className="font-display font-extrabold text-[2.2rem] sm:text-[3rem] lg:text-[3.6rem] text-white leading-tight tracking-tight max-w-[760px] mb-5 line-clamp-2"
-            variants={fadeUp}
-            custom={1}
-          >
-            {title}
-          </motion.h1>
-
-          {/* Description */}
-          <motion.p
-            className="text-white/65 text-base sm:text-lg leading-relaxed max-w-[560px] line-clamp-2"
-            variants={fadeUp}
-            custom={2}
-          >
-            {desc}
-          </motion.p>
-        </motion.div>
+        <p className="text-white/70 text-base sm:text-lg leading-relaxed max-w-[560px]">
+          {desc}
+        </p>
       </div>
     </section>
   )
