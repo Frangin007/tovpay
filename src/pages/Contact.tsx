@@ -1,5 +1,6 @@
 import { useId, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { MailIcon, ChatIcon, MapPinIcon, CheckCircleIcon, ShieldIcon } from '../components/Icon'
 import PageHero from '../components/PageHero'
 import RichText from '../components/RichText'
@@ -9,6 +10,9 @@ import { useDocumentMeta } from '../hooks/useDocumentMeta'
 import { useLanguage, useT } from '../i18n/language'
 import { fr, en } from '../i18n/dictionaries/contact'
 import { CONTACT_EMAIL, CONTACT_EMAIL_HREF, WHATSAPP_DISPLAY, WHATSAPP_URL } from '../lib/site'
+import { EASE_OUT as EASE, inView, makeFadeUp, reveal } from '../lib/motion'
+
+const fadeUp = makeFadeUp({ delayStep: 0.1 })
 
 // Sujet passé dans l'adresse (?sujet=partenariat...) : présélectionné s'il fait partie du menu « Sujet ».
 const subjectFromParam = (param: string | null) =>
@@ -84,18 +88,29 @@ function ContactForm({ initialSubject }: { initialSubject: string }) {
 
   if (submitted !== null) {
     const launch = submitted === 'lancement'
+    // Le message de confirmation apparaît en grandissant, puis la coche « rebondit ».
     return (
-      <div
+      <motion.div
         role="status"
         className="rounded-xl border border-g200 p-10 sm:p-16 text-center flex flex-col items-center justify-center h-full"
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5 }}
       >
-        <CheckCircleIcon size={44} strokeWidth={1.5} className="text-teal mb-5" />
+        <motion.div
+          className="flex text-teal mb-5"
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
+        >
+          <CheckCircleIcon size={44} strokeWidth={1.5} />
+        </motion.div>
         <h3 className="font-display font-bold text-navy text-2xl mb-3">{launch ? t.form.successLaunchTitle : t.form.successTitle}</h3>
         <p className="text-g600 mb-6">{launch ? t.form.successLaunchDesc : t.form.successDesc}</p>
         <button type="button" onClick={() => setSubmitted(null)} className="text-link text-sm">
           {t.form.sendAnother}
         </button>
-      </div>
+      </motion.div>
     )
   }
 
@@ -174,7 +189,7 @@ function ContactForm({ initialSubject }: { initialSubject: string }) {
       <button
         type="submit"
         disabled={sending}
-        className="w-full bg-teal text-white font-semibold py-3.5 rounded-lg text-[15px] transition-colors duration-200 hover:bg-teal-dk disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-teal"
+        className="w-full bg-teal text-white font-semibold py-3.5 rounded-lg text-[15px] transition-[background-color,translate,scale] duration-200 hover:bg-teal-dk enabled:hover:-translate-y-0.5 enabled:hover:scale-[1.02] enabled:active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:bg-teal"
       >
         {sending ? t.form.sending : t.form.submit}
       </button>
@@ -209,51 +224,52 @@ export default function Contact() {
         <div className="max-w-[1280px] mx-auto">
           <div className="grid lg:grid-cols-[1fr_1.5fr] gap-14">
 
-            {/* Infos de contact */}
-            <div>
-              <h2 className="font-display font-bold text-2xl text-navy mb-6">
+            {/* Infos de contact : apparaissent l'une après l'autre */}
+            <motion.div {...inView}>
+              <motion.h2 className="font-display font-bold text-2xl text-navy mb-6" variants={fadeUp} custom={0}>
                 {t.coords.title}
-              </h2>
+              </motion.h2>
 
               <div className="flex flex-col gap-1 mb-4">
-                {coords.map(c => (
-                  <SmartLink
-                    key={c.label}
-                    href={c.href}
-                    external={c.external}
-                    className="flex items-center gap-4 p-4 -mx-4 rounded-lg hover:bg-g50 transition-colors duration-200"
-                  >
-                    <c.Icon size={20} className="text-teal-ink shrink-0" />
-                    <div>
-                      <div className="text-g500 text-xs mb-0.5">{c.label}</div>
-                      <div className="text-navy font-semibold text-sm">{c.val}</div>
-                    </div>
-                  </SmartLink>
+                {coords.map((c, i) => (
+                  <motion.div key={c.label} variants={fadeUp} custom={i + 1}>
+                    <SmartLink
+                      href={c.href}
+                      external={c.external}
+                      className="flex items-center gap-4 p-4 -mx-4 rounded-lg hover:bg-g50 transition-colors duration-200"
+                    >
+                      <c.Icon size={20} className="text-teal-ink shrink-0" />
+                      <div>
+                        <div className="text-g500 text-xs mb-0.5">{c.label}</div>
+                        <div className="text-navy font-semibold text-sm">{c.val}</div>
+                      </div>
+                    </SmartLink>
+                  </motion.div>
                 ))}
-                <div className="flex items-center gap-4 p-4 -mx-4">
+                <motion.div className="flex items-center gap-4 p-4 -mx-4" variants={fadeUp} custom={3}>
                   <MapPinIcon size={20} className="text-teal-ink shrink-0" />
                   <div>
                     <div className="text-g500 text-xs mb-0.5">{t.coords.seatLabel}</div>
                     <div className="text-navy font-semibold text-sm">{t.coords.seatValue}</div>
                   </div>
-                </div>
+                </motion.div>
               </div>
-              <p className="text-g600 text-sm mb-8">{t.coords.responseNote}</p>
+              <motion.p className="text-g600 text-sm mb-8" variants={fadeUp} custom={4}>{t.coords.responseNote}</motion.p>
 
               {/* Sécurité */}
-              <div className="rounded-xl border border-g200 bg-g50 p-6">
+              <motion.div className="rounded-xl border border-g200 bg-g50 p-6" variants={fadeUp} custom={5}>
                 <div className="flex items-center gap-2.5 font-display font-bold text-navy text-base mb-2">
                   <ShieldIcon size={20} className="text-teal-ink shrink-0" />
                   {t.safety.title}
                 </div>
                 <p className="text-g600 text-sm leading-relaxed">{t.safety.text}</p>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
-            {/* Formulaire */}
-            <div>
+            {/* Formulaire : arrive par la droite */}
+            <motion.div {...reveal({ x: 40 }, { duration: 0.7, ease: EASE })}>
               <ContactForm key={initialSubject} initialSubject={initialSubject} />
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>

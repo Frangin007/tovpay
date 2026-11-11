@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="index, follow" />
     <!-- Titre, description, canonique, og:title/description/url et twitter:title/description : valeurs de l'accueil,
-         remplacées à la compilation par celles de chaque page (src/lib/indexablePages.ts, plugin de vite.config.ts). -->
+         remplacées à la compilation par celles de chaque page (src/lib/indexablePages.ts, plugin de vite.config.ts).
+         La compilation ajoute aussi, après la balise viewport, le préchargement de la photo d'en-tête de la page
+         (heroPreloads, src/lib/images.ts). -->
     <meta name="description" content="TOVPAY prépare une avance sur salaire pour les agents publics du Bénin et du Togo : frais annoncés en FCFA avant signature, remboursement anticipé possible." />
     <meta name="keywords" content="TOVPAY, avance sur salaire, agents publics, Bénin, Togo, GROUPE TOV" />
     <meta name="theme-color" content="#0D2251" />
@@ -29,15 +31,6 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Photo du hero de l'accueil (balise img rendue par React, même fichier que IMAGES.hero) : préchargée seulement sur l'accueil -->
-    <script>
-      if (location.pathname === '/') {
-        var l = document.createElement('link');
-        l.rel = 'preload'; l.as = 'image'; l.type = 'image/webp'; l.href = '/images/accueil-enseignante.webp';
-        l.setAttribute('fetchpriority', 'high');
-        document.head.appendChild(l);
-      }
-    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
     <title>Avance sur salaire des agents publics, Bénin et Togo | TOVPAY</title>
 

@@ -1,10 +1,11 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { access, mkdir, readFile, writeFile } from 'node:fs/promises'
 import { join, resolve } from 'node:path'
 import { createServer, defineConfig, type Logger, type Plugin } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
-type IndexablePage = { path: string; title: string; description: string; url: string }
+type ImagePreload = { href: string; srcset?: string; sizes?: string; media?: string }
+type IndexablePage = { path: string; title: string; description: string; url: string; preloads: ImagePreload[] }
 
 const escapeHtml = (text: string) =>
   text.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -26,7 +27,25 @@ function withPageHead(template: string, page: IndexablePage) {
   html = setTag(html, /(<meta property="og:url" content=")[^"]*(")/, page.url, 'og:url')
   html = setTag(html, /(<meta name="twitter:title" content=")[^"]*(")/, page.title, 'twitter:title')
   html = setTag(html, /(<meta name="twitter:description" content=")[^"]*(")/, page.description, 'twitter:description')
-  return html
+  return withImagePreloads(html, page.preloads)
+}
+
+/**
+ * Précharge la photo d'en-tête de la page dès la lecture du HTML, en parallèle des scripts :
+ * sans cela, le navigateur ne la découvre qu'une fois React et le code de la page chargés.
+ * Mêmes srcset et sizes que la balise <img> de PageHero, pour qu'il choisisse la même variante.
+ */
+function withImagePreloads(html: string, preloads: ImagePreload[]) {
+  if (!preloads.length) return html
+  const viewport = /<meta name="viewport"[^>]*>/
+  const count = html.match(new RegExp(viewport.source, 'g'))?.length ?? 0
+  if (count !== 1) throw new Error(`[pages-indexables] meta viewport : ${count} balise(s) dans index.html, 1 attendue.`)
+  const attr = (name: string, value?: string) => (value ? ` ${name}="${escapeHtml(value)}"` : '')
+  const tags = preloads.map(p =>
+    `<link rel="preload" as="image"${attr('href', p.href)}${attr('imagesrcset', p.srcset)}` +
+      `${attr('imagesizes', p.srcset && p.sizes)}${attr('media', p.media)} fetchpriority="high" />`,
+  )
+  return html.replace(viewport, match => [match, ...tags].join('\n    '))
 }
 
 /**
@@ -62,10 +81,25 @@ function indexablePageHeads(): Plugin {
         optimizeDeps: { noDiscovery: true, include: [] },
       })
       let pages: IndexablePage[]
+      let variantUrls: string[]
       try {
         pages = (await server.ssrLoadModule('/src/lib/indexablePages.ts')).INDEXABLE_PAGES
+        variantUrls = (await server.ssrLoadModule('/src/lib/images.ts')).allVariantUrls()
       } finally {
         await server.close()
+      }
+
+      // Chaque variante d'image annoncée (srcset, préchargements) doit exister dans public/.
+      const imageUrls = new Set([
+        ...variantUrls,
+        ...pages.flatMap(p => p.preloads.flatMap(l => [l.href, ...(l.srcset?.split(',').map(c => c.trim().split(' ')[0]) ?? [])])),
+      ])
+      const absent: string[] = []
+      for (const url of imageUrls) {
+        await access(join(root, 'public', url)).catch(() => absent.push(url))
+      }
+      if (absent.length) {
+        throw new Error(`[pages-indexables] Variantes d'images absentes (lancer « python scripts/images.py ») :\n${absent.join('\n')}`)
       }
 
       // Le sitemap et cette liste doivent annoncer exactement les mêmes adresses.
@@ -108,7 +142,10 @@ function indexablePageHeads(): Plugin {
         await mkdir(dir, { recursive: true })
         await writeFile(join(dir, 'index.html'), withPageHead(template, page))
       }
-      logger.info(`[pages-indexables] ${pages.length} pages HTML écrites, chacune avec ses balises de référencement.`)
+      logger.info(
+        `[pages-indexables] ${pages.length} pages HTML écrites, chacune avec ses balises de référencement ` +
+          `et le préchargement de sa photo d'en-tête (${imageUrls.size} variantes d'images vérifiées).`,
+      )
     },
   }
 }
@@ -121,6 +158,9 @@ export default defineConfig({
       output: {
         manualChunks(id) {
           if (!id.includes('node_modules')) return
+          // Bibliothèque d'animation (framer-motion et ses deux dépendances) dans son propre fichier,
+          // gardé en cache par le navigateur d'une mise en ligne à l'autre.
+          if (/[\\/]node_modules[\\/](framer-motion|motion-dom|motion-utils)[\\/]/.test(id)) return 'motion-vendor'
           if (id.includes('react-router-dom') || id.includes('react-dom') || id.includes('/react/')) return 'react-vendor'
         },
       },

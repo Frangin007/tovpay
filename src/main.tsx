@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
+import { startImagePrefetch } from './lib/prefetchImages'
 
 // L'ancien simulateur de crédit gardait un historique dans le navigateur des visiteurs :
 // on l'efface lors de leur prochaine visite (sans effet si la clé n'existe pas).
@@ -16,3 +17,5 @@ createRoot(document.getElementById('root')!).render(
     <App />
   </StrictMode>,
 )
+
+startImagePrefetch()

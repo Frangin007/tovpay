@@ -7,7 +7,8 @@ Site vitrine de TOVPAY, filiale de GROUPE TOV, qui prépare un service d'avance 
 - **React 19** + **TypeScript**
 - **Vite** pour le build et le dev server
 - **React Router** pour la navigation
-- **Tailwind CSS v4** (config CSS-first via `@theme`, pas de `tailwind.config.js`) - palette de marque navy/teal, typographie Inter ; animations limitées à des transitions CSS (menu mobile, FAQ)
+- **Tailwind CSS v4** (config CSS-first via `@theme`, pas de `tailwind.config.js`) - palette de marque navy/teal, typographie Inter
+- **Framer Motion** pour les animations : transitions entre pages, apparitions au défilement, en-têtes, compteurs, barre de lecture, point de la page active ; les survols, le menu mobile et la FAQ sont en transitions CSS
 - Système multilingue FR/EN maison (`src/i18n/`) via Context + dictionnaires par page
 
 ## Démarrer en local
@@ -34,12 +35,37 @@ Le site est accessible sur `http://localhost:5173`.
 Le site est une application React : sans traitement particulier, toutes les adresses renverraient le même HTML, avec le titre, la description et l'adresse canonique de l'accueil. Or les robots qui n'exécutent pas JavaScript (une partie des moteurs IndexNow) et les aperçus de liens (WhatsApp, Facebook, LinkedIn) ne lisent que ce HTML.
 
 - `src/lib/indexablePages.ts` liste les pages indexables. Leurs titres et descriptions viennent des dictionnaires (`meta` de chaque page, en français).
-- À la compilation, un plugin de `vite.config.ts` écrit une page HTML par adresse (`dist/faq/index.html`...), copie de `index.html` avec les balises de la page : `<title>`, description, canonique, `og:title`, `og:description`, `og:url`, `twitter:title` et `twitter:description`.
+- À la compilation, un plugin de `vite.config.ts` écrit une page HTML par adresse (`dist/faq/index.html`...), copie de `index.html` avec les balises de la page : `<title>`, description, canonique, `og:title`, `og:description`, `og:url`, `twitter:title` et `twitter:description`. Il y ajoute le préchargement de la photo d'en-tête de la page (voir « Images »).
 - `vercel.json` sert chacun de ces fichiers à l'adresse de sa page (`/faq` vers `/faq/index.html`). Ces réécritures sont placées avant la réécriture générale vers `index.html`.
 - React met ensuite ces balises à jour dans la langue du visiteur (`useDocumentMeta`), sans en ajouter de nouvelles.
 - **Ajouter ou retirer une page** : modifier ensemble `App.tsx`, `src/lib/indexablePages.ts`, `public/sitemap.xml` et les réécritures de `vercel.json`. La compilation échoue, avec un message explicite, si les trois dernières listes divergent.
 - Longueurs visées : titre complet (avec « | TOVPAY ») de moins de 600 px environ dans les résultats Google, description de 160 caractères au plus.
 - Données structurées (`index.html`) : `Organization` (et non `FinancialService`, le service n'étant pas ouvert) et `WebSite`, qui donne à Google le nom du site affiché au-dessus des résultats.
+
+## Images
+
+Les visiteurs sont surtout sur mobile, souvent avec un réseau lent : les photos sont servies au plus juste.
+
+- **Sources et variantes** : les photos sources sont dans `public/images/` (WebP). Le site affiche leurs variantes de `public/images/variantes/`, écrites par `python scripts/images.py` (Python 3 et Pillow). Le script produit :
+  - une variante par largeur utile (480 à 1920 px), en WebP qualité 80, identique à l'œil et environ deux fois plus légère que la source ;
+  - un recadrage vertical du hero de l'accueil pour les écrans en portrait ;
+  - le logo allégé `public/brand/tovpay-logo-nav.webp`, moitié exacte du logo source (mêmes proportions) ;
+  - les dimensions de chaque source et la liste de ses largeurs, dans `src/lib/imageVariants.ts`.
+- **Composant `Photo`** : le navigateur choisit la plus petite variante suffisante (`srcset` et `sizes`), et les photos hors écran attendent d'en approcher. Une photo qui arrive après l'affichage de la page apparaît en fondu, sur l'opacité seulement, sans fondu si elle est en cache ou si « réduire les animations » est activé.
+  - `sizes` indique la largeur réellement affichée. Avec `object-cover`, dans un cadre plus étroit que la photo, la photo déborde du cadre : sa largeur affichée vaut la hauteur du cadre multipliée par les proportions de la photo.
+  - `Photo` impose les proportions de la photo source. Les variantes, de hauteur arrondie au pixel, en diffèrent d'une fraction de pixel ; la mise en page reste donc identique au pixel près, et la place de la photo est réservée avant son arrivée.
+- **Photo d'en-tête** : la compilation ajoute son préchargement dans le HTML de chaque page (`heroPreloads`, `src/lib/images.ts`). Elle se télécharge ainsi en parallèle des scripts, au lieu d'attendre React et le code de la page.
+  - Celle d'une autre page se télécharge dès qu'un lien vers elle est survolé, touché ou atteint au clavier (`src/lib/prefetchImages.ts`). Rien n'est téléchargé à l'avance sans ce signal : sur forfait mobile, les visiteurs ne paient pas les photos des pages qu'ils ne visitent pas.
+- **Cache** (`vercel.json`) :
+  - fichiers de `/assets/` (noms avec empreinte) : gardés un an par les navigateurs ;
+  - images et logo : gardés 30 jours, puis servis depuis le cache pendant leur revérification.
+  - **Une photo remplacée doit changer de nom** : sinon, les visiteurs récents gardent l'ancienne jusqu'à 30 jours.
+- **Ajouter une photo** :
+  1. la déposer dans `public/images/` (WebP, 1920 px de large au plus) ;
+  2. lancer `python scripts/images.py` ;
+  3. l'ajouter à `IMAGES` et l'afficher avec `<Photo src={IMAGES.x} sizes="..." />`. Pour une photo d'en-tête, l'ajouter aussi à `PAGE_HEROES`, à la même adresse que la page.
+
+  La compilation échoue si une variante annoncée manque.
 
 ## Indexation (IndexNow)
 
@@ -69,6 +95,7 @@ src/
 │   ├── Footer.tsx           # Pied de page (liens légaux, textes de l'application)
 │   ├── PageHero.tsx         # En-tête des pages secondaires (photo sous voile bleu nuit)
 │   ├── FinalCta.tsx         # Bande d'appel à l'action de fin de page (photo sous voile)
+│   ├── Photo.tsx            # Photo en plusieurs largeurs (srcset), chargement différé, fondu à l'arrivée
 │   ├── DocumentLayout.tsx   # Mise en page des pages juridiques
 │   ├── DocumentSections.tsx # Blocs de contenu de ces pages (paragraphes, listes, tableaux, liens)
 │   ├── RichText.tsx         # Texte dont les adresses e-mail deviennent des liens
@@ -83,22 +110,29 @@ src/
 ├── lib/
 │   ├── site.ts              # Coordonnées, liens des textes de l'application, frais proposés, titre et canonique
 │   ├── indexablePages.ts    # Pages indexables et leurs balises (lu à la compilation, voir « Référencement »)
-│   └── images.ts            # Photos du site (fichiers WebP de public/images/)
+│   ├── motion.ts            # Animations communes : courbes, fondus, apparitions au défilement (inView, reveal)
+│   ├── images.ts            # Photos du site (variantes de public/images/), photos d'en-tête et leurs préchargements
+│   ├── imageVariants.ts     # Largeurs disponibles de chaque photo (écrit par scripts/images.py)
+│   └── prefetchImages.ts    # Téléchargement anticipé des photos d'en-tête des autres pages
 ├── hooks/
-│   └── useDocumentMeta.ts   # Met à jour titre, description, Open Graph et canonique dans la langue du visiteur
+│   ├── useDocumentMeta.ts   # Met à jour titre, description, Open Graph et canonique dans la langue du visiteur
+│   └── useMediaQuery.ts     # Suit une requête média (photo du hero de l'accueil en portrait ou en paysage)
 ├── index.css                # @theme Tailwind (palette, fonts) + @layer components
 └── App.tsx                  # Routes et redirections des anciennes pages
 
 middleware.ts                # Détection automatique de la langue par pays (Vercel Routing Middleware)
-vercel.json                  # Redirections permanentes des anciennes pages, page HTML de chaque adresse, réécriture SPA
-vite.config.ts               # Build + plugin qui écrit une page HTML par adresse indexable
+vercel.json                  # Redirections permanentes des anciennes pages, page HTML de chaque adresse, réécriture SPA, durées de cache
+vite.config.ts               # Build + plugin qui écrit une page HTML par adresse indexable (balises, préchargement de la photo d'en-tête)
 scripts/indexnow.mjs         # Soumission IndexNow, avec vérifications en ligne avant envoi
+scripts/images.py            # Variantes légères des photos et du logo (voir « Images »)
 
 public/
-├── images/                            # Photos libres de droits (Unsplash), en WebP, hébergées sur le site
+├── images/                            # Photos sources libres de droits (Unsplash), en WebP
+│   └── variantes/                     # Variantes affichées par le site (écrites par scripts/images.py)
 └── brand/
     ├── tovpay-logo.png                # Logo complet source (og:image, données structurées)
-    └── tovpay-logo-transparent.png    # Logo utilisé (nav, footer)
+    ├── tovpay-logo-transparent.png    # Logo transparent source
+    └── tovpay-logo-nav.webp           # Logo allégé affiché (nav, footer)
 ```
 
 ## Système de design
@@ -130,4 +164,5 @@ Anciennes pages redirigées (308) : `/nano-credit` et `/services` vers `/avance-
 - Le pourcentage des frais proposé (`PROPOSED_FEE_PERCENT` dans `src/lib/site.ts`) est une condition proposée : toujours l'afficher avec la mention « susceptibles d'évoluer avant le lancement ».
 - Les textes de l'application (conditions d'utilisation, politique de confidentialité) ne sont pas recopiés : le site renvoie vers les pages publiées par le serveur de l'application (`src/lib/site.ts`).
 - Les avatars de l'équipe sont des monogrammes (`Avatar.tsx`).
+- Animations : le réglage système « réduire les animations » est respecté (`MotionConfig reducedMotion="user"` dans `App.tsx`, règle CSS dans `index.css`). Pour couper un débordement horizontal, utiliser `overflow-x-clip` et non `overflow-x-hidden` : ce dernier crée un conteneur de défilement qui bloque l'effacement du hero au défilement et la colonne collante de la FAQ.
 
